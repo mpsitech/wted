@@ -1,0 +1,294 @@
+IexWdbeMdl v1.1.28
+ImeIMUnit.srefIxVBasetype	srefSilRefWdbeMUnit	sref	Title	Easy	srefKToolch	Comment
+fpga	lifcl-40-9bg400c	cleb	Lattice CrossLink-NX Evaluation Board	true	radiant
+	ImeIMModule.srefIxVBasetype	hsrefSupRefWdbeMModule	srefTplRefWdbeMModule	sref	Comment
+	top		top_v1_0	wted_core
+		ImeIAMModulePar.x1SrefKKey	Val
+		aresetNNotP	true
+		fAclk	50000
+		aclkIntNotExt	true
+		clks	mclk
+		fClks	50000
+		clkIntNotExts	true
+		clkDiffNotSngs	false
+		ImeIAMModulePar.end
+	oth	wted_core	debounce_v1_0	debounceBtn0
+		ImeIMGeneric.sref	Defval
+		invert	false
+		ImeIMGeneric.end
+	ectr	wted_core	ident_Easy_v1_0	ident	version identifier
+		ImeIAMModulePar.x1SrefKKey	Val
+		hash	c20dcef
+		who	aw.mpsi
+		cfg	fMclk.nat.uint32
+		ImeIAMModulePar.end
+	ehostif	wted_core	hostif_Easy_v1_0	hostif	connection to host via FT2232H
+		ImeIAMModulePar.x1SrefKKey	Val
+		phytype	uart
+		fSclk	115200
+		ImeIAMModulePar.end
+	edbgctr	wted_core	fsmtrack_Easy_v1_0	mfsmtrack0	track host interface FSM
+		ImeIAMModulePar.x1SrefKKey	Val
+		trkclk	mclk
+		ratioTrkclk	1
+		capts	hostif.op
+		trigs	hostifRxAXIS_tvalid.rising;ackInvTkclksrcSetTkst.rising
+		sizeSeqbuf	4
+		ImeIAMModulePar.end
+	edbgctr	wted_core	fsmtrack_Easy_v1_0	mfsmtrack1	track other mclk-based FSM's
+		ImeIAMModulePar.x1SrefKKey	Val
+		trkclk	mclk
+		ratioTrkclk	1
+		capts	tkclksrc.op
+		trigs	hostifRxAXIS_tvalid.rising;ackInvTkclksrcSetTkst.rising
+		sizeSeqbuf	4
+		ImeIAMModulePar.end
+	edbgctr	wted_core	gptrack_Easy_v1_0	mgptrack	track mclk-based signals
+		ImeIAMModulePar.x1SrefKKey	Val
+		trkclk	mclk
+		ratioTrkclk	1
+		capts	tkclk;rgb0_r;rgb0_g;rgb0_b;btn0;btn0_sig;tkclksrcGetTkstTkst[7..0]
+		trigs	btn0.rising;btn0.falling;ackInvTkclksrcSetTkst.rising
+		sizeSeqbuf	4
+		ImeIAMModulePar.end
+	ectr	wted_core	rgbled_v1_0	rgbled0
+	ectr	wted_core		state	state monitor
+	ectr	wted_core	tkclksrc_Easy_v1_0	tkclksrc	10 kHz clock source
+	ImeIMModule.end
+fpga	ti180m484i3	tidk	Efinix Titanium Ti180 development kit	true	efinity
+	ImeIMModule.srefIxVBasetype	hsrefSupRefWdbeMModule	srefTplRefWdbeMModule	sref	Comment
+	top		top_v1_0	wted_core
+		ImeIAMModulePar.x1SrefKKey	Val
+		aresetNNotP	false
+		fAclk	100000
+		aclkDiffNotSng	false
+		clks	mclk;memclk
+		fClks	100000;250000
+		clkIntNotExts	true;false
+		clkDiffNotSngs	false;false
+		ImeIAMModulePar.end
+	oth	wted_core	debounce_v1_0	debounceBtn0
+		ImeIMGeneric.sref	Defval
+		invert	true
+		ImeIMGeneric.end
+	ectr	wted_core	ident_Easy_v1_0	ident	version identifier
+		ImeIAMModulePar.x1SrefKKey	Val
+		hash	c20dcef
+		who	aw.mpsi
+		cfg	fMclk.nat.uint32;fMemclk.nat.uint32
+		ImeIAMModulePar.end
+	ehostif	wted_core	hostif_Easy_v1_0	hostif	connection to RISC-V soft-cores running Linux via AXIlite
+		ImeIAMModulePar.x1SrefKKey	Val
+		phytype	axi
+		wA	32
+		wD	32
+		ImeIAMModulePar.end
+	ectr	wted_core		client	host-triggered data exchange with DDR memory
+	imbuf	wted_core;client	dpram_efnx_v1_0	getbuf
+		ImeIRMModuleMModule.hsrefCorRefWdbeMModule	srefKFunction
+		wted_core;hostif	snk
+		ImeIRMModuleMModule.end
+		ImeIMImbuf.srefIxVRotype	Width	Minmax	Prio
+		multatmt	32	0..4096	2
+		ImeIMImbuf.end
+		ImeIAMModulePar.x1SrefKKey	Val
+		size	4
+		wA	32
+		wB	32
+		ImeIAMModulePar.end
+	imbuf	wted_core;client	dpram_efnx_v1_0	setbuf
+		ImeIRMModuleMModule.hsrefCorRefWdbeMModule	srefKFunction
+		wted_core;hostif	src
+		ImeIRMModuleMModule.end
+		ImeIMImbuf.srefIxVRotype	Width	Minmax	Prio
+		multatmt	32	0..4096	2
+		ImeIMImbuf.end
+		ImeIAMModulePar.x1SrefKKey	Val
+		size	4
+		wA	32
+		wB	32
+		ImeIAMModulePar.end
+	ectr	wted_core	ddrmux_Easy_v1_0	ddrif	connection to DDR memory controller via AXI port 0
+		ImeIAMModulePar.x1SrefKKey	Val
+		memclkIntNotExt	false
+		fMemclk	250000
+		wA	32	6+20+4+2
+		wAConst	6
+		aConst	000011	64 MB chunk from 192 MB to 256 MB
+		NBeat	16	default
+		wD	32
+		NRd	1
+		flexNBeatRds	false
+		wDRds	32
+		clkRds	memclk
+		ratioClkRds	1
+		NWr	2
+		flexNBeatWrs	false;false
+		wDWrs	32;32
+		clkWrs	memclk;memclk
+		ratioClkWrs	1.0;1.0
+		ImeIAMModulePar.end
+	edbgctr	wted_core	fsmtrack_Easy_v1_0	mfsmtrack0	track host interface FSM
+		ImeIAMModulePar.x1SrefKKey	Val
+		trkclk	mclk
+		ratioTrkclk	1
+		capts	hostif.op
+		trigs	hostifRxAXIS_tvalid.rising;ackInvTkclksrcSetTkst.rising
+		sizeSeqbuf	4
+		ImeIAMModulePar.end
+	edbgctr	wted_core	fsmtrack_Easy_v1_0	mfsmtrack1	track other mclk-based FSM's
+		ImeIAMModulePar.x1SrefKKey	Val
+		trkclk	mclk
+		ratioTrkclk	1
+		capts	client.getbufB;client.setbufB;tkclksrc.op
+		trigs	hostifRxAXIS_tvalid.rising;ackInvTkclksrcSetTkst.rising
+		sizeSeqbuf	4
+		ImeIAMModulePar.end
+	edbgctr	wted_core	gptrack_Easy_v1_0	mgptrack	track mclk-based signals
+		ImeIAMModulePar.x1SrefKKey	Val
+		trkclk	mclk
+		ratioTrkclk	1
+		capts	tkclk;rgb0_r;rgb0_g;rgb0_b;btn0;btn0_sig;tkclksrcGetTkstTkst[7..0]
+		trigs	btn0.rising;btn0.falling;ackInvTkclksrcSetTkst.rising
+		sizeSeqbuf	4
+		ImeIAMModulePar.end
+	edbgctr	wted_core	gptrack_Easy_v1_0	memgptrack	track memclk-based signals
+		ImeIAMModulePar.x1SrefKKey	Val
+		trkclk	memclk
+		ratioTrkclk	2.5
+		capts	reqClientToDdrifRd;ackClientToDdrifRd;memRdAAXI_rvalid;reqClientToDdrifWr;ackClientToDdrifWr;memWrAAXI_wready;reqTrafgenToDdrifRd;ackTrafgenToDdrifWr;memWrBAXI_wready
+		trigs	ackInvClientLoadGetbuf;ackInvClientStoreSetbuf
+		sizeSeqbuf	4
+		ImeIAMModulePar.end
+	ectr	wted_core	rgbled_v1_0	rgbled0
+	ectr	wted_core		state	state monitor
+	ectr	wted_core	tkclksrc_Easy_v1_0	tkclksrc	10 kHz clock source
+	ectr	wted_core		trafgen	randomized data exchange with DDR memory
+	oth	wted_core;trafgen	neotrng_v1_0	lenrng	randum number generator for transaction length
+	oth	wted_core;trafgen	neotrng_v1_0	ofsrng	random number generator for data value offset
+	oth	wted_core;trafgen	dpram_efnx_v1_0	setbuf
+		ImeIAMModulePar.x1SrefKKey	Val
+		size	4
+		wA	8
+		wB	32
+		ImeIAMModulePar.end
+	ImeIMModule.end
+fpga	xczu1cg-1sbva484e	zudk	Avnet Zynq UltraScale+ MPSoC development kit	true	vivado
+	ImeIMModule.srefIxVBasetype	hsrefSupRefWdbeMModule	srefTplRefWdbeMModule	sref	Comment
+	top		top_v1_0	wted_core
+		ImeIAMModulePar.x1SrefKKey	Val
+		aresetNNotP	true
+		fAclk	100000
+		aclkDiffNotSng	false
+		clks	mclk;memclk
+		fClks	100000;300000
+		clkIntNotExts	true;false
+		clkDiffNotSngs	false;false
+		ImeIAMModulePar.end
+	oth	wted_core	debounce_v1_0	debounceBtn0
+		ImeIMGeneric.sref	Defval
+		invert	true
+		ImeIMGeneric.end
+	ectr	wted_core	ident_Easy_v1_0	ident	version identifier
+		ImeIAMModulePar.x1SrefKKey	Val
+		hash	c20dcef
+		who	aw.mpsi
+		cfg	fMclk.nat.uint32;fMemclk.nat.uint32
+		ImeIAMModulePar.end
+	ehostif	wted_core	hostif_Easy_v1_0	hostif	connection to Cortex-A53's running Linux via FPD AXIlite
+		ImeIAMModulePar.x1SrefKKey	Val
+		phytype	axi
+		wA	40
+		wD	64
+		ImeIAMModulePar.end
+	ectr	wted_core		client	host-triggered data exchange with DDR memory
+	imbuf	wted_core;client	dpbram_xlnx_v8_4	getbuf
+		ImeIRMModuleMModule.hsrefCorRefWdbeMModule	srefKFunction
+		wted_core;hostif	snk
+		ImeIRMModuleMModule.end
+		ImeIMImbuf.srefIxVRotype	Width	Minmax	Prio
+		multatmt	64	0..2048	2
+		ImeIMImbuf.end
+		ImeIAMModulePar.x1SrefKKey	Val
+		size	2
+		wA	128
+		wB	64
+		ImeIAMModulePar.end
+	imbuf	wted_core;client	dpbram_xlnx_v8_4	setbuf
+		ImeIRMModuleMModule.hsrefCorRefWdbeMModule	srefKFunction
+		wted_core;hostif	src
+		ImeIRMModuleMModule.end
+		ImeIMImbuf.srefIxVRotype	Width	Minmax	Prio
+		multatmt	64	0..2048	2
+		ImeIMImbuf.end
+		ImeIAMModulePar.x1SrefKKey	Val
+		size	2
+		wA	128
+		wB	64
+		ImeIAMModulePar.end
+	ectr	wted_core	ddrmux_Easy_v1_0	ddrif	connection to DDR memory controller via FPD AXI (HP0)
+		ImeIAMModulePar.x1SrefKKey	Val
+		memclkIntNotExt	false
+		fMemclk	300000
+		wA	40	12+20+4+4
+		wAConst	12
+		aConst	000000000111	256 MB chunk from 0.75 GB to 1 GB
+		NBeat	16	default
+		wD	128
+		NRd	1
+		flexNBeatRds	false
+		wDRds	128
+		clkRds	memclk
+		ratioClkRds	1
+		NWr	2
+		flexNBeatWrs	false;false
+		wDWrs	128;128
+		clkWrs	memclk;memclk
+		ratioClkWrs	1.0;1.0
+		ImeIAMModulePar.end
+	edbgctr	wted_core	fsmtrack_Easy_v1_0	mfsmtrack0	track host interface FSM
+		ImeIAMModulePar.x1SrefKKey	Val
+		trkclk	mclk
+		ratioTrkclk	1
+		capts	hostif.op
+		trigs	hostifRxAXIS_tvalid.rising;ackInvTkclksrcSetTkst.rising
+		sizeSeqbuf	4
+		ImeIAMModulePar.end
+	edbgctr	wted_core	fsmtrack_Easy_v1_0	mfsmtrack1	track other mclk-based FSM's
+		ImeIAMModulePar.x1SrefKKey	Val
+		trkclk	mclk
+		ratioTrkclk	1
+		capts	client.getbufB;client.setbufB;tkclksrc.op
+		trigs	hostifRxAXIS_tvalid.rising;ackInvTkclksrcSetTkst.rising
+		sizeSeqbuf	4
+		ImeIAMModulePar.end
+	edbgctr	wted_core	gptrack_Easy_v1_0	mgptrack	track mclk-based signals
+		ImeIAMModulePar.x1SrefKKey	Val
+		trkclk	mclk
+		ratioTrkclk	1
+		capts	tkclk;rgb0_r;rgb0_g;rgb0_b;btn0;btn0_sig;tkclksrcGetTkstTkst[7..0]
+		trigs	btn0.rising;btn0.falling;ackInvTkclksrcSetTkst.rising
+		sizeSeqbuf	4
+		ImeIAMModulePar.end
+	edbgctr	wted_core	gptrack_Easy_v1_0	memgptrack	track memclk-based signals
+		ImeIAMModulePar.x1SrefKKey	Val
+		trkclk	memclk
+		ratioTrkclk	3
+		capts	reqClientToDdrifRd;ackClientToDdrifRd;memRdAAXI_rvalid;reqClientToDdrifWr;ackClientToDdrifWr;memWrAAXI_wready;reqTrafgenToDdrifRd;ackTrafgenToDdrifWr;memWrBAXI_wready
+		trigs	ackInvClientLoadGetbuf;ackInvClientStoreSetbuf
+		sizeSeqbuf	4
+		ImeIAMModulePar.end
+	ectr	wted_core	rgbled_v1_0	rgbled0
+	ectr	wted_core		state	state monitor
+	ectr	wted_core	tkclksrc_Easy_v1_0	tkclksrc	10 kHz clock source
+	ectr	wted_core		trafgen	randomized data exchange with DDR memory
+	oth	wted_core;trafgen	neotrng_v1_0	lenrng	randum number generator for transaction length
+	oth	wted_core;trafgen	neotrng_v1_0	ofsrng	random number generator for data value offset
+	oth	wted_core;trafgen	dpbram_xlnx_v8_4	setbuf
+		ImeIAMModulePar.x1SrefKKey	Val
+		size	2
+		wA	8
+		wB	128
+		ImeIAMModulePar.end
+	ImeIMModule.end
+ImeIMUnit.end

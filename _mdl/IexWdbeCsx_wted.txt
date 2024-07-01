@@ -1,0 +1,120 @@
+IexWdbeCsx v1.1.9
+ImeIMUnit.sref
+cleb
+	ImeIMVector1.srefIxVBasetype	sref	srefsKOption
+	tixlin	VecVWtedClebState	filfed
+		ImeIMVectoritem1.sref	Title	Comment
+		nc	offline
+		ready	ready
+		ImeIMVectoritem1.end
+	ImeIMVector1.end
+	ImeIMModule.hsrefSupRefWdbeMModule	sref
+	wted_core	ident
+	wted_core	mfsmtrack0
+	wted_core	mfsmtrack1
+	wted_core	mgptrack
+	wted_core	state
+		ImeIMController.
+		
+			ImeIMCommand2.refNum	sref	srefIxVRettype	srefIvrRefWdbeMSignal	srefRvrRefWdbeMSignal	srefRerRefWdbeMSignal	Comment
+			0	get	statsng
+				ImeIAMCommandRetpar2.sref	srefIxWdbeVPartype	srefRefWdbeMVector	Length	Comment
+				tixVClebState	tix	VecVWtedClebState
+				ImeIAMCommandRetpar2.end
+			ImeIMCommand2.end
+		ImeIMController.end
+	wted_core	tkclksrc
+	ImeIMModule.end
+tidk
+	ImeIMVector1.srefIxVBasetype	sref	srefsKOption
+	tixlin	VecVWtedTidkState	filfed
+		ImeIMVectoritem1.sref	Title	Comment
+		nc	offline
+		ready	ready
+		active	streaming
+		ImeIMVectoritem1.end
+	ImeIMVector1.end
+	ImeIMModule.hsrefSupRefWdbeMModule	sref
+	wted_core	ident
+	wted_core	client
+		ImeIMController.
+		
+			ImeIMCommand2.refNum	sref	srefIxVRettype	srefIvrRefWdbeMSignal	srefRvrRefWdbeMSignal	srefRerRefWdbeMSignal	Comment
+			0	loadGetbuf	void				2048 bytes from DDR memory
+			0	storeSetbuf	void				2048 bytes to DDR memory
+			ImeIMCommand2.end
+		ImeIMController.end
+	wted_core	ddrif
+	wted_core	mfsmtrack0
+	wted_core	mfsmtrack1
+	wted_core	mgptrack
+	wted_core	memgptrack
+	wted_core	state
+		ImeIMController.
+		
+			ImeIMCommand2.refNum	sref	srefIxVRettype	srefIvrRefWdbeMSignal	srefRvrRefWdbeMSignal	srefRerRefWdbeMSignal	Comment
+			0	get	statsng
+				ImeIAMCommandRetpar2.sref	srefIxWdbeVPartype	srefRefWdbeMVector	Length	Comment
+				tixVTidkState	tix	VecVWtedTidkState
+				ImeIAMCommandRetpar2.end
+			ImeIMCommand2.end
+		ImeIMController.end
+	wted_core	tkclksrc
+	wted_core	trafgen
+		ImeIMController.
+		
+			ImeIMCommand2.refNum	sref	srefIxVRettype	srefIvrRefWdbeMSignal	srefRvrRefWdbeMSignal	srefRerRefWdbeMSignal	Comment
+			0	set	void
+				ImeIAMCommandInvpar2.sref	srefIxWdbeVPartype	srefRefWdbeMVector	Length	Defval	srefRefWdbeMVectoritem	Comment
+				rng	_bool
+				ImeIAMCommandInvpar2.end
+			ImeIMCommand2.end
+		ImeIMController.end
+	ImeIMModule.end
+zudk
+	ImeIMVector1.srefIxVBasetype	sref	srefsKOption
+	tixlin	VecVWtedZudkState	filfed
+		ImeIMVectoritem1.sref	Title	Comment
+		nc	offline
+		ready	ready
+		active	streaming
+		ImeIMVectoritem1.end
+	ImeIMVector1.end
+	ImeIMModule.hsrefSupRefWdbeMModule	sref
+	wted_core	ident
+	wted_core	client
+		ImeIMController.
+		
+			ImeIMCommand2.refNum	sref	srefIxVRettype	srefIvrRefWdbeMSignal	srefRvrRefWdbeMSignal	srefRerRefWdbeMSignal	Comment
+			0	loadGetbuf	void				2048 bytes from DDR memory
+			0	storeSetbuf	void				2048 bytes to DDR memory
+			ImeIMCommand2.end
+		ImeIMController.end
+	wted_core	ddrif
+	wted_core	mfsmtrack0
+	wted_core	mfsmtrack1
+	wted_core	mgptrack
+	wted_core	memgptrack
+	wted_core	state
+		ImeIMController.
+		
+			ImeIMCommand2.refNum	sref	srefIxVRettype	srefIvrRefWdbeMSignal	srefRvrRefWdbeMSignal	srefRerRefWdbeMSignal	Comment
+			0	get	statsng
+				ImeIAMCommandRetpar2.sref	srefIxWdbeVPartype	srefRefWdbeMVector	Length	Comment
+				tixVZudkState	tix	VecVWtedZudkState
+				ImeIAMCommandRetpar2.end
+			ImeIMCommand2.end
+		ImeIMController.end
+	wted_core	tkclksrc
+	wted_core	trafgen
+		ImeIMController.
+		
+			ImeIMCommand2.refNum	sref	srefIxVRettype	srefIvrRefWdbeMSignal	srefRvrRefWdbeMSignal	srefRerRefWdbeMSignal	Comment
+			0	set	void
+				ImeIAMCommandInvpar2.sref	srefIxWdbeVPartype	srefRefWdbeMVector	Length	Defval	srefRefWdbeMVectoritem	Comment
+				rng	_bool
+				ImeIAMCommandInvpar2.end
+			ImeIMCommand2.end
+		ImeIMController.end
+	ImeIMModule.end
+ImeIMUnit.end

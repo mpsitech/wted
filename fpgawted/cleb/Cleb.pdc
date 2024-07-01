@@ -1,0 +1,24 @@
+# file Cleb.pdc
+# Lattice CrossLink-NX Evaluation Board pin mapping and constraints for Lattice Radiant
+# copyright: (C) 2021 MPSI Technologies GmbH
+# author: Alexander Wirthmueller (auto-generation)
+# date created: 30 Jun 2024
+# IP header --- ABOVE
+
+# bank1 3.3V
+ldc_set_location -site {F18} [get_ports {hiso}]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports {hiso}]
+ldc_set_location -site {F16} [get_ports {hosi}]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33 PULLMODE=NONE} [get_ports {hosi}]
+
+# bank3 1.8V (high-speed)
+ldc_set_location -site {Y15} [get_ports {btn0}]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18H PULLMODE=NONE} [get_ports {btn0}]
+ldc_set_location -site {V14} [get_ports {rgb0_r}]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18H} [get_ports {rgb0_r}]
+
+# bank4 1.8V (high-speed)
+ldc_set_location -site {P11} [get_ports {rgb0_b}]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18H} [get_ports {rgb0_b}]
+ldc_set_location -site {R11} [get_ports {rgb0_g}]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18H} [get_ports {rgb0_g}]

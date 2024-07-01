@@ -1,0 +1,19 @@
+IexWdbeDpl v1.1.35
+ImeIMComponent.srefIxVBasetype	sref	Comment
+fpga	fpgawted
+	ImeIMRelease.hsrefRefWdbeMMachine	sref	srefsKOption	Comment
+	any	fpgawted_any
+	ImeIMRelease.end
+ezdev	ezdevwted
+	ImeIMRelease.hsrefRefWdbeMMachine	sref	srefsKOption	Comment
+	any;ubuntu	ezdevwted_ubuntu
+	any;broot;riscv32;sapsoc	ezdevwted_riscv32
+	any;yocto;armv8;pl64	ezdevwted_pl64
+	ImeIMRelease.end
+term	wtedterm
+	ImeIMRelease.hsrefRefWdbeMMachine	sref	srefsKOption	Comment
+	any;ubuntu	wtedterm_ubuntu
+	any;broot;riscv32;sapsoc	wtedterm_riscv32
+	any;yocto;armv8;pl64	wtedterm_pl64
+	ImeIMRelease.end
+ImeIMComponent.end
