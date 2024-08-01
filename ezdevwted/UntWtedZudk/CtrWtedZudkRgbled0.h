@@ -2,8 +2,8 @@
 	* \file CtrWtedZudkRgbled0.h
 	* rgbled0 controller (declarations)
 	* \copyright (C) 2016-2020 MPSI Technologies GmbH
-	* \author Alexander Wirthmueller (auto-generation)
-	* \date created: 30 Jun 2024
+	* \author Catherine Johnson (auto-generation)
+	* \date created: 10 Jul 2024
 	*/
 // IP header --- ABOVE
 
@@ -38,7 +38,7 @@ public:
 	~CtrWtedZudkRgbled0();
 
 public:
-	static const uint8_t tixVController = 0x08;
+	static const uint8_t tixVController = 0x09;
 
 public:
 

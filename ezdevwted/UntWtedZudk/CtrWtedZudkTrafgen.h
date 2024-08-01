@@ -2,8 +2,8 @@
 	* \file CtrWtedZudkTrafgen.h
 	* trafgen controller (declarations)
 	* \copyright (C) 2016-2020 MPSI Technologies GmbH
-	* \author Alexander Wirthmueller (auto-generation)
-	* \date created: 30 Jun 2024
+	* \author Catherine Johnson (auto-generation)
+	* \date created: 10 Jul 2024
 	*/
 // IP header --- ABOVE
 
@@ -39,10 +39,10 @@ public:
 	~CtrWtedZudkTrafgen();
 
 public:
-	static const uint8_t tixVController = 0x0B;
+	static const uint8_t tixVController = 0x0C;
 
 public:
-	Dbecore::Cmd* cmdSet ;
+	Dbecore::Cmd* cmdSet;
 
 public:
 	static uint8_t getTixVCommandBySref(const std::string& sref);

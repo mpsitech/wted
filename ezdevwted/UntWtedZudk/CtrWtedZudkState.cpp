@@ -2,8 +2,8 @@
 	* \file CtrWtedZudkState.cpp
 	* state controller (implementation)
 	* \copyright (C) 2016-2020 MPSI Technologies GmbH
-	* \author Alexander Wirthmueller (auto-generation)
-	* \date created: 30 Jun 2024
+	* \author Catherine Johnson (auto-generation)
+	* \date created: 10 Jul 2024
 	*/
 // IP header --- ABOVE
 
@@ -53,11 +53,11 @@ void CtrWtedZudkState::VecVCommand::fillFeed(
 CtrWtedZudkState::CtrWtedZudkState(
 			UntWted* unt
 		) : CtrWted(unt) {
-	// IP constructor.easy.cmdvars --- INSERT
+	cmdGet = getNewCmdGet();
 };
 
 CtrWtedZudkState::~CtrWtedZudkState() {
-	// IP destructor.easy.cmdvars --- INSERT
+	delete cmdGet;
 };
 
 uint8_t CtrWtedZudkState::getTixVCommandBySref(

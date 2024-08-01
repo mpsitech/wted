@@ -29,14 +29,20 @@ cleb
 	ImeIMBank.end
 	ImeIMModule.hsrefSupRefWdbeMModule	sref
 		wted_core
+		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
+		ins	1	rtepin	rgb0_r	out	sl	1			rgb0_r
+		ins	1	rtepin	rgb0_g	out	sl	1			rgb0_g
+		ins	1	rtepin	rgb0_b	out	sl	1			rgb0_b
+		ImeIMPort.end
 		ImeIMSignal2.srefIxVBasetype	irefRefWdbeCSignal	srefMgeIxVTbl	srefMgeUref	sref	Const	srefWdbeKHdltype	Width	Minmax	Comb	Onval	Offval	Defon	srefDrvRefWdbeMPort	Comment
 		oth	0	mdl	debounceBtn0	btn0_sig	false	sl	1					false
 		oth	0	mdl	hostif	commok	false	sl	1					false
 		oth	0	mdl	hostif	hostifRxAXIS_tvalid	false	sl	1					false
+		oprt	1	mdl	rgbled0	rgb0_r	false	sl	1					false	rgb0_r
+		oprt	1	mdl	rgbled0	rgb0_g	false	sl	1					false	rgb0_g
+		oprt	1	mdl	rgbled0	rgb0_b	false	sl	1					false	rgb0_b
 		oth	0	mdl	state	rgb0	false	slvdn	24					false
 		oth	0	mdl	tkclksrc	tkclk	false	sl	1					false
-		oth	0	mdl	hostif	hostifStateOp_dbg	false	slvdn	8					false
-		oth	0	mdl	tkclksrc	tkclksrcStateOp_dbg	false	slvdn	8					false
 		ImeIMSignal2.end
 	wted_core	debounceBtn0
 		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
@@ -55,7 +61,6 @@ cleb
 		retrupd	0		rxd						hosi
 		retrupd	0		txd						hiso
 		ins		rtesup	rxAXIS_tvalid_sig	out	sl	1					hostifRxAXIS_tvalid
-		ins		dbg	stateOp_dbg	out	slvdn	8					hostifStateOp_dbg
 		ImeIMPort.end
 	wted_core	ident
 	wted_core	mfsmtrack0
@@ -72,15 +77,19 @@ cleb
 		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
 		retrupd			reset								reset
 		retrupd			mclk								mclk
+		retrupd			btn0						btn0
 		ImeIMPort.end
 	wted_core	rgbled0
+		ImeIMGeneric.srefIxWdbeVIop	irefRefWdbeCGeneric	sref	srefWdbeKHdltype	Width	Minmax	Defval	srcSrefWdbeMGeneric	Comment
+		retrupd	0	fMclk					fMclk
+		ImeIMGeneric.end
 		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
 		retrupd			reset								reset
 		retrupd			mclk								mclk
 		retrupd			rgb								rgb0
-		retrupd			r						rgb0_r
-		retrupd			g						rgb0_g
-		retrupd			b						rgb0_b
+		retrupd			r								rgb0_r
+		retrupd			g								rgb0_g
+		retrupd			b								rgb0_b
 		ImeIMPort.end
 	wted_core	state
 		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
@@ -134,7 +143,6 @@ cleb
 		retrupd	0		reset								reset
 		retrupd	0		mclk								mclk
 		retrupd	0		tkclk								tkclk
-		ins		dbg	stateOp_dbg	out	slvdn	8					tkclksrcStateOp_dbg
 		ImeIMPort.end
 	ImeIMModule.end
 tidk
@@ -174,6 +182,17 @@ tidk
 		ins	5	rtepin	apuAXIL_bready	in	sl	1
 		ins	5	rtepin	apuAXIL_bresp	out	slvdn	2
 		ins	5	rtepin	apuAXIL_bvalid	out	sl	1
+		ins	6	rtepin	rgb0_r	out	sl	1			rgb0_r
+		ins	6	rtepin	rgb0_g	out	sl	1			rgb0_g
+		ins	6	rtepin	rgb0_b	out	sl	1			rgb0_b
+		ins	7	rtepin	ddrAXI_araddr	out	slvdn	32
+		ins	7	rtepin	ddrAXI_arvalid	out	sl	1
+		ins	7	rtepin	ddrAXI_rready	out	sl	1
+		ins	7	rtepin	ddrAXI_awaddr	out	slvdn	32
+		ins	7	rtepin	ddrAXI_awvalid	out	sl	1
+		ins	7	rtepin	ddrAXI_wdata	out	slvdn	512
+		ins	7	rtepin	ddrAXI_wlast	out	sl	1
+		ins	7	rtepin	ddrAXI_bready	out	sl	1
 		ImeIMPort.end
 		ImeIMSignal2.srefIxVBasetype	irefRefWdbeCSignal	srefMgeIxVTbl	srefMgeUref	sref	Const	srefWdbeKHdltype	Width	Minmax	Comb	Onval	Offval	Defon	srefDrvRefWdbeMPort	Comment
 		oth	0	mdl	debounceBtn0	btn0_sig	false	sl	1					false
@@ -189,9 +208,6 @@ tidk
 		oth	7	mdl	trafgen	memTWrAXI_wlast	false	sl	1					false
 		oth	7	mdl	ddrif	memTWrAXI_wready	false	sl	1					false
 		oth	7	mdl	trafgen	memTWrAXI_wvalid	false	sl	1					false
-		oth	7	mdl	trafgen	memTWrAXI_bready	false	sl	1					false
-		oth	7	mdl	ddrif	memTWrAXI_bresp	false	slvdn	2					false
-		oth	7	mdl	ddrif	memTWrAXI_bvalid	false	sl	1					false
 		oth	8	mdl	client	memCRdAXI_araddr	false	slvdn	20					false
 		oth	8	mdl	ddrif	memCRdAXI_arready	false	sl	1					false
 		oth	8	mdl	client	memCRdAXI_arvalid	false	sl	1					false
@@ -207,17 +223,23 @@ tidk
 		oth	9	mdl	client	memCWrAXI_wlast	false	sl	1					false
 		oth	9	mdl	ddrif	memCWrAXI_wready	false	sl	1					false
 		oth	9	mdl	client	memCWrAXI_wvalid	false	sl	1					false
-		oth	9	mdl	client	memCWrAXI_bready	false	sl	1					false
-		oth	9	mdl	ddrif	memCWrAXI_bresp	false	slvdn	2					false
-		oth	9	mdl	ddrif	memCWrAXI_bvalid	false	sl	1					false
-		hshk	15	mdl	client	reqClientToDdrifRd	false	sl	1					false
-		hshk	15	mdl	ddrif	ackClientToDdrifRd	false	sl	1					false
-		hshk	16	mdl	client	reqClientToDdrifWr	false	sl	1					false
-		hshk	16	mdl	ddrif	ackClientToDdrifWr	false	sl	1					false
-		hshk	17	mdl	trafgen	reqTrafgenToDdrifWr	false	sl	1					false
-		hshk	17	mdl	ddrif	ackTrafgenToDdrifWr	false	sl	1					false
-		oth	0	mdl	hostif	hostifStateOp_dbg	false	slvdn	8					false
-		oth	0	mdl	tkclksrc	tkclksrcStateOp_dbg	false	slvdn	8					false
+		oprt	10	mdl	rgbled0	rgb0_r	false	sl	1					false	rgb0_r
+		oprt	10	mdl	rgbled0	rgb0_g	false	sl	1					false	rgb0_g
+		oprt	10	mdl	rgbled0	rgb0_b	false	sl	1					false	rgb0_b
+		hshk	11	mdl	client	reqClientToDdrifRd	false	sl	1					false
+		hshk	11	mdl	ddrif	ackClientToDdrifRd	false	sl	1					false
+		hshk	12	mdl	client	reqClientToDdrifWr	false	sl	1					false
+		hshk	12	mdl	ddrif	ackClientToDdrifWr	false	sl	1					false
+		hshk	13	mdl	trafgen	reqTrafgenToDdrifWr	false	sl	1					false
+		hshk	13	mdl	ddrif	ackTrafgenToDdrifWr	false	sl	1					false
+		oth	14	mdl	ddrif	ddrAXI_araddr_sig	false	slvdn	32					false
+		oth	14	mdl	ddrif	ddrAXI_arvalid_sig	false	sl	1					false
+		oth	14	mdl	ddrif	ddrAXI_rready_sig	false	sl	1					false
+		oth	14	mdl	ddrif	ddrAXI_awaddr_sig	false	slvdn	32					false
+		oth	14	mdl	ddrif	ddrAXI_awvalid_sig	false	sl	1					false
+		oth	14	mdl	ddrif	ddrAXI_wdata_sig	false	slvdn	512					false
+		oth	14	mdl	ddrif	ddrAXI_wlast_sig	false	sl	1					false
+		oth	14	mdl	ddrif	ddrAXI_bready_sig	false	sl	1					false
 		ImeIMSignal2.end
 	wted_core	client
 		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
@@ -242,9 +264,6 @@ tidk
 		ins	5	rtetop	memCWrAXI_wlast	out	sl	1					memCWrAXI_wlast
 		ins	5	rtetop	memCWrAXI_wready	in	sl	1					memCWrAXI_wready
 		ins	5	rtetop	memCWrAXI_wvalid	out	sl	1					memCWrAXI_wvalid
-		ins	5	rtetop	memCWrAXI_bready	out	sl	1					memCWrAXI_bready
-		ins	5	rtetop	memCWrAXI_bresp	in	slvdn	2					memCWrAXI_bresp
-		ins	5	rtetop	memCWrAXI_bvalid	in	sl	1					memCWrAXI_bvalid
 		ins	6	rtetop	reqToDdrifWr	out	sl	1					reqClientToDdrifWr
 		ins	6	rtetop	ackToDdrifWr	in	sl	1					ackClientToDdrifWr
 		ImeIMPort.end
@@ -254,7 +273,6 @@ tidk
 		oprt	1	prc	egr	memCWrAXI_awvalid	false	sl	1		state(copyB)	1	0	false	memCWrAXI_awvalid
 		oprt	1	prc	egr	memCWrAXI_wlast	false	sl	1				1	false	memCWrAXI_wlast
 		oprt	1	prc	egr	memCWrAXI_wvalid	false	sl	1		state(copyC)	1	0	false	memCWrAXI_wvalid
-		oprt	1	prc	egr	memCWrAXI_bready	false	sl	1		*		1	false	memCWrAXI_bready
 		oprt	0	prc	egr	reqToDdrifWr	false	sl	1		state(copyB)	1	0	false	reqToDdrifWr
 		oth	0	prc	egr	enSetbuf	false	sl	1				0	false
 		oth	2	prc	egr	aSetbuf	false	nat		0..1023			0	false
@@ -349,7 +367,7 @@ tidk
 			ImeIMFsm.end
 		getbufB	mclk	reset	false	state(init)	false	get buffer B/hostif-facing operation
 			ImeIMFsm.srefIxVDbgtaptype
-			void
+			clust
 				ImeIMFsmstate.irefRefWdbeCFsmstate	sref	Extip	Comment
 				0	init	false
 					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
@@ -428,7 +446,7 @@ tidk
 			ImeIMFsm.end
 		setbufB	mclk	reset	false	state(init)	false	set buffer B/hostif-facing operation
 			ImeIMFsm.srefIxVDbgtaptype
-			void
+			clust
 				ImeIMFsmstate.irefRefWdbeCFsmstate	sref	Extip	Comment
 				0	init	false
 					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
@@ -501,7 +519,8 @@ tidk
 		retrupd			tkclk								tkclk
 		retrupd			resetMemclk								resetMemclk
 		retrupd			memclk							memclk
-		retrupd			ddrAXI_araddr						ddrAXI_araddr
+		retrupd			ddrAXI_arid						ddrAXI_arid
+		retrupd			ddrAXI_araddr								ddrAXI_araddr_sig
 		retrupd			ddrAXI_arburst						ddrAXI_arburst
 		retrupd			ddrAXI_arcache						ddrAXI_arcache
 		retrupd			ddrAXI_arlen						ddrAXI_arlen
@@ -511,13 +530,15 @@ tidk
 		retrupd			ddrAXI_arready						ddrAXI_arready
 		retrupd			ddrAXI_arregion						ddrAXI_arregion
 		retrupd			ddrAXI_arsize						ddrAXI_arsize
-		retrupd			ddrAXI_arvalid						ddrAXI_arvalid
+		retrupd			ddrAXI_arvalid								ddrAXI_arvalid_sig
+		retrupd			ddrAXI_rid						ddrAXI_rid
 		retrupd			ddrAXI_rdata						ddrAXI_rdata
 		retrupd			ddrAXI_rlast						ddrAXI_rlast
-		retrupd			ddrAXI_rready						ddrAXI_rready
+		retrupd			ddrAXI_rready								ddrAXI_rready_sig
 		retrupd			ddrAXI_rresp						ddrAXI_rresp
 		retrupd			ddrAXI_rvalid						ddrAXI_rvalid
-		retrupd			ddrAXI_awaddr						ddrAXI_awaddr
+		retrupd			ddrAXI_awid						ddrAXI_awid
+		retrupd			ddrAXI_awaddr								ddrAXI_awaddr_sig
 		retrupd			ddrAXI_awburst						ddrAXI_awburst
 		retrupd			ddrAXI_awcache						ddrAXI_awcache
 		retrupd			ddrAXI_awlen						ddrAXI_awlen
@@ -527,13 +548,14 @@ tidk
 		retrupd			ddrAXI_awready						ddrAXI_awready
 		retrupd			ddrAXI_awregion						ddrAXI_awregion
 		retrupd			ddrAXI_awsize						ddrAXI_awsize
-		retrupd			ddrAXI_awvalid						ddrAXI_awvalid
-		retrupd			ddrAXI_wdata						ddrAXI_wdata
-		retrupd			ddrAXI_wlast						ddrAXI_wlast
+		retrupd			ddrAXI_awvalid								ddrAXI_awvalid_sig
+		retrupd			ddrAXI_wdata								ddrAXI_wdata_sig
+		retrupd			ddrAXI_wlast								ddrAXI_wlast_sig
 		retrupd			ddrAXI_wready						ddrAXI_wready
 		retrupd			ddrAXI_wstrb						ddrAXI_wstrb
 		retrupd			ddrAXI_wvalid						ddrAXI_wvalid
-		retrupd			ddrAXI_bready						ddrAXI_bready
+		retrupd			ddrAXI_bid						ddrAXI_bid
+		retrupd			ddrAXI_bready								ddrAXI_bready_sig
 		retrupd			ddrAXI_bresp						ddrAXI_bresp
 		retrupd			ddrAXI_bvalid						ddrAXI_bvalid
 		retrupd			rdAAXI_araddr								memCRdAXI_araddr
@@ -551,9 +573,6 @@ tidk
 		retrupd			wrAAXI_wlast								memCWrAXI_wlast
 		retrupd			wrAAXI_wready								memCWrAXI_wready
 		retrupd			wrAAXI_wvalid								memCWrAXI_wvalid
-		retrupd			wrAAXI_bready								memCWrAXI_bready
-		retrupd			wrAAXI_bresp								memCWrAXI_bresp
-		retrupd			wrAAXI_bvalid								memCWrAXI_bvalid
 		retrupd			wrBAXI_awaddr								memTWrAXI_awaddr
 		retrupd			wrBAXI_awready								memTWrAXI_awready
 		retrupd			wrBAXI_awvalid								memTWrAXI_awvalid
@@ -561,9 +580,6 @@ tidk
 		retrupd			wrBAXI_wlast								memTWrAXI_wlast
 		retrupd			wrBAXI_wready								memTWrAXI_wready
 		retrupd			wrBAXI_wvalid								memTWrAXI_wvalid
-		retrupd			wrBAXI_bready								memTWrAXI_bready
-		retrupd			wrBAXI_bresp								memTWrAXI_bresp
-		retrupd			wrBAXI_bvalid								memTWrAXI_bvalid
 		retrupd			reqRdA								reqClientToDdrifRd
 		retrupd			ackRdA								ackClientToDdrifRd
 		retrupd			reqWrA								reqClientToDdrifWr
@@ -598,7 +614,6 @@ tidk
 		retrupd			AXIL_bresp							apuAXIL_bresp
 		retrupd			AXIL_bvalid							apuAXIL_bvalid
 		ins		rtesup	rxAXIS_tvalid_sig	out	sl	1					hostifRxAXIS_tvalid
-		ins		dbg	stateOp_dbg	out	slvdn	8					hostifStateOp_dbg
 		ImeIMPort.end
 	wted_core	ident
 	wted_core	mfsmtrack0
@@ -615,22 +630,39 @@ tidk
 		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
 		retrupd			reset								reset
 		retrupd			mclk								mclk
+		retrupd			btn0						btn0
 		ImeIMPort.end
-	wted_core	memgptrack
+	wted_core	memrdtrack
 		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
 		retrupd			reset								reset
 		retrupd			mclk								mclk
-		ins	0	reset	resetMemclk	in	sl	1					resetMemclk
-		ins	0	clk	memclk	in	sl	1				memclk
+		retrupd			resetMemclk								resetMemclk
+		retrupd			memclk							memclk
+		retrupd			ddrAXI_arready						ddrAXI_arready
+		retrupd			ddrAXI_rdata						ddrAXI_rdata
+		retrupd			ddrAXI_rlast						ddrAXI_rlast
+		ImeIMPort.end
+	wted_core	memwrtrack
+		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
+		retrupd			reset								reset
+		retrupd			mclk								mclk
+		retrupd			resetMemclk								resetMemclk
+		retrupd			memclk							memclk
+		retrupd			ddrAXI_awready						ddrAXI_awready
+		retrupd			ddrAXI_wready						ddrAXI_wready
+		retrupd			ddrAXI_bvalid						ddrAXI_bvalid
 		ImeIMPort.end
 	wted_core	rgbled0
+		ImeIMGeneric.srefIxWdbeVIop	irefRefWdbeCGeneric	sref	srefWdbeKHdltype	Width	Minmax	Defval	srcSrefWdbeMGeneric	Comment
+		retrupd	0	fMclk					fMclk
+		ImeIMGeneric.end
 		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
 		retrupd			reset								reset
 		retrupd			mclk								mclk
 		retrupd			rgb								rgb0
-		retrupd			r						rgb0_r
-		retrupd			g						rgb0_g
-		retrupd			b						rgb0_b
+		retrupd			r								rgb0_r
+		retrupd			g								rgb0_g
+		retrupd			b								rgb0_b
 		ImeIMPort.end
 	wted_core	state
 		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
@@ -645,6 +677,7 @@ tidk
 		oth	0	prc	led	sizeSeq	true	nat					5	false
 		oth	0	prc	led	seq	false	seq_t						false
 		oth	0	prc	led	ixSeq	false	nat		0..sizeSeq-1			0	false
+		oth	0	prc	op	trafgenRng_capt	false	sl	1				0	false
 		oth	2	void		rgbWhite	true	slvdn	24				x"555555"	false
 		oth	2	void		rgbRed	true	slvdn	24				x"FF0000"	false
 		oth	2	void		rgbOrange	true	slvdn	24				x"7F7F00"	false
@@ -675,7 +708,20 @@ tidk
 					ImeIAMFsmstateStep.end
 				ImeIMFsmstate.end
 			ImeIMFsm.end
-		op	mclk	reset	false		false	main operation
+		op	mclk	reset	false		true	main operation
+			ImeIMFsm.srefIxVDbgtaptype
+			void
+				ImeIMFsmstate.irefRefWdbeCFsmstate	sref	Extip	Comment
+				1	runA	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					runB	tkclk	runA
+					ImeIAMFsmstateStep.end
+				1	runB	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					runA	!tkclk	runB
+					ImeIAMFsmstateStep.end
+				ImeIMFsmstate.end
+			ImeIMFsm.end
 		ImeIMProcess.end
 	wted_core	tkclksrc
 		ImeIMGeneric.srefIxWdbeVIop	irefRefWdbeCGeneric	sref	srefWdbeKHdltype	Width	Minmax	Defval	srcSrefWdbeMGeneric	Comment
@@ -685,7 +731,6 @@ tidk
 		retrupd	0		reset								reset
 		retrupd	0		mclk								mclk
 		retrupd	0		tkclk								tkclk
-		ins		dbg	stateOp_dbg	out	slvdn	8					tkclksrcStateOp_dbg
 		ImeIMPort.end
 	wted_core	trafgen
 		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
@@ -700,46 +745,27 @@ tidk
 		ins	5	rtetop	memTWrAXI_wlast	out	sl	1					memTWrAXI_wlast
 		ins	5	rtetop	memTWrAXI_wready	in	sl	1					memTWrAXI_wready
 		ins	5	rtetop	memTWrAXI_wvalid	out	sl	1					memTWrAXI_wvalid
-		ins	5	rtetop	memTWrAXI_bready	out	sl	1					memTWrAXI_bready
-		ins	5	rtetop	memTWrAXI_bresp	in	slvdn	2					memTWrAXI_bresp
-		ins	5	rtetop	memTWrAXI_bvalid	in	sl	1					memTWrAXI_bvalid
 		ins	6	rtetop	reqToDdrifWr	out	sl	1					reqTrafgenToDdrifWr
 		ins	6	rtetop	ackToDdrifWr	in	sl	1					ackTrafgenToDdrifWr
+		ins	0	rtetop	rng	out	sl	1					trafgenRng
 		ImeIMPort.end
 		ImeIMSignal2.srefIxVBasetype	irefRefWdbeCSignal	srefMgeIxVTbl	srefMgeUref	sref	Const	srefWdbeKHdltype	Width	Minmax	Comb	Onval	Offval	Defon	srefDrvRefWdbeMPort	Comment
-		oprt	0	prc	op	ackInvSet	false	sl	1		state(inv)	1	0	false	ackInvSet
 		oprt	1	prc	egr	memTWrAXI_awaddr	false	slvdn	20				0	false	memTWrAXI_awaddr
-		oprt	1	prc	egr	memTWrAXI_awvalid	false	sl	1		state(copyB)	1	0	false	memTWrAXI_awvalid
+		oprt	1	prc	egr	memTWrAXI_awvalid	false	sl	1		state(runB)	1	0	false	memTWrAXI_awvalid
+		oprt	1	prc	egr	memTWrAXI_wdata	false	slvdn	32				0	false	memTWrAXI_wdata
 		oprt	1	prc	egr	memTWrAXI_wlast	false	sl	1				1	false	memTWrAXI_wlast
-		oprt	1	prc	egr	memTWrAXI_wvalid	false	sl	1		state(copyC)	1	0	false	memTWrAXI_wvalid
-		oprt	1	prc	egr	memTWrAXI_bready	false	sl	1		*		1	false	memTWrAXI_bready
-		oprt	0	prc	egr	reqToDdrifWr	false	sl	1		state(copyB)	1	0	false	reqToDdrifWr
-		oth	0	prc	egr	enSetbufB	false	sl	1				0	false
-		oth	2	prc	egr	aSetbufB	false	nat		0..1023			0	false
-		oth	2	prc	egr	aSetbufB_vec	false	slvdn	10		*		std_logic_vector(to_unsigned(aSetbufB, 10))	false
-		oth	0	prc	setbuf	setbufLock	false	lock_t					lockIdle	false
-		oth	0	prc	setbuf	lenSetbuf	false	slvdn	32				0	false
-		oth	0	prc	op	enSetbuf	false	sl	1		state(write) and setbufFromHostifAXIS_tvalid	1	0	false
-		oth	3	prc	op	aSetbuf	false	nat		0..4095			0	false
-		oth	3	prc	op	aSetbuf_vec	false	slvdn	12		*		std_logic_vector(to_unsigned(aSetbuf, 12))	false
-		oth	3	prc	op	lenSetbuf	false	nat		0..4095			0	false
-		oth	0	prc	op	dwrSetbuf	false	slvdn	8				0	false
+		oprt	1	prc	egr	memTWrAXI_wvalid	false	sl	1		state(runC)	1	0	false	memTWrAXI_wvalid
+		oprt	0	prc	egr	reqToDdrifWr	false	sl	1		state(runB)	1	0	false	reqToDdrifWr
+		oprt	0	prc	op	ackInvSet	false	sl	1		state(inv)	1	0	false	ackInvSet
+		oprt	0	prc	op	rng_sig	false	sl	1				0	false	rng
 		oth	0	prc	op	enLenrng	false	sl	1		state(getRnA)	1	0	false
 		oth	0	mdl	lenrng	lenrn	false	slvdn	8					false
 		oth	0	mdl	lenrng	validLenrn	false	sl	1					false
+		oth	0	prc	op	len	false	slvdn	3				0	false		in bursts: allow max. 2 kB i.e. 8 bursts for 128-bit interface
 		oth	0	prc	op	enOfsrng	false	sl	1		state(getRnB)	1	0	false
 		oth	0	mdl	ofsrng	ofsrn	false	slvdn	8					false
 		oth	0	mdl	ofsrng	validOfsrn	false	sl	1					false
-		hshk	4	prc	op	reqOpToSetbufLock	false	sl	1		state(trylock)	1	0	false
-		hshk	4	prc	setbuf	ackOpToSetbufLock	false	sl	1				0	false
-		hshk	4	prc	setbuf	dnyOpToSetbufLock	false	sl	1				0	false
-		hshk	5	prc	op	reqOpToSetbufUnlock	false	sl	1		state(unlock)	1	0	false
-		hshk	5	prc	setbuf	ackOpToSetbufUnlock	false	sl	1				0	false
-		hshk	6	prc	egr	reqEgrToSetbufLock	false	sl	1		state(trylock)	1	0	false
-		hshk	6	prc	setbuf	ackEgrToSetbufLock	false	sl	1				0	false
-		hshk	6	prc	setbuf	dnyEgrToSetbufLock	false	sl	1				0	false
-		hshk	7	prc	egr	reqEgrToSetbufUnlock	false	sl	1		state(unlock)	1	0	false
-		hshk	7	prc	setbuf	ackEgrToSetbufUnlock	false	sl	1				0	false
+		oth	0	prc	op	ofs	false	slvdn	8				0	false
 		ImeIMSignal2.end
 		ImeIMProcess.sref	clkSrefWdbeMSignal	asrSrefWdbeMSignal	Falling	Syncrst	Extip	Comment
 		egr	memclk	resetMemclk	false	state(init)	false	copy data from setbuf to DDR memory
@@ -747,53 +773,53 @@ tidk
 			void
 				ImeIMFsmstate.irefRefWdbeCFsmstate	sref	Extip	Comment
 				0	init	false
-				0	idle	false
-				0	inv	false
-				0	trylock	false
-				1	copyA	false
-				1	copyB	false
-				1	copyC	false
-				0	unlock	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					init	!rng_sig_memclk
+					start	else
+					ImeIAMFsmstateStep.end
+				0	start	true
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					init	!rng_sig_memclk
+					runA	else	start
+					ImeIAMFsmstateStep.end
+				1	runA	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					init	!rng_sig_memclk
+					runB	else	setAddr
+					ImeIAMFsmstateStep.end
+				1	runB	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					runC	ackToDdrifWr and memTWrAXI_awready
+					ImeIAMFsmstateStep.end
+				1	runC	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					init	memTWrAXI_wready	inc	beatEgr=15		!rng_sig_memclk or burstEgr=burstEgrLast
+					runA	memTWrAXI_wready	inc	beatEgr=15		else	nextBurst
+					runC	memTWrAXI_wready	inc	else		nextBeat
+					ImeIAMFsmstateStep.end
 				ImeIMFsmstate.end
 			ImeIMFsm.end
-		op	mclk	reset	false	state(init)	false	main operation
+		op	mclk	reset	false	state(init) or (state(!inv) and reqInvSet)	false	main operation
 			ImeIMFsm.srefIxVDbgtaptype
 			void
 				ImeIMFsmstate.irefRefWdbeCFsmstate	sref	Extip	Comment
 				0	init	false
-				0	idle	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					inv	reqInvSet	invSet
+					getRnA	rng_sig
+					init	else	syncrst
+					ImeIAMFsmstateStep.end
 				0	inv	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					init	!reqInvSet
+					ImeIAMFsmstateStep.end
 				1	getRnA	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					getRnB	validLenrn	getRnA
+					ImeIAMFsmstateStep.end
 				1	getRnB	false
-				0	trylock	false
-				0	fill	false
-				0	unlock	false
-				ImeIMFsmstate.end
-			ImeIMFsm.end
-		setbuf	mclk	reset	false	state(init)	false	set buffer mutex management
-			ImeIAVKeylistKey.sref	Title	Comment
-			lock_t	(lockIdle, lockBuf, lockBufB)	lockIdle
-			ImeIAVKeylistKey.end
-			ImeIMFsm.srefIxVDbgtaptype
-			void
-				ImeIMFsmstate.irefRefWdbeCFsmstate	sref	Extip	Comment
-				0	init	false
 					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
-					ready
-					ImeIAMFsmstateStep.end
-				0	ready	false
-					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
-					ack	reqOpToSetbufLock	bufLock
-					ack	reqOpToSetbufUnlock	bufUnlock
-					ack	reqEgrToSetbufLock	bufBLock
-					ack	reqEgrToSetbufUnlock	bufBUnlock
-					ImeIAMFsmstateStep.end
-				0	ack	false
-					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
-					ready	(ackOpToSetbufLock or dnyOpToSetbufLock) and !reqOpToSetbufLock	bufLock
-					ready	ackOpToSetbufUnlock and !reqOpToSetbufUnlock	bufUnlock
-					ready	(ackEgrToSetbufLock or dnyEgrToSetbufLock) and !reqEgrToSetbufLock	bufBLock
-					ready	ackEgrToSetbufUnlock and !reqEgrToSetbufUnlock	bufBUnlock
+					getRnA	validOfsrn	getRnB
 					ImeIAMFsmstateStep.end
 				ImeIMFsmstate.end
 			ImeIMFsm.end
@@ -811,19 +837,6 @@ tidk
 		retrupd			enable_i								enOfsrng
 		retrupd			data_o								ofsrn
 		retrupd			valid_o								validOfsrn
-		ImeIMPort.end
-	wted_core;trafgen	setbuf
-		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
-		retrupd			clkA							mclk
-		retrupd			enA								enSetbuf
-		retrupd			weA					1
-		retrupd			aA								aSetbuf_vec
-		retrupd			dwrA								dwrSetbuf
-		retrupd			clkB							memclk
-		retrupd			enB								enSetbufB
-		retrupd			weB					0
-		retrupd			aB								aSetbufB_vec
-		retrupd			drdB							memTWrAXI_wdata
 		ImeIMPort.end
 	ImeIMModule.end
 zudk
@@ -865,7 +878,18 @@ zudk
 		ins	5	rtepin	apuAXIL_bready	in	sl	1
 		ins	5	rtepin	apuAXIL_bresp	out	slvdn	2
 		ins	5	rtepin	apuAXIL_bvalid	out	sl	1
+		ins	6	rtepin	rgb0_r	out	sl	1			rgb0_r
+		ins	6	rtepin	rgb0_g	out	sl	1			rgb0_g
+		ins	6	rtepin	rgb0_b	out	sl	1			rgb0_b
 		ins	0	rtepin	probe	out	slvdn	6			probe
+		ins	7	rtepin	ddrAXI_araddr	out	slvdn	40
+		ins	7	rtepin	ddrAXI_arvalid	out	sl	1
+		ins	7	rtepin	ddrAXI_rready	out	sl	1
+		ins	7	rtepin	ddrAXI_awaddr	out	slvdn	40
+		ins	7	rtepin	ddrAXI_awvalid	out	sl	1
+		ins	7	rtepin	ddrAXI_wdata	out	slvdn	128
+		ins	7	rtepin	ddrAXI_wlast	out	sl	1
+		ins	7	rtepin	ddrAXI_bready	out	sl	1
 		ImeIMPort.end
 		ImeIMSignal2.srefIxVBasetype	irefRefWdbeCSignal	srefMgeIxVTbl	srefMgeUref	sref	Const	srefWdbeKHdltype	Width	Minmax	Comb	Onval	Offval	Defon	srefDrvRefWdbeMPort	Comment
 		oth	0	mdl	debounceBtn0	btn0_sig	false	sl	1					false
@@ -881,9 +905,6 @@ zudk
 		oth	7	mdl	trafgen	memTWrAXI_wlast	false	sl	1					false
 		oth	7	mdl	ddrif	memTWrAXI_wready	false	sl	1					false
 		oth	7	mdl	trafgen	memTWrAXI_wvalid	false	sl	1					false
-		oth	7	mdl	trafgen	memTWrAXI_bready	false	sl	1					false
-		oth	7	mdl	ddrif	memTWrAXI_bresp	false	slvdn	2					false
-		oth	7	mdl	ddrif	memTWrAXI_bvalid	false	sl	1					false
 		oth	8	mdl	client	memCRdAXI_araddr	false	slvdn	20					false
 		oth	8	mdl	ddrif	memCRdAXI_arready	false	sl	1					false
 		oth	8	mdl	client	memCRdAXI_arvalid	false	sl	1					false
@@ -900,17 +921,23 @@ zudk
 		oth	9	mdl	client	memCWrAXI_wlast	false	sl	1					false
 		oth	9	mdl	ddrif	memCWrAXI_wready	false	sl	1					false
 		oth	9	mdl	client	memCWrAXI_wvalid	false	sl	1					false
-		oth	9	mdl	client	memCWrAXI_bready	false	sl	1					false
-		oth	9	mdl	ddrif	memCWrAXI_bresp	false	slvdn	2					false
-		oth	9	mdl	ddrif	memCWrAXI_bvalid	false	sl	1					false
-		hshk	15	mdl	client	reqClientToDdrifRd	false	sl	1					false
-		hshk	15	mdl	ddrif	ackClientToDdrifRd	false	sl	1					false
-		hshk	16	mdl	client	reqClientToDdrifWr	false	sl	1					false
-		hshk	16	mdl	ddrif	ackClientToDdrifWr	false	sl	1					false
-		hshk	17	mdl	trafgen	reqTrafgenToDdrifWr	false	sl	1					false
-		hshk	17	mdl	ddrif	ackTrafgenToDdrifWr	false	sl	1					false
-		oth	0	mdl	hostif	hostifStateOp_dbg	false	slvdn	8					false
-		oth	0	mdl	tkclksrc	tkclksrcStateOp_dbg	false	slvdn	8					false
+		oprt	10	mdl	rgbled0	rgb0_r	false	sl	1					false	rgb0_r
+		oprt	10	mdl	rgbled0	rgb0_g	false	sl	1					false	rgb0_g
+		oprt	10	mdl	rgbled0	rgb0_b	false	sl	1					false	rgb0_b
+		hshk	11	mdl	client	reqClientToDdrifRd	false	sl	1					false
+		hshk	11	mdl	ddrif	ackClientToDdrifRd	false	sl	1					false
+		hshk	12	mdl	client	reqClientToDdrifWr	false	sl	1					false
+		hshk	12	mdl	ddrif	ackClientToDdrifWr	false	sl	1					false
+		hshk	13	mdl	trafgen	reqTrafgenToDdrifWr	false	sl	1					false
+		hshk	13	mdl	ddrif	ackTrafgenToDdrifWr	false	sl	1					false
+		oth	14	mdl	ddrif	ddrAXI_araddr_sig	false	slvdn	40					false
+		oth	14	mdl	ddrif	ddrAXI_arvalid_sig	false	sl	1					false
+		oth	14	mdl	ddrif	ddrAXI_rready_sig	false	sl	1					false
+		oth	14	mdl	ddrif	ddrAXI_awaddr_sig	false	slvdn	40					false
+		oth	14	mdl	ddrif	ddrAXI_awvalid_sig	false	sl	1					false
+		oth	14	mdl	ddrif	ddrAXI_wdata_sig	false	slvdn	128					false
+		oth	14	mdl	ddrif	ddrAXI_wlast_sig	false	sl	1					false
+		oth	14	mdl	ddrif	ddrAXI_bready_sig	false	sl	1					false
 		ImeIMSignal2.end
 	wted_core	client
 		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
@@ -935,23 +962,30 @@ zudk
 		ins	5	rtetop	memCWrAXI_wlast	out	sl	1					memCWrAXI_wlast
 		ins	5	rtetop	memCWrAXI_wready	in	sl	1					memCWrAXI_wready
 		ins	5	rtetop	memCWrAXI_wvalid	out	sl	1					memCWrAXI_wvalid
-		ins	5	rtetop	memCWrAXI_bready	out	sl	1					memCWrAXI_bready
-		ins	5	rtetop	memCWrAXI_bresp	in	slvdn	2					memCWrAXI_bresp
-		ins	5	rtetop	memCWrAXI_bvalid	in	sl	1					memCWrAXI_bvalid
 		ins	6	rtetop	reqToDdrifWr	out	sl	1					reqClientToDdrifWr
 		ins	6	rtetop	ackToDdrifWr	in	sl	1					ackClientToDdrifWr
 		ImeIMPort.end
 		ImeIMSignal2.srefIxVBasetype	irefRefWdbeCSignal	srefMgeIxVTbl	srefMgeUref	sref	Const	srefWdbeKHdltype	Width	Minmax	Comb	Onval	Offval	Defon	srefDrvRefWdbeMPort	Comment
-		oprt	0	prc	egr	ackInvStoreSetbuf	false	sl	1		state(inv)	1	0	false	ackInvStoreSetbuf
+		oth	0	prc	egr	ackInvStoreSetbuf_sig	false	sl	1		state(inv)	1	0	false
 		oprt	1	prc	egr	memCWrAXI_awaddr	false	slvdn	20				0	false	memCWrAXI_awaddr
 		oprt	1	prc	egr	memCWrAXI_awvalid	false	sl	1		state(copyB)	1	0	false	memCWrAXI_awvalid
-		oprt	1	prc	egr	memCWrAXI_wlast	false	sl	1				1	false	memCWrAXI_wlast
-		oprt	1	prc	egr	memCWrAXI_wvalid	false	sl	1		state(copyC)	1	0	false	memCWrAXI_wvalid
-		oprt	1	prc	egr	memCWrAXI_bready	false	sl	1		*		1	false	memCWrAXI_bready
+		oprt	1	prc	egr	memCWrAXI_wdata	false	slvdn	128		*		egrAXIS_tdata	false	memCWrAXI_wdata
+		oprt	1	prc	egr	memCWrAXI_wlast	false	sl	1		(reqEgrToEgrstr and !ackEgrToEgrstr) or !egrAXIS_tlast	0	1	false	memCWrAXI_wlast
+		oprt	1	prc	egr	memCWrAXI_wvalid	false	sl	1		*		egrAXIS_tvalid	false	memCWrAXI_wvalid
+		oth	17	prc	egr	a0Egrstr	false	nat		0..127			0	false
+		oth	17	prc	egr	lenEgrstr	false	nat		0..16			0	false
+		oth	0	prc	egr	setbufClearNotKeep	false	sl	1				0	false
 		oprt	0	prc	egr	reqToDdrifWr	false	sl	1		state(copyB)	1	0	false	reqToDdrifWr
-		oth	0	prc	egr	enSetbuf	false	sl	1				0	false
-		oth	2	prc	egr	aSetbuf	false	nat		0..127			0	false
-		oth	2	prc	egr	aSetbuf_vec	false	slvdn	7		*		std_logic_vector(to_unsigned(aSetbuf, 7))	false
+		oth	18	prc	egrstr	enSetbuf	false	sl	1				0	false
+		oth	18	prc	egrstr	enSetbufm1	false	sl	1				0	false
+		oth	2	prc	egrstr	aSetbuf	false	nat		0..127			0	false
+		oth	2	prc	egrstr	aSetbuf_vec	false	slvdn	7		*		std_logic_vector(to_unsigned(aSetbuf, 7))	false
+		oth	0	prc	egrstr	egrfifo	false	egrfifo_t					(others => (others => '0'))	false
+		oth	19	prc	egrstr	ixRdEgrfifo	false	nat		0..2			0	false
+		oth	19	prc	egrstr	ixWrEgrfifo	false	nat		0..2			0	false
+		oth	20	prc	egrstr	egrAXIS_tdata	false	slvdn	128				0	false
+		oth	20	prc	egrstr	egrAXIS_tvalid	false	sl	1		state(run)	1	0	false
+		oth	20	prc	egrstr	egrAXIS_tlast	false	sl	1				1	false
 		oth	0	prc	getbuf	getbufLock	false	lock_t					lockIdle	false
 		oth	0	prc	getbuf	lenGetbuf	false	slvdn	32				0	false
 		oprt	0	prc	getbufB	ackGetbufToHostif	false	sl	1		state(xferA..B;done)	1	0	false	ackGetbufToHostif
@@ -961,7 +995,7 @@ zudk
 		oth	4	prc	getbufB	aGetbufB	false	nat		0..255			0	false
 		oth	4	prc	getbufB	aGetbufB_vec	false	slvdn	8		*		std_logic_vector(to_unsigned(aGetbufB, 8))	false
 		oth	0	prc	getbufB	getbufClearNotKeep	false	sl	1				0	false
-		oprt	0	prc	igr	ackInvLoadGetbuf	false	sl	1		state(inv)	1	0	false	ackInvLoadGetbuf
+		oth	0	prc	igr	ackInvLoadGetbuf_sig	false	sl	1		state(inv)	1	0	false
 		oprt	5	prc	igr	memCRdAXI_araddr	false	slvdn	20				0	false	memCRdAXI_araddr
 		oprt	5	prc	igr	memCRdAXI_arvalid	false	sl	1		state(copyB)	1	0	false	memCRdAXI_arvalid
 		oprt	0	prc	igr	memCRdAXI_rready	false	sl	1		state(copyC)	1	0	false	memCRdAXI_rready
@@ -969,6 +1003,7 @@ zudk
 		oth	0	prc	igr	enGetbuf	false	sl	1		state(copyC)	1	0	false
 		oth	6	prc	igr	aGetbuf	false	nat		0..127			0	false
 		oth	6	prc	igr	aGetbuf_vec	false	slvdn	7		*		std_logic_vector(to_unsigned(aGetbuf, 7))	false
+		oth	0	prc	igr	lenGetbuf_sig	false	slvdn	32				0	false
 		oth	0	prc	setbuf	setbufLock	false	lock_t					lockIdle	false
 		oth	0	prc	setbuf	lenSetbuf	false	slvdn	32				0	false
 		oprt	0	prc	setbufB	ackSetbufFromHostif	false	sl	1		state(write)	1	0	false	ackSetbufFromHostif
@@ -976,7 +1011,15 @@ zudk
 		oth	0	prc	setbufB	enSetbufB	false	sl	1		state(write) and setbufFromHostifAXIS_tvalid	1	0	false
 		oth	7	prc	setbufB	aSetbufB	false	nat		0..255			0	false
 		oth	7	prc	setbufB	aSetbufB_vec	false	slvdn	8		*		std_logic_vector(to_unsigned(aSetbufB, 8))	false
-		oth	7	prc	setbufB	lenSetbufB	false	nat		0..2047			0	false
+		oth	7	prc	setbufB	lenSetbufB	false	slvdn	32				0	false
+		oth	0	mdl	setbuf	drdSetbuf	false	slvdn	128					false
+		oth	0	void		reqInvLoadGetbuf_sig	false	sl	1					false
+		oth	0	void		reqInvStoreSetbuf_sig	false	sl	1					false
+		hshk	16	prc	egr	reqEgrToEgrstr	false	sl	1				0	false
+		hshk	16	prc	egrstr	ackEgrToEgrstr	false	sl	1				0	false
+		hshk	16	prc	egrstr	dneEgrToEgrstr	false	sl	1				0	false
+		hshk	21	prc	egr	egrAXIS_tready	false	sl	1				0	false
+		hshk	21	prc	egrstr	egrAXIS_tvalud	false	sl	1				0	false
 		hshk	8	prc	igr	reqIgrToGetbufLock	false	sl	1		state(trylock)	1	0	false
 		hshk	8	prc	getbuf	ackIgrToGetbufLock	false	sl	1				0	false
 		hshk	8	prc	getbuf	dnyIgrToGetbufLock	false	sl	1				0	false
@@ -998,19 +1041,93 @@ zudk
 		hshk	15	prc	setbufB	reqSetbufBToSetbufUnlock	false	sl	1		state(unlock)	1	0	false
 		hshk	15	prc	setbuf	ackSetbufBToSetbufUnlock	false	sl	1				0	false
 		ImeIMSignal2.end
+		ImeIMCdc.fckSrefWdbeMSignal	farSrefWdbeMSignal	sckSrefWdbeMSignal	sarSrefWdbeMSignal	Ratio
+		memclk	resetMemclk	mclk	reset	3.0
+			ImeIRMCdcMSignal.srefRefWdbeMSignal	srefIxVDir
+			reqInvLoadGetbuf_sig	stf
+			ackInvLoadGetbuf_sig	fts
+			reqInvStoreSetbuf_sig	stf
+			ackInvStoreSetbuf_sig	fts
+			reqIgrToGetbufLock	fts
+			ackIgrToGetbufLock	stf
+			dnyIgrToGetbufLock	stf
+			reqIgrToGetbufUnlock	fts
+			ackIgrToGetbufUnlock	stf
+			reqEgrToSetbufLock	fts
+			ackEgrToSetbufLock	stf
+			dnyEgrToSetbufLock	stf
+			reqEgrToSetbufUnlock	fts
+			ackEgrToSetbufUnlock	stf
+			ImeIRMCdcMSignal.end
+		ImeIMCdc.end
 		ImeIMProcess.sref	clkSrefWdbeMSignal	asrSrefWdbeMSignal	Falling	Syncrst	Extip	Comment
 		egr	memclk	resetMemclk	false	state(init)	false	copy data from setbuf to DDR memory
 			ImeIMFsm.srefIxVDbgtaptype
 			void
 				ImeIMFsmstate.irefRefWdbeCFsmstate	sref	Extip	Comment
 				0	init	false
-				0	idle	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					inv	reqInvStoreSetbuf_sig_memclk
+					init	else
+					ImeIAMFsmstateStep.end
 				0	inv	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					trylock	!reqInvStoreSetbuf_sig_memclk
+					ImeIAMFsmstateStep.end
 				0	trylock	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					copyA	ackEgrToSetbufLock_memclk
+					init	dnyEgrToSetbufLock_memclk
+					ImeIAMFsmstateStep.end
 				1	copyA	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					copyB		setAddr
+					ImeIAMFsmstateStep.end
 				1	copyB	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					copyC	ackToDdrifWr and memCWrAXI_awready
+					ImeIAMFsmstateStep.end
 				1	copyC	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					unlock	dneEgrToEgrstr		burstEgr=NBurstEgr-1	done
+					copyA	dneEgrToEgrstr		else	nextBurst
+					ImeIAMFsmstateStep.end
 				0	unlock	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					init	ackEgrToSetbufUnlock_memclk
+					ImeIAMFsmstateStep.end
+				ImeIMFsmstate.end
+			ImeIMFsm.end
+		egrstr	memclk	resetMemclk	false	state(init)	false	continuous streaming from buffers
+			ImeIAVKeylistKey.sref	Title	Comment
+			egrfifo_t	array (0 to 2) of std_logic_vector(127 downto 0)	(others => (others => '0'))
+			ImeIAVKeylistKey.end
+			ImeIMFsm.srefIxVDbgtaptype
+			void
+				ImeIMFsmstate.irefRefWdbeCFsmstate	sref	Extip	Comment
+				0	init	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					idle		syncrst
+					ImeIAMFsmstateStep.end
+				0	idle	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					load	reqEgrToEgrstr	start
+					ImeIAMFsmstateStep.end
+				0	load	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					load	i=0	one
+					load	i=1	two
+					run	else	done
+					ImeIAMFsmstateStep.end
+				0	run	true
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					done	egrAXIS_tready and egrAXIS_tlast	done
+					run	else	nextWord
+					ImeIAMFsmstateStep.end
+				0	done	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					init	!reqEgrToEgrstr
+					ImeIAMFsmstateStep.end
 				ImeIMFsmstate.end
 			ImeIMFsm.end
 		getbuf	mclk	reset	false	state(init)	false	get buffer mutex management
@@ -1042,7 +1159,7 @@ zudk
 			ImeIMFsm.end
 		getbufB	mclk	reset	false	state(init)	false	get buffer B/hostif-facing operation
 			ImeIMFsm.srefIxVDbgtaptype
-			void
+			clust
 				ImeIMFsmstate.irefRefWdbeCFsmstate	sref	Extip	Comment
 				0	init	false
 					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
@@ -1083,19 +1200,40 @@ zudk
 			void
 				ImeIMFsmstate.irefRefWdbeCFsmstate	sref	Extip	Comment
 				0	init	false
-				0	idle	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					inv	reqInvLoadGetbuf_sig_memclk
+					init	else
+					ImeIAMFsmstateStep.end
 				0	inv	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					trylock	!reqInvLoadGetbuf_sig_memclk
+					ImeIAMFsmstateStep.end
 				0	trylock	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					copyA	ackIgrToGetbufLock_memclk
+					init	dnyIgrToGetbufLock_memclk
+					ImeIAMFsmstateStep.end
 				1	copyA	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					copyB		copyA
+					ImeIAMFsmstateStep.end
 				1	copyB	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					copyC	ackToDdrifRd and memCRdAXI_arready
+					ImeIAMFsmstateStep.end
 				1	copyC	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					unlock	memCRdAXI_rvalid	inc	beatIgr=NBeatIgr-1	burstDone	burstIgr=NBurstIgr-1	done
+					copyB	memCRdAXI_rvalid	inc	beatIgr=NBeatIgr-1	burstDone	else	nextBurst
+					copyC	memCRdAXI_rvalid	inc	else	nextBeat
+					ImeIAMFsmstateStep.end
 				0	unlock	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					init	ackIgrToGetbufUnlock_memclk
+					ImeIAMFsmstateStep.end
 				ImeIMFsmstate.end
 			ImeIMFsm.end
 		setbuf	mclk	reset	false	state(init)	false	set buffer mutex management
-			ImeIAVKeylistKey.sref	Title	Comment
-			lock_t	(lockIdle, lockBuf, lockBufB)	lockIdle
-			ImeIAVKeylistKey.end
 			ImeIMFsm.srefIxVDbgtaptype
 			void
 				ImeIMFsmstate.irefRefWdbeCFsmstate	sref	Extip	Comment
@@ -1121,7 +1259,7 @@ zudk
 			ImeIMFsm.end
 		setbufB	mclk	reset	false	state(init)	false	set buffer B/hostif-facing operation
 			ImeIMFsm.srefIxVDbgtaptype
-			void
+			clust
 				ImeIMFsmstate.irefRefWdbeCFsmstate	sref	Extip	Comment
 				0	init	false
 					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
@@ -1172,7 +1310,7 @@ zudk
 		retrupd			enA								enSetbuf
 		retrupd			weA					0
 		retrupd			addrA								aSetbuf_vec
-		retrupd			doutA							memCWrAXI_wdata
+		retrupd			doutA								drdSetbuf
 		retrupd			clkB							mclk
 		retrupd			enB								enSetbufB
 		retrupd			weB					1
@@ -1194,7 +1332,8 @@ zudk
 		retrupd			tkclk								tkclk
 		retrupd			resetMemclk								resetMemclk
 		retrupd			memclk							memclk
-		retrupd			ddrAXI_araddr						ddrAXI_araddr
+		retrupd			ddrAXI_arid						ddrAXI_arid
+		retrupd			ddrAXI_araddr								ddrAXI_araddr_sig
 		retrupd			ddrAXI_arburst						ddrAXI_arburst
 		retrupd			ddrAXI_arcache						ddrAXI_arcache
 		retrupd			ddrAXI_arlen						ddrAXI_arlen
@@ -1204,13 +1343,15 @@ zudk
 		retrupd			ddrAXI_arready						ddrAXI_arready
 		retrupd			ddrAXI_arregion						ddrAXI_arregion
 		retrupd			ddrAXI_arsize						ddrAXI_arsize
-		retrupd			ddrAXI_arvalid						ddrAXI_arvalid
+		retrupd			ddrAXI_arvalid								ddrAXI_arvalid_sig
+		retrupd			ddrAXI_rid						ddrAXI_rid
 		retrupd			ddrAXI_rdata						ddrAXI_rdata
 		retrupd			ddrAXI_rlast						ddrAXI_rlast
-		retrupd			ddrAXI_rready						ddrAXI_rready
+		retrupd			ddrAXI_rready								ddrAXI_rready_sig
 		retrupd			ddrAXI_rresp						ddrAXI_rresp
 		retrupd			ddrAXI_rvalid						ddrAXI_rvalid
-		retrupd			ddrAXI_awaddr						ddrAXI_awaddr
+		retrupd			ddrAXI_awid						ddrAXI_awid
+		retrupd			ddrAXI_awaddr								ddrAXI_awaddr_sig
 		retrupd			ddrAXI_awburst						ddrAXI_awburst
 		retrupd			ddrAXI_awcache						ddrAXI_awcache
 		retrupd			ddrAXI_awlen						ddrAXI_awlen
@@ -1220,13 +1361,14 @@ zudk
 		retrupd			ddrAXI_awready						ddrAXI_awready
 		retrupd			ddrAXI_awregion						ddrAXI_awregion
 		retrupd			ddrAXI_awsize						ddrAXI_awsize
-		retrupd			ddrAXI_awvalid						ddrAXI_awvalid
-		retrupd			ddrAXI_wdata						ddrAXI_wdata
-		retrupd			ddrAXI_wlast						ddrAXI_wlast
+		retrupd			ddrAXI_awvalid								ddrAXI_awvalid_sig
+		retrupd			ddrAXI_wdata								ddrAXI_wdata_sig
+		retrupd			ddrAXI_wlast								ddrAXI_wlast_sig
 		retrupd			ddrAXI_wready						ddrAXI_wready
 		retrupd			ddrAXI_wstrb						ddrAXI_wstrb
 		retrupd			ddrAXI_wvalid						ddrAXI_wvalid
-		retrupd			ddrAXI_bready						ddrAXI_bready
+		retrupd			ddrAXI_bid						ddrAXI_bid
+		retrupd			ddrAXI_bready								ddrAXI_bready_sig
 		retrupd			ddrAXI_bresp						ddrAXI_bresp
 		retrupd			ddrAXI_bvalid						ddrAXI_bvalid
 		retrupd			rdAAXI_araddr								memCRdAXI_araddr
@@ -1244,9 +1386,6 @@ zudk
 		retrupd			wrAAXI_wlast								memCWrAXI_wlast
 		retrupd			wrAAXI_wready								memCWrAXI_wready
 		retrupd			wrAAXI_wvalid								memCWrAXI_wvalid
-		retrupd			wrAAXI_bready								memCWrAXI_bready
-		retrupd			wrAAXI_bresp								memCWrAXI_bresp
-		retrupd			wrAAXI_bvalid								memCWrAXI_bvalid
 		retrupd			wrBAXI_awaddr								memTWrAXI_awaddr
 		retrupd			wrBAXI_awready								memTWrAXI_awready
 		retrupd			wrBAXI_awvalid								memTWrAXI_awvalid
@@ -1254,9 +1393,6 @@ zudk
 		retrupd			wrBAXI_wlast								memTWrAXI_wlast
 		retrupd			wrBAXI_wready								memTWrAXI_wready
 		retrupd			wrBAXI_wvalid								memTWrAXI_wvalid
-		retrupd			wrBAXI_bready								memTWrAXI_bready
-		retrupd			wrBAXI_bresp								memTWrAXI_bresp
-		retrupd			wrBAXI_bvalid								memTWrAXI_bvalid
 		retrupd			reqRdA								reqClientToDdrifRd
 		retrupd			ackRdA								ackClientToDdrifRd
 		retrupd			reqWrA								reqClientToDdrifWr
@@ -1291,7 +1427,6 @@ zudk
 		retrupd			AXIL_bresp							apuAXIL_bresp
 		retrupd			AXIL_bvalid							apuAXIL_bvalid
 		ins		rtesup	rxAXIS_tvalid_sig	out	sl	1					hostifRxAXIS_tvalid
-		ins		dbg	stateOp_dbg	out	slvdn	8					hostifStateOp_dbg
 		ImeIMPort.end
 	wted_core	ident
 	wted_core	mfsmtrack0
@@ -1308,22 +1443,39 @@ zudk
 		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
 		retrupd			reset								reset
 		retrupd			mclk								mclk
+		retrupd			btn0						btn0
 		ImeIMPort.end
-	wted_core	memgptrack
+	wted_core	memrdtrack
 		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
 		retrupd			reset								reset
 		retrupd			mclk								mclk
-		ins	0	reset	resetMemclk	in	sl	1					resetMemclk
-		ins	0	clk	memclk	in	sl	1				memclk
+		retrupd			resetMemclk								resetMemclk
+		retrupd			memclk							memclk
+		retrupd			ddrAXI_arready						ddrAXI_arready
+		retrupd			ddrAXI_rdata						ddrAXI_rdata
+		retrupd			ddrAXI_rlast						ddrAXI_rlast
+		ImeIMPort.end
+	wted_core	memwrtrack
+		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
+		retrupd			reset								reset
+		retrupd			mclk								mclk
+		retrupd			resetMemclk								resetMemclk
+		retrupd			memclk							memclk
+		retrupd			ddrAXI_awready						ddrAXI_awready
+		retrupd			ddrAXI_wready						ddrAXI_wready
+		retrupd			ddrAXI_bvalid						ddrAXI_bvalid
 		ImeIMPort.end
 	wted_core	rgbled0
+		ImeIMGeneric.srefIxWdbeVIop	irefRefWdbeCGeneric	sref	srefWdbeKHdltype	Width	Minmax	Defval	srcSrefWdbeMGeneric	Comment
+		retrupd	0	fMclk					fMclk
+		ImeIMGeneric.end
 		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
 		retrupd			reset								reset
 		retrupd			mclk								mclk
 		retrupd			rgb								rgb0
-		retrupd			r						rgb0_r
-		retrupd			g						rgb0_g
-		retrupd			b						rgb0_b
+		retrupd			r								rgb0_r
+		retrupd			g								rgb0_g
+		retrupd			b								rgb0_b
 		ImeIMPort.end
 	wted_core	state
 		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
@@ -1338,6 +1490,7 @@ zudk
 		oth	0	prc	led	sizeSeq	true	nat					5	false
 		oth	0	prc	led	seq	false	seq_t						false
 		oth	0	prc	led	ixSeq	false	nat		0..sizeSeq-1			0	false
+		oth	0	prc	op	trafgenRng_capt	false	sl	1				0	false
 		oth	2	void		rgbWhite	true	slvdn	24				x"555555"	false
 		oth	2	void		rgbRed	true	slvdn	24				x"FF0000"	false
 		oth	2	void		rgbOrange	true	slvdn	24				x"7F7F00"	false
@@ -1368,7 +1521,20 @@ zudk
 					ImeIAMFsmstateStep.end
 				ImeIMFsmstate.end
 			ImeIMFsm.end
-		op	mclk	reset	false		false	main operation
+		op	mclk	reset	false		true	main operation
+			ImeIMFsm.srefIxVDbgtaptype
+			void
+				ImeIMFsmstate.irefRefWdbeCFsmstate	sref	Extip	Comment
+				1	runA	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					runB	tkclk	runA
+					ImeIAMFsmstateStep.end
+				1	runB	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					runA	!tkclk	runB
+					ImeIAMFsmstateStep.end
+				ImeIMFsmstate.end
+			ImeIMFsm.end
 		ImeIMProcess.end
 	wted_core	tkclksrc
 		ImeIMGeneric.srefIxWdbeVIop	irefRefWdbeCGeneric	sref	srefWdbeKHdltype	Width	Minmax	Defval	srcSrefWdbeMGeneric	Comment
@@ -1378,7 +1544,6 @@ zudk
 		retrupd	0		reset								reset
 		retrupd	0		mclk								mclk
 		retrupd	0		tkclk								tkclk
-		ins		dbg	stateOp_dbg	out	slvdn	8					tkclksrcStateOp_dbg
 		ImeIMPort.end
 	wted_core	trafgen
 		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
@@ -1393,100 +1558,89 @@ zudk
 		ins	5	rtetop	memTWrAXI_wlast	out	sl	1					memTWrAXI_wlast
 		ins	5	rtetop	memTWrAXI_wready	in	sl	1					memTWrAXI_wready
 		ins	5	rtetop	memTWrAXI_wvalid	out	sl	1					memTWrAXI_wvalid
-		ins	5	rtetop	memTWrAXI_bready	out	sl	1					memTWrAXI_bready
-		ins	5	rtetop	memTWrAXI_bresp	in	slvdn	2					memTWrAXI_bresp
-		ins	5	rtetop	memTWrAXI_bvalid	in	sl	1					memTWrAXI_bvalid
 		ins	6	rtetop	reqToDdrifWr	out	sl	1					reqTrafgenToDdrifWr
 		ins	6	rtetop	ackToDdrifWr	in	sl	1					ackTrafgenToDdrifWr
+		ins	0	rtetop	rng	out	sl	1					trafgenRng
 		ImeIMPort.end
 		ImeIMSignal2.srefIxVBasetype	irefRefWdbeCSignal	srefMgeIxVTbl	srefMgeUref	sref	Const	srefWdbeKHdltype	Width	Minmax	Comb	Onval	Offval	Defon	srefDrvRefWdbeMPort	Comment
-		oprt	0	prc	op	ackInvSet	false	sl	1		state(inv)	1	0	false	ackInvSet
 		oprt	1	prc	egr	memTWrAXI_awaddr	false	slvdn	20				0	false	memTWrAXI_awaddr
-		oprt	1	prc	egr	memTWrAXI_awvalid	false	sl	1		state(copyB)	1	0	false	memTWrAXI_awvalid
+		oprt	1	prc	egr	memTWrAXI_awvalid	false	sl	1		state(runB)	1	0	false	memTWrAXI_awvalid
+		oprt	1	prc	egr	memTWrAXI_wdata	false	slvdn	128				0	false	memTWrAXI_wdata
 		oprt	1	prc	egr	memTWrAXI_wlast	false	sl	1				1	false	memTWrAXI_wlast
-		oprt	1	prc	egr	memTWrAXI_wvalid	false	sl	1		state(copyC)	1	0	false	memTWrAXI_wvalid
-		oprt	1	prc	egr	memTWrAXI_bready	false	sl	1		*		1	false	memTWrAXI_bready
-		oprt	0	prc	egr	reqToDdrifWr	false	sl	1		state(copyB)	1	0	false	reqToDdrifWr
-		oth	0	prc	egr	enSetbufB	false	sl	1				0	false
-		oth	2	prc	egr	aSetbufB	false	nat		0..127			0	false
-		oth	2	prc	egr	aSetbufB_vec	false	slvdn	7		*		std_logic_vector(to_unsigned(aSetbufB, 7))	false
-		oth	0	prc	setbuf	setbufLock	false	lock_t					lockIdle	false
-		oth	0	prc	setbuf	lenSetbuf	false	slvdn	32				0	false
-		oth	0	prc	op	enSetbuf	false	sl	1		state(write) and setbufFromHostifAXIS_tvalid	1	0	false
-		oth	3	prc	op	aSetbuf	false	nat		0..2047			0	false
-		oth	3	prc	op	aSetbuf_vec	false	slvdn	11		*		std_logic_vector(to_unsigned(aSetbuf, 11))	false
-		oth	3	prc	op	lenSetbuf	false	nat		0..2047			0	false
-		oth	0	prc	op	dwrSetbuf	false	slvdn	8				0	false
+		oprt	1	prc	egr	memTWrAXI_wvalid	false	sl	1		state(runC)	1	0	false	memTWrAXI_wvalid
+		oprt	0	prc	egr	reqToDdrifWr	false	sl	1		state(runB)	1	0	false	reqToDdrifWr
+		oprt	0	prc	op	ackInvSet	false	sl	1		state(inv)	1	0	false	ackInvSet
+		oprt	0	prc	op	rng_sig	false	sl	1				0	false	rng
 		oth	0	prc	op	enLenrng	false	sl	1		state(getRnA)	1	0	false
 		oth	0	mdl	lenrng	lenrn	false	slvdn	8					false
 		oth	0	mdl	lenrng	validLenrn	false	sl	1					false
+		oth	0	prc	op	len	false	slvdn	3				0	false		in bursts: allow max. 2 kB i.e. 8 bursts for 128-bit interface
 		oth	0	prc	op	enOfsrng	false	sl	1		state(getRnB)	1	0	false
 		oth	0	mdl	ofsrng	ofsrn	false	slvdn	8					false
 		oth	0	mdl	ofsrng	validOfsrn	false	sl	1					false
-		hshk	4	prc	op	reqOpToSetbufLock	false	sl	1		state(trylock)	1	0	false
-		hshk	4	prc	setbuf	ackOpToSetbufLock	false	sl	1				0	false
-		hshk	4	prc	setbuf	dnyOpToSetbufLock	false	sl	1				0	false
-		hshk	5	prc	op	reqOpToSetbufUnlock	false	sl	1		state(unlock)	1	0	false
-		hshk	5	prc	setbuf	ackOpToSetbufUnlock	false	sl	1				0	false
-		hshk	6	prc	egr	reqEgrToSetbufLock	false	sl	1		state(trylock)	1	0	false
-		hshk	6	prc	setbuf	ackEgrToSetbufLock	false	sl	1				0	false
-		hshk	6	prc	setbuf	dnyEgrToSetbufLock	false	sl	1				0	false
-		hshk	7	prc	egr	reqEgrToSetbufUnlock	false	sl	1		state(unlock)	1	0	false
-		hshk	7	prc	setbuf	ackEgrToSetbufUnlock	false	sl	1				0	false
+		oth	0	prc	op	ofs	false	slvdn	8				0	false
 		ImeIMSignal2.end
+		ImeIMCdc.fckSrefWdbeMSignal	farSrefWdbeMSignal	sckSrefWdbeMSignal	sarSrefWdbeMSignal	Ratio
+		memclk	resetMemclk	mclk	reset	3.0
+			ImeIRMCdcMSignal.srefRefWdbeMSignal	srefIxVDir
+			rng_sig	stf
+			len	stf
+			ofs	stf
+			ImeIRMCdcMSignal.end
+		ImeIMCdc.end
 		ImeIMProcess.sref	clkSrefWdbeMSignal	asrSrefWdbeMSignal	Falling	Syncrst	Extip	Comment
 		egr	memclk	resetMemclk	false	state(init)	false	copy data from setbuf to DDR memory
 			ImeIMFsm.srefIxVDbgtaptype
 			void
 				ImeIMFsmstate.irefRefWdbeCFsmstate	sref	Extip	Comment
 				0	init	false
-				0	idle	false
-				0	inv	false
-				0	trylock	false
-				1	copyA	false
-				1	copyB	false
-				1	copyC	false
-				0	unlock	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					init	!rng_sig_memclk
+					start	else
+					ImeIAMFsmstateStep.end
+				0	start	true
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					init	!rng_sig_memclk
+					runA	else	start
+					ImeIAMFsmstateStep.end
+				1	runA	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					init	!rng_sig_memclk
+					runB	else	setAddr
+					ImeIAMFsmstateStep.end
+				1	runB	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					runC	ackToDdrifWr and memTWrAXI_awready
+					ImeIAMFsmstateStep.end
+				1	runC	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					init	memTWrAXI_wready	inc	beatEgr=15		!rng_sig_memclk or burstEgr=burstEgrLast
+					runA	memTWrAXI_wready	inc	beatEgr=15		else	nextBurst
+					runC	memTWrAXI_wready	inc	else		nextBeat
+					ImeIAMFsmstateStep.end
 				ImeIMFsmstate.end
 			ImeIMFsm.end
-		op	mclk	reset	false	state(init)	false	main operation
+		op	mclk	reset	false	state(init) or (state(!inv) and reqInvSet)	false	main operation
 			ImeIMFsm.srefIxVDbgtaptype
 			void
 				ImeIMFsmstate.irefRefWdbeCFsmstate	sref	Extip	Comment
 				0	init	false
-				0	idle	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					inv	reqInvSet	invSet
+					getRnA	rng_sig
+					init	else	syncrst
+					ImeIAMFsmstateStep.end
 				0	inv	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					init	!reqInvSet
+					ImeIAMFsmstateStep.end
 				1	getRnA	false
+					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
+					getRnB	validLenrn	getRnA
+					ImeIAMFsmstateStep.end
 				1	getRnB	false
-				0	trylock	false
-				0	fill	false
-				0	unlock	false
-				ImeIMFsmstate.end
-			ImeIMFsm.end
-		setbuf	mclk	reset	false	state(init)	false	set buffer mutex management
-			ImeIAVKeylistKey.sref	Title	Comment
-			lock_t	(lockIdle, lockBuf, lockBufB)	lockIdle
-			ImeIAVKeylistKey.end
-			ImeIMFsm.srefIxVDbgtaptype
-			void
-				ImeIMFsmstate.irefRefWdbeCFsmstate	sref	Extip	Comment
-				0	init	false
 					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
-					ready
-					ImeIAMFsmstateStep.end
-				0	ready	false
-					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
-					ack	reqOpToSetbufLock	bufLock
-					ack	reqOpToSetbufUnlock	bufUnlock
-					ack	reqEgrToSetbufLock	bufBLock
-					ack	reqEgrToSetbufUnlock	bufBUnlock
-					ImeIAMFsmstateStep.end
-				0	ack	false
-					ImeIAMFsmstateStep.srefFnxRefWdbeMFsmstate	Cond1	Ip1	Cond2	Ip2	Cond3	Ip3	Cond4	Ip4
-					ready	(ackOpToSetbufLock or dnyOpToSetbufLock) and !reqOpToSetbufLock	bufLock
-					ready	ackOpToSetbufUnlock and !reqOpToSetbufUnlock	bufUnlock
-					ready	(ackEgrToSetbufLock or dnyEgrToSetbufLock) and !reqEgrToSetbufLock	bufBLock
-					ready	ackEgrToSetbufUnlock and !reqEgrToSetbufUnlock	bufBUnlock
+					getRnA	validOfsrn	getRnB
 					ImeIAMFsmstateStep.end
 				ImeIMFsmstate.end
 			ImeIMFsm.end
@@ -1504,19 +1658,6 @@ zudk
 		retrupd			enable_i								enOfsrng
 		retrupd			data_o								ofsrn
 		retrupd			valid_o								validOfsrn
-		ImeIMPort.end
-	wted_core;trafgen	setbuf
-		ImeIMPort.srefIxWdbeVIop	irefRefWdbeCPort	srefMdlIxVCat	sref	srefIxVDir	srefWdbeKHdltype	Width	Minmax	Defval	cpiSrefWdbeMPin	cprSrefWdbeMPort	csiSrefWdbeMSignal	Comment
-		retrupd			clkA							mclk
-		retrupd			enA								enSetbuf
-		retrupd			weA					1
-		retrupd			addrA								aSetbuf_vec
-		retrupd			dinA								dwrSetbuf
-		retrupd			clkB							memclk
-		retrupd			enB								enSetbufB
-		retrupd			weB					0
-		retrupd			addrB								aSetbufB_vec
-		retrupd			doutB							memTWrAXI_wdata
 		ImeIMPort.end
 	ImeIMModule.end
 ImeIMUnit.end

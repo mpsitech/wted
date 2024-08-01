@@ -2,7 +2,7 @@
 # make file for Wted device access library, release ezdevwted_pl64 (ubuntu cross-compilation)
 # copyright: (C) 2016-2020 MPSI Technologies GmbH
 # author: Alexander Wirthmueller (auto-generation)
-# date created: 30 Jun 2024
+# date created: 24 Jul 2024
 # IP header --- ABOVE
 
 BUILDROOT = ${WHIZSDKROOT}/build
@@ -21,8 +21,8 @@ PCHS = DevWted.h.gch
 
 OBJS = Wted.o
 OBJS += UntWtedCleb.o UntWtedCleb_vecs.o CtrWtedClebHostif.o CtrWtedClebIdent.o CtrWtedClebMfsmtrack0.o CtrWtedClebMfsmtrack1.o CtrWtedClebMgptrack.o CtrWtedClebRgbled0.o CtrWtedClebState.o CtrWtedClebTkclksrc.o
-OBJS += UntWtedTidk.o UntWtedTidk_vecs.o CtrWtedTidkClient.o CtrWtedTidkDdrif.o CtrWtedTidkHostif.o CtrWtedTidkIdent.o CtrWtedTidkMemgptrack.o CtrWtedTidkMfsmtrack0.o CtrWtedTidkMfsmtrack1.o CtrWtedTidkMgptrack.o CtrWtedTidkRgbled0.o CtrWtedTidkState.o CtrWtedTidkTkclksrc.o CtrWtedTidkTrafgen.o
-OBJS += UntWtedZudk.o UntWtedZudk_vecs.o CtrWtedZudkClient.o CtrWtedZudkDdrif.o CtrWtedZudkHostif.o CtrWtedZudkIdent.o CtrWtedZudkMemgptrack.o CtrWtedZudkMfsmtrack0.o CtrWtedZudkMfsmtrack1.o CtrWtedZudkMgptrack.o CtrWtedZudkRgbled0.o CtrWtedZudkState.o CtrWtedZudkTkclksrc.o CtrWtedZudkTrafgen.o
+OBJS += UntWtedTidk.o UntWtedTidk_vecs.o CtrWtedTidkClient.o CtrWtedTidkDdrif.o CtrWtedTidkHostif.o CtrWtedTidkIdent.o CtrWtedTidkMemrdtrack.o CtrWtedTidkMemwrtrack.o CtrWtedTidkMfsmtrack0.o CtrWtedTidkMfsmtrack1.o CtrWtedTidkMgptrack.o CtrWtedTidkRgbled0.o CtrWtedTidkState.o CtrWtedTidkTkclksrc.o CtrWtedTidkTrafgen.o
+OBJS += UntWtedZudk.o UntWtedZudk_vecs.o CtrWtedZudkClient.o CtrWtedZudkDdrif.o CtrWtedZudkHostif.o CtrWtedZudkIdent.o CtrWtedZudkMemrdtrack.o CtrWtedZudkMemwrtrack.o CtrWtedZudkMfsmtrack0.o CtrWtedZudkMfsmtrack1.o CtrWtedZudkMgptrack.o CtrWtedZudkRgbled0.o CtrWtedZudkState.o CtrWtedZudkTkclksrc.o CtrWtedZudkTrafgen.o
 
 LIB = libezdevwted
 

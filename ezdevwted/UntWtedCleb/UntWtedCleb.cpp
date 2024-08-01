@@ -377,12 +377,13 @@ Bufxf* UntWtedCleb::getNewBufxf(
 		) {
 	Bufxf* bufxf = NULL;
 
-	if (tixVBuffer == VecVWtedClebBuffer::CNTBUFMFSMTRACK0TOHOSTIF) bufxf = getNewBufxfCntbufFromMfsmtrack0(reqlen, buf);
-	else if (tixVBuffer == VecVWtedClebBuffer::CNTBUFMFSMTRACK1TOHOSTIF) bufxf = getNewBufxfCntbufFromMfsmtrack1(reqlen, buf);
-	else if (tixVBuffer == VecVWtedClebBuffer::FSTOCCBUFMFSMTRACK0TOHOSTIF) bufxf = getNewBufxfFstoccbufFromMfsmtrack0(reqlen, buf);
+	if (tixVBuffer == VecVWtedClebBuffer::CNTBUFMFSMTRACK1TOHOSTIF) bufxf = getNewBufxfCntbufFromMfsmtrack1(reqlen, buf);
+	else if (tixVBuffer == VecVWtedClebBuffer::CNTBUFMFSMTRACK0TOHOSTIF) bufxf = getNewBufxfCntbufFromMfsmtrack0(reqlen, buf);
 	else if (tixVBuffer == VecVWtedClebBuffer::FSTOCCBUFMFSMTRACK1TOHOSTIF) bufxf = getNewBufxfFstoccbufFromMfsmtrack1(reqlen, buf);
-	else if (tixVBuffer == VecVWtedClebBuffer::SEQBUFMFSMTRACK0TOHOSTIF) bufxf = getNewBufxfSeqbufFromMfsmtrack0(reqlen, buf);
+	else if (tixVBuffer == VecVWtedClebBuffer::FSTOCCBUFMFSMTRACK0TOHOSTIF) bufxf = getNewBufxfFstoccbufFromMfsmtrack0(reqlen, buf);
 	else if (tixVBuffer == VecVWtedClebBuffer::SEQBUFMFSMTRACK1TOHOSTIF) bufxf = getNewBufxfSeqbufFromMfsmtrack1(reqlen, buf);
+	else if (tixVBuffer == VecVWtedClebBuffer::SEQBUFMFSMTRACK0TOHOSTIF) bufxf = getNewBufxfSeqbufFromMfsmtrack0(reqlen, buf);
+	else if (tixVBuffer == VecVWtedClebBuffer::SEQBUFMGPTRACKTOHOSTIF) bufxf = getNewBufxfSeqbufFromMgptrack(reqlen, buf);
 
 	return bufxf;
 };
@@ -403,34 +404,6 @@ Cmd* UntWtedCleb::getNewCmd(
 	else if (tixVController == VecVWtedClebController::TKCLKSRC) cmd = CtrWtedClebTkclksrc::getNewCmd(tixVCommand);
 
 	return cmd;
-};
-
-Bufxf* UntWtedCleb::getNewBufxfCntbufFromMfsmtrack0(
-			const size_t reqlen
-			, unsigned char* buf
-		) {
-	return(new Bufxf(VecVWtedClebBuffer::CNTBUFMFSMTRACK0TOHOSTIF, false, reqlen, 0, 2, buf));
-};
-
-void UntWtedCleb::readCntbufFromMfsmtrack0(
-			const size_t reqlen
-			, unsigned char*& data
-			, size_t& datalen
-		) {
-	Bufxf* bufxf = getNewBufxfCntbufFromMfsmtrack0(reqlen, data);
-
-	if (runBufxf(bufxf)) {
-		if (!data) data = bufxf->getReadData();
-		datalen = bufxf->getReadDatalen();
-
-	} else {
-		datalen = 0;
-
-		delete bufxf;
-		throw DbeException("error running readCntbufFromMfsmtrack0");
-	};
-
-	delete bufxf;
 };
 
 Bufxf* UntWtedCleb::getNewBufxfCntbufFromMfsmtrack1(
@@ -461,19 +434,19 @@ void UntWtedCleb::readCntbufFromMfsmtrack1(
 	delete bufxf;
 };
 
-Bufxf* UntWtedCleb::getNewBufxfFstoccbufFromMfsmtrack0(
+Bufxf* UntWtedCleb::getNewBufxfCntbufFromMfsmtrack0(
 			const size_t reqlen
 			, unsigned char* buf
 		) {
-	return(new Bufxf(VecVWtedClebBuffer::FSTOCCBUFMFSMTRACK0TOHOSTIF, false, reqlen, 0, 2, buf));
+	return(new Bufxf(VecVWtedClebBuffer::CNTBUFMFSMTRACK0TOHOSTIF, false, reqlen, 0, 2, buf));
 };
 
-void UntWtedCleb::readFstoccbufFromMfsmtrack0(
+void UntWtedCleb::readCntbufFromMfsmtrack0(
 			const size_t reqlen
 			, unsigned char*& data
 			, size_t& datalen
 		) {
-	Bufxf* bufxf = getNewBufxfFstoccbufFromMfsmtrack0(reqlen, data);
+	Bufxf* bufxf = getNewBufxfCntbufFromMfsmtrack0(reqlen, data);
 
 	if (runBufxf(bufxf)) {
 		if (!data) data = bufxf->getReadData();
@@ -483,7 +456,7 @@ void UntWtedCleb::readFstoccbufFromMfsmtrack0(
 		datalen = 0;
 
 		delete bufxf;
-		throw DbeException("error running readFstoccbufFromMfsmtrack0");
+		throw DbeException("error running readCntbufFromMfsmtrack0");
 	};
 
 	delete bufxf;
@@ -517,19 +490,19 @@ void UntWtedCleb::readFstoccbufFromMfsmtrack1(
 	delete bufxf;
 };
 
-Bufxf* UntWtedCleb::getNewBufxfSeqbufFromMfsmtrack0(
+Bufxf* UntWtedCleb::getNewBufxfFstoccbufFromMfsmtrack0(
 			const size_t reqlen
 			, unsigned char* buf
 		) {
-	return(new Bufxf(VecVWtedClebBuffer::SEQBUFMFSMTRACK0TOHOSTIF, false, reqlen, 0, 2, buf));
+	return(new Bufxf(VecVWtedClebBuffer::FSTOCCBUFMFSMTRACK0TOHOSTIF, false, reqlen, 0, 2, buf));
 };
 
-void UntWtedCleb::readSeqbufFromMfsmtrack0(
+void UntWtedCleb::readFstoccbufFromMfsmtrack0(
 			const size_t reqlen
 			, unsigned char*& data
 			, size_t& datalen
 		) {
-	Bufxf* bufxf = getNewBufxfSeqbufFromMfsmtrack0(reqlen, data);
+	Bufxf* bufxf = getNewBufxfFstoccbufFromMfsmtrack0(reqlen, data);
 
 	if (runBufxf(bufxf)) {
 		if (!data) data = bufxf->getReadData();
@@ -539,7 +512,7 @@ void UntWtedCleb::readSeqbufFromMfsmtrack0(
 		datalen = 0;
 
 		delete bufxf;
-		throw DbeException("error running readSeqbufFromMfsmtrack0");
+		throw DbeException("error running readFstoccbufFromMfsmtrack0");
 	};
 
 	delete bufxf;
@@ -568,6 +541,62 @@ void UntWtedCleb::readSeqbufFromMfsmtrack1(
 
 		delete bufxf;
 		throw DbeException("error running readSeqbufFromMfsmtrack1");
+	};
+
+	delete bufxf;
+};
+
+Bufxf* UntWtedCleb::getNewBufxfSeqbufFromMfsmtrack0(
+			const size_t reqlen
+			, unsigned char* buf
+		) {
+	return(new Bufxf(VecVWtedClebBuffer::SEQBUFMFSMTRACK0TOHOSTIF, false, reqlen, 0, 2, buf));
+};
+
+void UntWtedCleb::readSeqbufFromMfsmtrack0(
+			const size_t reqlen
+			, unsigned char*& data
+			, size_t& datalen
+		) {
+	Bufxf* bufxf = getNewBufxfSeqbufFromMfsmtrack0(reqlen, data);
+
+	if (runBufxf(bufxf)) {
+		if (!data) data = bufxf->getReadData();
+		datalen = bufxf->getReadDatalen();
+
+	} else {
+		datalen = 0;
+
+		delete bufxf;
+		throw DbeException("error running readSeqbufFromMfsmtrack0");
+	};
+
+	delete bufxf;
+};
+
+Bufxf* UntWtedCleb::getNewBufxfSeqbufFromMgptrack(
+			const size_t reqlen
+			, unsigned char* buf
+		) {
+	return(new Bufxf(VecVWtedClebBuffer::SEQBUFMGPTRACKTOHOSTIF, false, reqlen, 0, 2, buf));
+};
+
+void UntWtedCleb::readSeqbufFromMgptrack(
+			const size_t reqlen
+			, unsigned char*& data
+			, size_t& datalen
+		) {
+	Bufxf* bufxf = getNewBufxfSeqbufFromMgptrack(reqlen, data);
+
+	if (runBufxf(bufxf)) {
+		if (!data) data = bufxf->getReadData();
+		datalen = bufxf->getReadDatalen();
+
+	} else {
+		datalen = 0;
+
+		delete bufxf;
+		throw DbeException("error running readSeqbufFromMgptrack");
 	};
 
 	delete bufxf;

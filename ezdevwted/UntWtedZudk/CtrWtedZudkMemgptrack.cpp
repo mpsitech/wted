@@ -2,8 +2,8 @@
 	* \file CtrWtedZudkMemgptrack.cpp
 	* memgptrack controller (implementation)
 	* \copyright (C) 2016-2020 MPSI Technologies GmbH
-	* \author Alexander Wirthmueller (auto-generation)
-	* \date created: 30 Jun 2024
+	* \author Catherine Johnson (auto-generation)
+	* \date created: 10 Jul 2024
 	*/
 // IP header --- ABOVE
 
@@ -13,6 +13,61 @@ using namespace std;
 using namespace Sbecore;
 using namespace Xmlio;
 using namespace Dbecore;
+
+/******************************************************************************
+ class CtrWtedZudkMemgptrack::VecVCapture
+ ******************************************************************************/
+
+uint8_t CtrWtedZudkMemgptrack::VecVCapture::getTix(
+			const string& sref
+		) {
+	string s = StrMod::lc(sref);
+
+	if (s == "reqclienttoddrifrd") return REQCLIENTTODDRIFRD;
+	else if (s == "ackclienttoddrifrd") return ACKCLIENTTODDRIFRD;
+	else if (s == "memcrdaxi_rvalid") return MEMCRDAXIRVALID;
+	else if (s == "reqclienttoddrifwr") return REQCLIENTTODDRIFWR;
+	else if (s == "ackclienttoddrifwr") return ACKCLIENTTODDRIFWR;
+	else if (s == "memcwraxi_wready") return MEMCWRAXIWREADY;
+	else if (s == "reqtrafgentoddrifwr") return REQTRAFGENTODDRIFWR;
+	else if (s == "acktrafgentoddrifwr") return ACKTRAFGENTODDRIFWR;
+	else if (s == "memtwraxi_wready") return MEMTWRAXIWREADY;
+
+	return(0xFF);
+};
+
+string CtrWtedZudkMemgptrack::VecVCapture::getSref(
+			const uint8_t tix
+		) {
+	if (tix == REQCLIENTTODDRIFRD) return("reqClientToDdrifRd");
+	else if (tix == ACKCLIENTTODDRIFRD) return("ackClientToDdrifRd");
+	else if (tix == MEMCRDAXIRVALID) return("memCRdAXI_rvalid");
+	else if (tix == REQCLIENTTODDRIFWR) return("reqClientToDdrifWr");
+	else if (tix == ACKCLIENTTODDRIFWR) return("ackClientToDdrifWr");
+	else if (tix == MEMCWRAXIWREADY) return("memCWrAXI_wready");
+	else if (tix == REQTRAFGENTODDRIFWR) return("reqTrafgenToDdrifWr");
+	else if (tix == ACKTRAFGENTODDRIFWR) return("ackTrafgenToDdrifWr");
+	else if (tix == MEMTWRAXIWREADY) return("memTWrAXI_wready");
+
+	return("");
+};
+
+string CtrWtedZudkMemgptrack::VecVCapture::getTitle(
+			const uint8_t tix
+		) {
+
+	return(getSref(tix));
+};
+
+void CtrWtedZudkMemgptrack::VecVCapture::fillFeed(
+			Feed& feed
+		) {
+	feed.clear();
+
+	std::set<uint8_t> items = {REQCLIENTTODDRIFRD,ACKCLIENTTODDRIFRD,MEMCRDAXIRVALID,REQCLIENTTODDRIFWR,ACKCLIENTTODDRIFWR,MEMCWRAXIWREADY,REQTRAFGENTODDRIFWR,ACKTRAFGENTODDRIFWR,MEMTWRAXIWREADY};
+
+	for (auto it = items.begin(); it != items.end(); it++) feed.appendIxSrefTitles(*it, getSref(*it), getTitle(*it));
+};
 
 /******************************************************************************
  class CtrWtedZudkMemgptrack::VecVCommand
@@ -107,6 +162,8 @@ uint8_t CtrWtedZudkMemgptrack::VecVTrigger::getTix(
 	string s = StrMod::lc(sref);
 
 	if (s == "void") return VOID;
+	else if (s == "ackinvclientloadgetbuf") return ACKINVCLIENTLOADGETBUF;
+	else if (s == "ackinvclientstoresetbuf") return ACKINVCLIENTSTORESETBUF;
 
 	return(0xFF);
 };
@@ -115,6 +172,8 @@ string CtrWtedZudkMemgptrack::VecVTrigger::getSref(
 			const uint8_t tix
 		) {
 	if (tix == VOID) return("void");
+	else if (tix == ACKINVCLIENTLOADGETBUF) return("ackInvClientLoadGetbuf");
+	else if (tix == ACKINVCLIENTSTORESETBUF) return("ackInvClientStoreSetbuf");
 
 	return("");
 };
@@ -131,7 +190,7 @@ void CtrWtedZudkMemgptrack::VecVTrigger::fillFeed(
 		) {
 	feed.clear();
 
-	std::set<uint8_t> items = {VOID};
+	std::set<uint8_t> items = {VOID,ACKINVCLIENTLOADGETBUF,ACKINVCLIENTSTORESETBUF};
 
 	for (auto it = items.begin(); it != items.end(); it++) feed.appendIxSrefTitles(*it, getSref(*it), getTitle(*it));
 };
@@ -143,11 +202,15 @@ void CtrWtedZudkMemgptrack::VecVTrigger::fillFeed(
 CtrWtedZudkMemgptrack::CtrWtedZudkMemgptrack(
 			UntWted* unt
 		) : CtrWted(unt) {
-	// IP constructor.easy.cmdvars --- INSERT
+	cmdGetInfo = getNewCmdGetInfo();
+	cmdSelect = getNewCmdSelect();
+	cmdSet = getNewCmdSet();
 };
 
 CtrWtedZudkMemgptrack::~CtrWtedZudkMemgptrack() {
-	// IP destructor.easy.cmdvars --- INSERT
+	delete cmdGetInfo;
+	delete cmdSelect;
+	delete cmdSet;
 };
 
 uint8_t CtrWtedZudkMemgptrack::getTixVCommandBySref(

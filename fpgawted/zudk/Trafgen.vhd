@@ -27,12 +27,11 @@ entity Trafgen is
 		memTWrAXI_wlast: out std_logic;
 		memTWrAXI_wready: in std_logic;
 		memTWrAXI_wvalid: out std_logic;
-		memTWrAXI_bready: out std_logic;
-		memTWrAXI_bresp: in std_logic_vector(1 downto 0);
-		memTWrAXI_bvalid: in std_logic;
 
 		reqToDdrifWr: out std_logic;
 		ackToDdrifWr: in std_logic;
+
+		rng: out std_logic;
 
 		reqInvSet: in std_logic;
 		ackInvSet: out std_logic;
@@ -64,28 +63,6 @@ architecture Rtl of Trafgen is
 		);
 	end component;
 
-	component Dpbram_size2kB_a8b128 is
-		port (
-			clkA: in std_logic;
-
-			enA: in std_logic;
-			weA: in std_logic_vector(0 downto 0);
-
-			addrA: in std_logic_vector(10 downto 0);
-			doutA: out std_logic_vector(7 downto 0);
-			dinA: in std_logic_vector(7 downto 0);
-
-			clkB: in std_logic;
-
-			enB: in std_logic;
-			weB: in std_logic_vector(0 downto 0);
-
-			addrB: in std_logic_vector(6 downto 0);
-			doutB: out std_logic_vector(127 downto 0);
-			dinB: in std_logic_vector(127 downto 0)
-		);
-	end component;
-
 	------------------------------------------------------------------------
 	-- signal declarations
 	------------------------------------------------------------------------
@@ -93,66 +70,45 @@ architecture Rtl of Trafgen is
 	---- copy data from setbuf to DDR memory (egr)
 	type stateEgr_t is (
 		stateEgrInit,
-		stateEgrIdle,
-		stateEgrInv,
-		stateEgrTrylock,
-		stateEgrCopyA, stateEgrCopyB, stateEgrCopyC,
-		stateEgrUnlock
+		stateEgrStart,
+		stateEgrRunA, stateEgrRunB, stateEgrRunC
 	);
 	signal stateEgr: stateEgr_t := stateEgrInit;
 
 	signal memTWrAXI_awaddr_sig: std_logic_vector(19 downto 0);
 	signal memTWrAXI_awvalid_sig: std_logic;
+	signal memTWrAXI_wdata_sig: std_logic_vector(127 downto 0);
 	signal memTWrAXI_wlast_sig: std_logic;
 	signal memTWrAXI_wvalid_sig: std_logic;
-	signal memTWrAXI_bready_sig: std_logic;
 
 	signal reqToDdrifWr_sig: std_logic;
-	signal enSetbufB: std_logic;
-
-	signal aSetbufB: natural range 0 to 127;
-	signal aSetbufB_vec: std_logic_vector(6 downto 0);
 
 	-- IP sigs.egr.cust --- INSERT
 
 	---- main operation (op)
 	type stateOp_t is (
 		stateOpInit,
-		stateOpIdle,
 		stateOpInv,
-		stateOpGetRnA, stateOpGetRnB,
-		stateOpTrylock,
-		stateOpFill,
-		stateOpUnlock
+		stateOpGetRnA, stateOpGetRnB
 	);
 	signal stateOp: stateOp_t := stateOpInit;
 
 	signal ackInvSet_sig: std_logic;
-	signal enSetbuf: std_logic;
-
-	signal aSetbuf: natural range 0 to 2047;
-	signal aSetbuf_vec: std_logic_vector(10 downto 0);
-	signal lenSetbuf: natural range 0 to 2047;
-
-	signal dwrSetbuf: std_logic_vector(7 downto 0);
+	signal rng_sig: std_logic;
 	signal enLenrng: std_logic;
+	signal len: std_logic_vector(2 downto 0); -- in bursts: allow max. 2 kB i.e. 8 bursts for 128-bit interface
 	signal enOfsrng: std_logic;
+	signal ofs: std_logic_vector(7 downto 0);
 
 	-- IP sigs.op.cust --- INSERT
 
-	---- set buffer mutex management (setbuf)
-	type stateSetbuf_t is (
-		stateSetbufInit,
-		stateSetbufReady,
-		stateSetbufAck
-	);
-	signal stateSetbuf: stateSetbuf_t := stateSetbufInit;
+	---- mclk to memclk CDC sampling (mclkToMemclkSample)
 
-	type lock_t is (lockIdle, lockBuf, lockBufB);
-	signal setbufLock: lock_t;
-	signal lenSetbuf: std_logic_vector(31 downto 0);
+	signal ofs_memclk: std_logic_vector(7 downto 0);
+	signal len_memclk: std_logic_vector(2 downto 0);
+	signal rng_sig_memclk: std_logic;
 
-	-- IP sigs.setbuf.cust --- INSERT
+	-- IP sigs.mclkToMemclkSample.cust --- INSERT
 
 	---- myLenrng
 	signal lenrn: std_logic_vector(7 downto 0);
@@ -161,25 +117,6 @@ architecture Rtl of Trafgen is
 	---- myOfsrng
 	signal ofsrn: std_logic_vector(7 downto 0);
 	signal validOfsrn: std_logic;
-
-	---- handshake
-	-- op to setbuf
-	signal reqOpToSetbufLock: std_logic;
-	signal ackOpToSetbufLock: std_logic;
-	signal dnyOpToSetbufLock: std_logic;
-
-	-- op to setbuf
-	signal reqOpToSetbufUnlock: std_logic;
-	signal ackOpToSetbufUnlock: std_logic;
-
-	-- egr to setbuf
-	signal reqEgrToSetbufLock: std_logic;
-	signal ackEgrToSetbufLock: std_logic;
-	signal dnyEgrToSetbufLock: std_logic;
-
-	-- egr to setbuf
-	signal reqEgrToSetbufUnlock: std_logic;
-	signal ackEgrToSetbufUnlock: std_logic;
 
 	---- other
 	-- IP sigs.oth.cust --- INSERT
@@ -222,98 +159,152 @@ begin
 			valid_o => validOfsrn
 		);
 
-	mySetbuf : Dpbram_size2kB_a8b128
-		port map (
-			clkA => mclk,
-
-			enA => enSetbuf,
-			weA => (others => '1'),
-
-			addrA => aSetbuf_vec,
-			doutA => open,
-			dinA => dwrSetbuf,
-
-			clkB => memclk,
-
-			enB => enSetbufB,
-			weB => (others => '0'),
-
-			addrB => aSetbufB_vec,
-			doutB => memTWrAXI_wdata,
-			dinB => (others => '0')
-		);
-
 	------------------------------------------------------------------------
 	-- implementation: copy data from setbuf to DDR memory (egr)
 	------------------------------------------------------------------------
 
-	-- IP impl.egr.wiring --- BEGIN
+	-- IP impl.egr.wiring --- RBEGIN
+
 	memTWrAXI_awaddr <= memTWrAXI_awaddr_sig;
-	memTWrAXI_awvalid_sig <= '1' when stateEgr=stateEgrCopyB else '0';
+
+	memTWrAXI_awvalid_sig <= '1' when stateEgr=stateEgrRunB else '0';
 	memTWrAXI_awvalid <= memTWrAXI_awvalid_sig;
-	memTWrAXI_wlast <= memTWrAXI_wlast_sig;
-	memTWrAXI_wvalid_sig <= '1' when stateEgr=stateEgrCopyC else '0';
+
+	memTWrAXI_wvalid_sig <= '1' when stateEgr=stateEgrRunC else '0';
 	memTWrAXI_wvalid <= memTWrAXI_wvalid_sig;
-	memTWrAXI_bready_sig <= '1';
-	memTWrAXI_bready <= memTWrAXI_bready_sig;
 
-	reqToDdrifWr_sig <= '1' when stateEgr=stateEgrCopyB else '0';
+	memTWrAXI_wdata <= memTWrAXI_wdata_sig;
+
+	memTWrAXI_wlast <= memTWrAXI_wlast_sig;
+
+	reqToDdrifWr_sig <= '1' when stateEgr=stateEgrRunB else '0';
 	reqToDdrifWr <= reqToDdrifWr_sig;
-
-	aSetbufB_vec <= std_logic_vector(to_unsigned(aSetbufB, 7));
-
-	reqEgrToSetbufLock <= '1' when stateEgr=stateEgrTrylock else '0';
-
-	reqEgrToSetbufUnlock <= '1' when stateEgr=stateEgrUnlock else '0';
-	-- IP impl.egr.wiring --- END
+	-- IP impl.egr.wiring --- REND
 
 	-- IP impl.egr.rising --- BEGIN
 	process (resetMemclk, memclk, stateEgr)
-		-- IP impl.egr.vars --- BEGIN
-		-- IP impl.egr.vars --- END
+		-- IP impl.egr.vars --- RBEGIN
+		variable burstEgr: natural range 0 to 2048/16/16-1;
+		variable burstEgrLast: natural range 0 to 2048/16/16-1;
+
+		variable beatEgr: natural range 0 to 15;
+
+		constant imax: natural := 100; -- pause between transactions
+		variable i: natural range 0 to imax;
+		-- IP impl.egr.vars --- REND
 
 	begin
 		if resetMemclk='1' then
-			-- IP impl.egr.asyncrst --- BEGIN
+			-- IP impl.egr.asyncrst --- RBEGIN
 			stateEgr <= stateEgrInit;
 			memTWrAXI_awaddr_sig <= (others => '0');
+			memTWrAXI_wdata_sig <= (others => '0');
 			memTWrAXI_wlast_sig <= '1';
-			enSetbufB <= '0';
-			aSetbufB <= 0;
 
-			-- IP impl.egr.asyncrst --- END
+			burstEgr := 0;
+			burstEgrLast := 0;
+			-- IP impl.egr.asyncrst --- REND
 
 		elsif rising_edge(memclk) then
 			if stateEgr=stateEgrInit then
-				-- IP impl.egr.syncrst --- BEGIN
+				-- IP impl.egr.syncrst --- RBEGIN
 				memTWrAXI_awaddr_sig <= (others => '0');
+				memTWrAXI_wdata_sig <= (others => '0');
 				memTWrAXI_wlast_sig <= '1';
-				enSetbufB <= '0';
-				aSetbufB <= 0;
 
-				stateEgr <= stateEgrIdle;
-				-- IP impl.egr.syncrst --- END
+				burstEgr := 0;
+				burstEgrLast := 0;
 
-			elsif stateEgr=stateEgrIdle then
-				-- IP impl.egr.idle --- INSERT
+				beatEgr := 0;
 
-			elsif stateEgr=stateEgrInv then
-				-- IP impl.egr.inv --- INSERT
+				i := 0;
+				-- IP impl.egr.syncrst --- REND
 
-			elsif stateEgr=stateEgrTrylock then
-				-- IP impl.egr.trylock --- INSERT
+				if rng_sig_memclk='0' then
+					stateEgr <= stateEgrInit;
 
-			elsif stateEgr=stateEgrCopyA then
-				-- IP impl.egr.copyA --- INSERT
+				else
+					stateEgr <= stateEgrStart;
+				end if;
 
-			elsif stateEgr=stateEgrCopyB then
-				-- IP impl.egr.copyB --- INSERT
+			elsif stateEgr=stateEgrStart then
+				i := i + 1; -- IP impl.egr.start.ext --- ILINE
 
-			elsif stateEgr=stateEgrCopyC then
-				-- IP impl.egr.copyC --- INSERT
+				if rng_sig_memclk='0' then
+					stateEgr <= stateEgrInit;
 
-			elsif stateEgr=stateEgrUnlock then
-				-- IP impl.egr.unlock --- INSERT
+				else
+					-- IP impl.egr.start --- IBEGIN
+					i := 0;
+
+					for i in 0 to 15 loop
+						memTWrAXI_wdata_sig((i+1)*8-1 downto i*8) <= std_logic_vector(unsigned(ofs_memclk) + i);
+					end loop;
+
+					burstEgr := 0;
+					burstEgrLast := to_integer(unsigned(len_memclk));
+					-- IP impl.egr.start --- IEND
+
+					stateEgr <= stateEgrRunA;
+				end if;
+
+			elsif stateEgr=stateEgrRunA then
+				if rng_sig_memclk='0' then
+					stateEgr <= stateEgrInit;
+
+				else
+					-- IP impl.egr.runA.setAddr --- IBEGIN
+					memTWrAXI_awaddr_sig(2 downto 0) <= std_logic_vector(to_unsigned(burstEgr, 3));
+					memTWrAXI_awaddr_sig(16 downto 3) <= (others => '0');
+					memTWrAXI_awaddr_sig(19 downto 17) <= (others => '0');
+
+					memTWrAXI_wlast_sig <= '0';
+
+					beatEgr := 0;
+					-- IP impl.egr.runA.setAddr --- IEND
+
+					stateEgr <= stateEgrRunB;
+				end if;
+
+			elsif stateEgr=stateEgrRunB then
+				if (ackToDdrifWr='1' and memTWrAXI_awready='1') then
+					stateEgr <= stateEgrRunC;
+				end if;
+
+			elsif stateEgr=stateEgrRunC then
+				if memTWrAXI_wready='1' then
+					-- IP impl.egr.runC.inc --- IBEGIN
+					for i in 0 to 15 loop
+						memTWrAXI_wdata_sig((i+1)*8-1 downto i*8+4) <= std_logic_vector(unsigned(memTWrAXI_wdata_sig((i+1)*8-1 downto i*8+4)) + 1);
+					end loop;
+					-- IP impl.egr.runC.inc --- IEND
+
+					if beatEgr=15 then
+						if rng_sig_memclk='0' or burstEgr=burstEgrLast then
+							stateEgr <= stateEgrInit;
+
+						else
+							burstEgr := burstEgr + 1; -- IP impl.egr.runC.nextBurst --- ILINE
+
+							stateEgr <= stateEgrRunA;
+						end if;
+
+					else
+						-- IP impl.egr.runC.nextBeat --- IBEGIN
+						for i in 0 to 15 loop
+							memTWrAXI_wdata_sig((i+1)*8-1 downto i*8) <= std_logic_vector(unsigned(memTWrAXI_wdata_sig((i+1)*8-1 downto i*8)) + 1);
+						end loop;
+
+						if beatEgr=14 then
+							memTWrAXI_wlast_sig <= '1';
+						end if;
+
+						beatEgr := beatEgr + 1;
+						-- IP impl.egr.runC.nextBeat --- IEND
+
+						stateEgr <= stateEgrRunC;
+					end if;
+				end if;
 			end if;
 		end if;
 	end process;
@@ -326,158 +317,127 @@ begin
 	-- IP impl.op.wiring --- BEGIN
 	ackInvSet_sig <= '1' when stateOp=stateOpInv else '0';
 	ackInvSet <= ackInvSet_sig;
-	enSetbuf <= '1' when state(write) and setbufFromHostifAXIS_tvalid else '0';
-
-	aSetbuf_vec <= std_logic_vector(to_unsigned(aSetbuf, 11));
-
+	rng <= rng_sig;
 	enLenrng <= '1' when stateOp=stateOpGetRnA else '0';
 	enOfsrng <= '1' when stateOp=stateOpGetRnB else '0';
-
-	reqOpToSetbufLock <= '1' when stateOp=stateOpTrylock else '0';
-
-	reqOpToSetbufUnlock <= '1' when stateOp=stateOpUnlock else '0';
 	-- IP impl.op.wiring --- END
 
 	-- IP impl.op.rising --- BEGIN
 	process (reset, mclk, stateOp)
-		-- IP impl.op.vars --- BEGIN
-		-- IP impl.op.vars --- END
+		-- IP impl.op.vars --- RBEGIN
+		variable len_lcl: std_logic_vector(2 downto 0);
+		-- IP impl.op.vars --- REND
 
 	begin
 		if reset='1' then
-			-- IP impl.op.asyncrst --- BEGIN
+			-- IP impl.op.asyncrst --- RBEGIN
 			stateOp <= stateOpInit;
-			aSetbuf <= 0;
-			lenSetbuf <= 0;
-			dwrSetbuf <= (others => '0');
+			rng_sig <= '0';
+			len <= (others => '0');
+			ofs <= (others => '0');
 
-			-- IP impl.op.asyncrst --- END
+			len_lcl := (others => '0');
+			-- IP impl.op.asyncrst --- REND
 
 		elsif rising_edge(mclk) then
-			if stateOp=stateOpInit then
-				-- IP impl.op.syncrst --- BEGIN
-				aSetbuf <= 0;
-				lenSetbuf <= 0;
-				dwrSetbuf <= (others => '0');
+			if (stateOp=stateOpInit or (stateOp/=stateOpInv and reqInvSet='1')) then
+				if reqInvSet='1' then
+					-- IP impl.op.init.invSet --- IBEGIN
+					if setRng=tru8 then
+						rng_sig <= '1';
+					else
+						rng_sig <= '0';
+					end if;
+					-- IP impl.op.init.invSet --- IEND
 
-				stateOp <= stateOpIdle;
-				-- IP impl.op.syncrst --- END
+					stateOp <= stateOpInv;
 
-			elsif stateOp=stateOpIdle then
-				-- IP impl.op.idle --- INSERT
+				elsif rng_sig='1' then
+					stateOp <= stateOpGetRnA;
+
+				else
+					-- IP impl.op.syncrst --- RBEGIN
+					len <= (others => '0');
+					ofs <= (others => '0');
+
+					len_lcl := (others => '0');
+					-- IP impl.op.syncrst --- REND
+
+					stateOp <= stateOpInit;
+				end if;
 
 			elsif stateOp=stateOpInv then
-				-- IP impl.op.inv --- INSERT
+				if reqInvSet='0' then
+					stateOp <= stateOpInit;
+				end if;
 
 			elsif stateOp=stateOpGetRnA then
-				-- IP impl.op.getRnA --- INSERT
+				if validLenrn='1' then
+					len_lcl := lenrn(2 downto 0); -- IP impl.op.getRnA --- ILINE
+
+					stateOp <= stateOpGetRnB;
+				end if;
 
 			elsif stateOp=stateOpGetRnB then
-				-- IP impl.op.getRnB --- INSERT
+				if validOfsrn='1' then
+					-- IP impl.op.getRnB --- IBEGIN
+					len <= len_lcl;
+					ofs <= ofsrn;
+					-- IP impl.op.getRnB --- IEND
 
-			elsif stateOp=stateOpTrylock then
-				-- IP impl.op.trylock --- INSERT
-
-			elsif stateOp=stateOpFill then
-				-- IP impl.op.fill --- INSERT
-
-			elsif stateOp=stateOpUnlock then
-				-- IP impl.op.unlock --- INSERT
+					stateOp <= stateOpGetRnA;
+				end if;
 			end if;
 		end if;
 	end process;
 	-- IP impl.op.rising --- END
 
 	------------------------------------------------------------------------
-	-- implementation: set buffer mutex management (setbuf)
+	-- implementation: mclk to memclk CDC sampling (mclkToMemclkSample)
 	------------------------------------------------------------------------
 
-	-- IP impl.setbuf.wiring --- BEGIN
-	-- IP impl.setbuf.wiring --- END
+	-- IP impl.mclkToMemclkSample.wiring --- BEGIN
+	-- IP impl.mclkToMemclkSample.wiring --- END
 
-	-- IP impl.setbuf.rising --- BEGIN
-	process (reset, mclk, stateSetbuf)
-		-- IP impl.setbuf.vars --- BEGIN
-		-- IP impl.setbuf.vars --- END
+	-- IP impl.mclkToMemclkSample.rising --- BEGIN
+	process (resetMemclk, memclk)
+		-- IP impl.mclkToMemclkSample.vars --- BEGIN
+		variable ofs_last: std_logic_vector(7 downto 0);
+		variable len_last: std_logic_vector(2 downto 0);
+		variable rng_sig_last: std_logic;
+		-- IP impl.mclkToMemclkSample.vars --- END
 
 	begin
-		if reset='1' then
-			-- IP impl.setbuf.asyncrst --- BEGIN
-			stateSetbuf <= stateSetbufInit;
-			setbufLock <= lockIdle;
-			lenSetbuf <= (others => '0');
-			ackOpToSetbufLock <= '0';
-			dnyOpToSetbufLock <= '0';
-			ackOpToSetbufUnlock <= '0';
-			ackEgrToSetbufLock <= '0';
-			dnyEgrToSetbufLock <= '0';
-			ackEgrToSetbufUnlock <= '0';
+		if resetMemclk='1' then
+			-- IP impl.mclkToMemclkSample.asyncrst --- BEGIN
+			ofs_memclk <= (others => '0');
+			len_memclk <= (others => '0');
+			rng_sig_memclk <= '0';
 
-			-- IP impl.setbuf.asyncrst --- END
+			ofs_last := (others => '0');
+			len_last := (others => '0');
+			rng_sig_last := '0';
+			-- IP impl.mclkToMemclkSample.asyncrst --- END
 
-		elsif rising_edge(mclk) then
-			if stateSetbuf=stateSetbufInit then
-				-- IP impl.setbuf.syncrst --- BEGIN
-				setbufLock <= lockIdle;
-				lenSetbuf <= (others => '0');
-				ackOpToSetbufLock <= '0';
-				dnyOpToSetbufLock <= '0';
-				ackOpToSetbufUnlock <= '0';
-				ackEgrToSetbufLock <= '0';
-				dnyEgrToSetbufLock <= '0';
-				ackEgrToSetbufUnlock <= '0';
-
-				-- IP impl.setbuf.syncrst --- END
-
-				stateSetbuf <= stateSetbufReady;
-
-			elsif stateSetbuf=stateSetbufReady then
-				if reqOpToSetbufLock='1' then
-					-- IP impl.setbuf.ready.bufLock --- INSERT
-
-					stateSetbuf <= stateSetbufAck;
-
-				elsif reqOpToSetbufUnlock='1' then
-					-- IP impl.setbuf.ready.bufUnlock --- INSERT
-
-					stateSetbuf <= stateSetbufAck;
-
-				elsif reqEgrToSetbufLock='1' then
-					-- IP impl.setbuf.ready.bufBLock --- INSERT
-
-					stateSetbuf <= stateSetbufAck;
-
-				elsif reqEgrToSetbufUnlock='1' then
-					-- IP impl.setbuf.ready.bufBUnlock --- INSERT
-
-					stateSetbuf <= stateSetbufAck;
-				end if;
-
-			elsif stateSetbuf=stateSetbufAck then
-				if ((ackOpToSetbufLock='1' or dnyOpToSetbufLock='1') and reqOpToSetbufLock='0') then
-					-- IP impl.setbuf.ack.bufLock --- INSERT
-
-					stateSetbuf <= stateSetbufReady;
-
-				elsif (ackOpToSetbufUnlock='1' and reqOpToSetbufUnlock='0') then
-					-- IP impl.setbuf.ack.bufUnlock --- INSERT
-
-					stateSetbuf <= stateSetbufReady;
-
-				elsif ((ackEgrToSetbufLock='1' or dnyEgrToSetbufLock='1') and reqEgrToSetbufLock='0') then
-					-- IP impl.setbuf.ack.bufBLock --- INSERT
-
-					stateSetbuf <= stateSetbufReady;
-
-				elsif (ackEgrToSetbufUnlock='1' and reqEgrToSetbufUnlock='0') then
-					-- IP impl.setbuf.ack.bufBUnlock --- INSERT
-
-					stateSetbuf <= stateSetbufReady;
-				end if;
+		elsif rising_edge(memclk) then
+			if ofs=ofs_last then
+				ofs_memclk <= ofs;
 			end if;
+			ofs_last := ofs;
+
+			if len=len_last then
+				len_memclk <= len;
+			end if;
+			len_last := len;
+
+			if rng_sig=rng_sig_last then
+				rng_sig_memclk <= rng_sig;
+			end if;
+			rng_sig_last := rng_sig;
+
 		end if;
 	end process;
-	-- IP impl.setbuf.rising --- END
+	-- IP impl.mclkToMemclkSample.rising --- END
 
 	------------------------------------------------------------------------
 	-- implementation: other 

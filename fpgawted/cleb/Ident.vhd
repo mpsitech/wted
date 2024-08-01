@@ -29,7 +29,7 @@ architecture Rtl of Ident is
 	-- signal declarations
 	------------------------------------------------------------------------
 
-	constant ver: string(1 to 8) := "0.1.0   ";
+	constant ver: string(1 to 8) := "0.1.2   ";
 	constant hash: string(1 to 8) := "c20dcef ";
 	constant who: string(1 to 8) := "aw.mpsi ";
 

@@ -53,11 +53,11 @@ void CtrWtedClebHostif::VecVCommand::fillFeed(
 CtrWtedClebHostif::CtrWtedClebHostif(
 			UntWted* unt
 		) : CtrWted(unt) {
-	// IP constructor.easy.cmdvars --- INSERT
+	cmdReset = getNewCmdReset();
 };
 
 CtrWtedClebHostif::~CtrWtedClebHostif() {
-	// IP destructor.easy.cmdvars --- INSERT
+	delete cmdReset;
 };
 
 uint8_t CtrWtedClebHostif::getTixVCommandBySref(

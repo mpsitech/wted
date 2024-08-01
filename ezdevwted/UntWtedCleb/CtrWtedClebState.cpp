@@ -53,11 +53,11 @@ void CtrWtedClebState::VecVCommand::fillFeed(
 CtrWtedClebState::CtrWtedClebState(
 			UntWted* unt
 		) : CtrWted(unt) {
-	// IP constructor.easy.cmdvars --- INSERT
+	cmdGet = getNewCmdGet();
 };
 
 CtrWtedClebState::~CtrWtedClebState() {
-	// IP destructor.easy.cmdvars --- INSERT
+	delete cmdGet;
 };
 
 uint8_t CtrWtedClebState::getTixVCommandBySref(

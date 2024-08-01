@@ -66,6 +66,9 @@ architecture Rtl of Dpram_size4kB_a8b32 is
 	signal enA_i3: std_logic;
 	signal enA_i3m1: std_logic;
 
+	---
+	signal drdA_sig: std_logic_vector(7 downto 0);
+
 	-- IP sigs.muxA.cust --- INSERT
 
 	---- B-side multiplexing (muxB)
@@ -75,6 +78,9 @@ architecture Rtl of Dpram_size4kB_a8b32 is
 
 	signal enB_k0: std_logic;
 	signal enB_k0m1: std_logic;
+
+	---
+	signal drdB_sig: std_logic_vector(31 downto 0);
 
 	-- IP sigs.muxB.cust --- INSERT
 
@@ -491,16 +497,16 @@ begin
 
 	-- IP impl.muxA.wiring --- BEGIN
 	enA_i0 <= '1' when (weA='1' and enA='1' and aA(11 downto 10)="00") else '0';
-	enA_i0m1 <= '1' when (weA='1' and enAm1='1' and aAm1(11 downto 10)="00") else '0';
+	enA_i0m1 <= '1' when (enAm1='1' and aAm1(11 downto 10)="00") else '0'; -- we removed
 
 	enA_i1 <= '1' when (weA='1' and enA='1' and aA(11 downto 10)="01") else '0';
-	enA_i1m1 <= '1' when (weA='1' and enAm1='1' and aAm1(11 downto 10)="01") else '0';
+	enA_i1m1 <= '1' when (enAm1='1' and aAm1(11 downto 10)="01") else '0';
 
 	enA_i2 <= '1' when (weA='1' and enA='1' and aA(11 downto 10)="10") else '0';
-	enA_i2m1 <= '1' when (weA='1' and enAm1='1' and aAm1(11 downto 10)="10") else '0';
+	enA_i2m1 <= '1' when (enAm1='1' and aAm1(11 downto 10)="10") else '0';
 
 	enA_i3 <= '1' when (weA='1' and enA='1' and aA(11 downto 10)="11") else '0';
-	enA_i3m1 <= '1' when (weA='1' and enAm1='1' and aAm1(11 downto 10)="11") else '0';
+	enA_i3m1 <= '1' when (enAm1='1' and aAm1(11 downto 10)="11") else '0';
 	-- IP impl.muxA.wiring --- END
 
 	-- IP impl.muxA.rising --- BEGIN
@@ -513,12 +519,27 @@ begin
 			-- IP impl.muxA.asyncrst --- BEGIN
 			enAm1 <= '0';
 			aAm1 <= (others => '0');
+			---
+			drdA_sig <= (others => '0');
 
 			-- IP impl.muxA.asyncrst --- END
 
 		elsif rising_edge(clkA) then
 			enAm1 <= enA;
 			aAm1 <= aA;
+
+			---
+			if  enA_i0m1='1' then
+				drdA_sig <= drdA_i0;
+			elsif  enA_i1m1='1' then
+				drdA_sig <= drdA_i1;
+			elsif  enA_i2m1='1' then
+				drdA_sig <= drdA_i2;
+			elsif  enA_i3m1='1' then
+				drdA_sig <= drdA_i3;
+			else
+				drdA_sig <= (others => '0');
+			end if;
 		end if;
 	end process;
 	-- IP impl.muxA.rising --- END
@@ -529,7 +550,7 @@ begin
 
 	-- IP impl.muxB.wiring --- BEGIN
 	enB_k0 <= '1' when (weB='1' and enB='1') else '0';
-	enB_k0m1 <= '1' when (weB='1' and enBm1='1') else '0';
+	enB_k0m1 <= '1' when (enBm1='1') else '0'; -- we removed
 	-- IP impl.muxB.wiring --- END
 
 	-- IP impl.muxB.rising --- BEGIN
@@ -542,12 +563,22 @@ begin
 			-- IP impl.muxB.asyncrst --- BEGIN
 			enBm1 <= '0';
 			aBm1 <= (others => '0');
+			---
+			drdB_sig <= (others => '0');
 
 			-- IP impl.muxB.asyncrst --- END
 
 		elsif rising_edge(clkB) then
 			enBm1 <= enB;
 			aBm1 <= aB;
+
+			---
+			if  enB_k0m1='1' then
+				drdB_sig <= drdB_k0;
+			else
+				drdB_sig <= (others => '0');
+			end if;
+
 		end if;
 	end process;
 	-- IP impl.muxB.rising --- END
@@ -562,15 +593,12 @@ begin
 	drdA_i2 <= drdA_i2j0;
 	drdA_i3 <= drdA_i3j0;
 
-	drdA <= drdA_i0 when enA_i0m1='1'
-				else drdA_i1 when enA_i1m1='1'
-				else drdA_i2 when enA_i2m1='1'
-				else drdA_i3 when enA_i3m1='1'
-				else (others => '0');
+	---
+	drdA <= drdA_sig;
 
 	drdB_k0 <= drdB_k0l3 & drdB_k0l2 & drdB_k0l1 & drdB_k0l0;
 
-	drdB <= drdB_k0 when enB_k0m1='1'
-				else (others => '0');
+	---
+	drdB <= drdB_sig;
 
 end Rtl;

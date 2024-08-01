@@ -53,11 +53,11 @@ void CtrWtedTidkState::VecVCommand::fillFeed(
 CtrWtedTidkState::CtrWtedTidkState(
 			UntWted* unt
 		) : CtrWted(unt) {
-	// IP constructor.easy.cmdvars --- INSERT
+	cmdGet = getNewCmdGet();
 };
 
 CtrWtedTidkState::~CtrWtedTidkState() {
-	// IP destructor.easy.cmdvars --- INSERT
+	delete cmdGet;
 };
 
 uint8_t CtrWtedTidkState::getTixVCommandBySref(

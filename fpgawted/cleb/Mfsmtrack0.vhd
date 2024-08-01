@@ -26,9 +26,11 @@ entity Mfsmtrack0 is
 		reqInvSelect: in std_logic;
 		ackInvSelect: out std_logic;
 
-		selectTixVSource: in std_logic_vector(7 downto 0);
+		selectTixVCapture: in std_logic_vector(7 downto 0);
 		selectStaTixVTrigger: in std_logic_vector(7 downto 0);
+		selectStaFallingNotRising: in std_logic_vector(7 downto 0);
 		selectStoTixVTrigger: in std_logic_vector(7 downto 0);
+		selectStoFallingNotRising: in std_logic_vector(7 downto 0);
 
 		reqInvSet: in std_logic;
 		ackInvSet: out std_logic;
@@ -152,7 +154,7 @@ architecture Rtl of Mfsmtrack0 is
 	constant sizeSeqbuf: natural := 4096;
 	constant logSizeSeqbuf: natural := 12;
 
-	constant tixVSourceHostifOp: std_logic_vector(7 downto 0) := x"01";
+	constant tixVCaptureHostifOp: std_logic_vector(7 downto 0) := x"01";
 
 	constant tixVStateIdle: std_logic_vector(7 downto 0) := x"00";
 	constant tixVStateArm: std_logic_vector(7 downto 0) := x"01";
@@ -258,14 +260,13 @@ architecture Rtl of Mfsmtrack0 is
 	signal ackInvSelect_sig: std_logic;
 	signal ackInvSet_sig: std_logic;
 
-	signal tixVSource: std_logic_vector(7 downto 0);
+	signal tixVCapture: std_logic_vector(7 downto 0);
+
 	signal staTixVTrigger: std_logic_vector(7 downto 0);
+	signal staFallingNotRising: boolean;
+
 	signal stoTixVTrigger: std_logic_vector(7 downto 0);
-
-	signal state: std_logic_vector(7 downto 0);
-
-	signal start: std_logic;
-	signal stop: std_logic;
+	signal stoFallingNotRising: boolean;
 
 	signal strbStart: std_logic;
 	signal strbStop: std_logic;
@@ -307,6 +308,12 @@ architecture Rtl of Mfsmtrack0 is
 
 	signal aSeqbufB: natural range 0 to sizeSeqbuf/(wD/8)-1;
 	signal aSeqbufB_vec: std_logic_vector(logSizeSeqbuf-logWD-1 downto 0);
+
+	---- sampling operation (sample)
+	signal state: std_logic_vector(7 downto 0);
+
+	signal start: std_logic;
+	signal stop: std_logic;
 
 	---- myCntbuf
 	signal drdCntbufB: std_logic_vector(31 downto 0);
@@ -788,17 +795,6 @@ begin
 				else tixVStateIdle;
 	getInfoCoverage <= coverage;
 
-	state <= hostifStateOp when tixVSource=tixVSourceHostifOp
-				else (others => '1');
-
-	start <= hostifRxAXIS_tvalid when staTixVTrigger=tixVTriggerHostifRxAXIS_tvalid
-				else ackInvTkclksrcSetTkst when staTixVTrigger=tixVTriggerAckInvTkclksrcSetTkst
-				else '0';
-
-	stop <= hostifRxAXIS_tvalid when stoTixVTrigger=tixVTriggerHostifRxAXIS_tvalid
-				else ackInvTkclksrcSetTkst when stoTixVTrigger=tixVTriggerAckInvTkclksrcSetTkst
-				else '0';
-
 	strbStart <= '1' when stateOp=stateOpStart else '0';
 
 	reqOpClear <= '1' when stateOp=stateOpClear else '0';
@@ -816,9 +812,11 @@ begin
 			stateOp <= stateOpInit;
 			ackInvSelect_sig <= '0';
 			ackInvSet_sig <= '0';
-			tixVSource <= x"01";
+			tixVCapture <= x"01";
 			staTixVTrigger <= tixVTriggerVoid;
+			staFallingNotRising <= false;
 			stoTixVTrigger <= tixVTriggerVoid;
+			stoFallingNotRising <= false;
 			strbStop <= '0';
 			tick <= (others => '0');
 
@@ -833,9 +831,11 @@ begin
 				tick <= (others => '0');
 
 				if reqInvSelect='1' then
-					tixVSource <= selectTixVSource;
+					tixVCapture <= selectTixVCapture;
 					staTixVTrigger <= selectStaTixVTrigger;
+					staFallingNotRising <= (selectStaFallingNotRising=tru8);
 					stoTixVTrigger <= selectStoTixVTrigger;
+					stoFallingNotRising <= (selectStoFallingNotRising=tru8);
 
 					ackInvSelect_sig <= '1';
 					stateOp <= stateOpInv;
@@ -879,7 +879,7 @@ begin
 				end if;
 
 			elsif stateOp=stateOpIdle then
-				if staTixVTrigger=tixVTriggerVoid or (strb_last='0' and start='1') then
+				if staTixVTrigger=tixVTriggerVoid or (not staFallingNotRising and strb_last='0' and start='1') or (staFallingNotRising and strb_last='1' and start='0') then
 					stateOp <= stateOpStart;
 				else
 					strb_last := start;
@@ -893,7 +893,7 @@ begin
 			elsif stateOp=stateOpRun then
 				tick <= std_logic_vector(unsigned(tick) + 1);
 
-				if (stoTixVTrigger=tixVTriggerVoid and tick>=TCapt) or tick=x"FFFFFFF0" or (strb_last='0' and stop='1') or dneCount='1' or dneSeq='1' then
+				if (stoTixVTrigger=tixVTriggerVoid and tick>=TCapt) or tick=x"FFFFFFF0" or (not staFallingNotRising and strb_last='0' and stop='1') or (staFallingNotRising and strb_last='1' and stop='0') or dneCount='1' or dneSeq='1' then
 					strbStop <= '1';
 
 					stateOp <= stateOpStop;
@@ -921,6 +921,46 @@ begin
 					stateOp <= stateOpInit;
 				end if;
 			end if;
+		end if;
+	end process;
+
+	------------------------------------------------------------------------
+	-- implementation: sampling operation (sample)
+	------------------------------------------------------------------------
+
+	process (reset, mclk)
+
+	begin
+		if reset='1' then
+			state <= (others => '1');
+			start <= '0';
+			stop <= '0';
+
+		elsif rising_edge(mclk) then
+			case tixVCapture is
+				when tixVCaptureHostifOp =>
+					state <= hostifStateOp;
+				when others =>
+					state <= (others => '1');
+			end case;
+
+			case staTixVTrigger is
+				when tixVTriggerHostifRxAXIS_tvalid =>
+					start <= hostifRxAXIS_tvalid;
+				when tixVTriggerAckInvTkclksrcSetTkst =>
+					start <= ackInvTkclksrcSetTkst;
+				when others =>
+					start <= '0';
+			end case;
+
+			case stoTixVTrigger is
+				when tixVTriggerHostifRxAXIS_tvalid =>
+					stop <= hostifRxAXIS_tvalid;
+				when tixVTriggerAckInvTkclksrcSetTkst =>
+					stop <= ackInvTkclksrcSetTkst;
+				when others =>
+					stop <= '0';
+			end case;
 		end if;
 	end process;
 

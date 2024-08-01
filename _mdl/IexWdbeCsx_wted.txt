@@ -48,7 +48,8 @@ tidk
 	wted_core	mfsmtrack0
 	wted_core	mfsmtrack1
 	wted_core	mgptrack
-	wted_core	memgptrack
+	wted_core	memrdtrack
+	wted_core	memwrtrack
 	wted_core	state
 		ImeIMController.
 		
@@ -94,7 +95,8 @@ zudk
 	wted_core	mfsmtrack0
 	wted_core	mfsmtrack1
 	wted_core	mgptrack
-	wted_core	memgptrack
+	wted_core	memrdtrack
+	wted_core	memwrtrack
 	wted_core	state
 		ImeIMController.
 		

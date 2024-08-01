@@ -2,8 +2,8 @@
 	* \file CtrWtedZudkMfsmtrack1.cpp
 	* mfsmtrack1 controller (implementation)
 	* \copyright (C) 2016-2020 MPSI Technologies GmbH
-	* \author Alexander Wirthmueller (auto-generation)
-	* \date created: 30 Jun 2024
+	* \author Catherine Johnson (auto-generation)
+	* \date created: 10 Jul 2024
 	*/
 // IP header --- ABOVE
 
@@ -13,6 +13,49 @@ using namespace std;
 using namespace Sbecore;
 using namespace Xmlio;
 using namespace Dbecore;
+
+/******************************************************************************
+ class CtrWtedZudkMfsmtrack1::VecVCapture
+ ******************************************************************************/
+
+uint8_t CtrWtedZudkMfsmtrack1::VecVCapture::getTix(
+			const string& sref
+		) {
+	string s = StrMod::lc(sref);
+
+	if (s == "clientgetbufb") return CLIENTGETBUFB;
+	else if (s == "clientsetbufb") return CLIENTSETBUFB;
+	else if (s == "tkclksrcop") return TKCLKSRCOP;
+
+	return(0xFF);
+};
+
+string CtrWtedZudkMfsmtrack1::VecVCapture::getSref(
+			const uint8_t tix
+		) {
+	if (tix == CLIENTGETBUFB) return("clientGetbufB");
+	else if (tix == CLIENTSETBUFB) return("clientSetbufB");
+	else if (tix == TKCLKSRCOP) return("tkclksrcOp");
+
+	return("");
+};
+
+string CtrWtedZudkMfsmtrack1::VecVCapture::getTitle(
+			const uint8_t tix
+		) {
+
+	return(getSref(tix));
+};
+
+void CtrWtedZudkMfsmtrack1::VecVCapture::fillFeed(
+			Feed& feed
+		) {
+	feed.clear();
+
+	std::set<uint8_t> items = {CLIENTGETBUFB,CLIENTSETBUFB,TKCLKSRCOP};
+
+	for (auto it = items.begin(); it != items.end(); it++) feed.appendIxSrefTitles(*it, getSref(*it), getTitle(*it));
+};
 
 /******************************************************************************
  class CtrWtedZudkMfsmtrack1::VecVCommand
@@ -48,49 +91,6 @@ void CtrWtedZudkMfsmtrack1::VecVCommand::fillFeed(
 	std::set<uint8_t> items = {GETINFO,SELECT,SET};
 
 	for (auto it = items.begin(); it != items.end(); it++) feed.appendIxSrefTitles(*it, getSref(*it), getSref(*it));
-};
-
-/******************************************************************************
- class CtrWtedZudkMfsmtrack1::VecVSource
- ******************************************************************************/
-
-uint8_t CtrWtedZudkMfsmtrack1::VecVSource::getTix(
-			const string& sref
-		) {
-	string s = StrMod::lc(sref);
-
-	if (s == "clientgetbufb") return CLIENTGETBUFB;
-	else if (s == "clientsetbufb") return CLIENTSETBUFB;
-	else if (s == "tkclksrcop") return TKCLKSRCOP;
-
-	return(0xFF);
-};
-
-string CtrWtedZudkMfsmtrack1::VecVSource::getSref(
-			const uint8_t tix
-		) {
-	if (tix == CLIENTGETBUFB) return("clientGetbufB");
-	else if (tix == CLIENTSETBUFB) return("clientSetbufB");
-	else if (tix == TKCLKSRCOP) return("tkclksrcOp");
-
-	return("");
-};
-
-string CtrWtedZudkMfsmtrack1::VecVSource::getTitle(
-			const uint8_t tix
-		) {
-
-	return(getSref(tix));
-};
-
-void CtrWtedZudkMfsmtrack1::VecVSource::fillFeed(
-			Feed& feed
-		) {
-	feed.clear();
-
-	std::set<uint8_t> items = {CLIENTGETBUFB,CLIENTSETBUFB,TKCLKSRCOP};
-
-	for (auto it = items.begin(); it != items.end(); it++) feed.appendIxSrefTitles(*it, getSref(*it), getTitle(*it));
 };
 
 /******************************************************************************
@@ -190,11 +190,15 @@ void CtrWtedZudkMfsmtrack1::VecVTrigger::fillFeed(
 CtrWtedZudkMfsmtrack1::CtrWtedZudkMfsmtrack1(
 			UntWted* unt
 		) : CtrWted(unt) {
-	// IP constructor.easy.cmdvars --- INSERT
+	cmdGetInfo = getNewCmdGetInfo();
+	cmdSelect = getNewCmdSelect();
+	cmdSet = getNewCmdSet();
 };
 
 CtrWtedZudkMfsmtrack1::~CtrWtedZudkMfsmtrack1() {
-	// IP destructor.easy.cmdvars --- INSERT
+	delete cmdGetInfo;
+	delete cmdSelect;
+	delete cmdSet;
 };
 
 uint8_t CtrWtedZudkMfsmtrack1::getTixVCommandBySref(
@@ -257,25 +261,31 @@ void CtrWtedZudkMfsmtrack1::getInfo(
 Cmd* CtrWtedZudkMfsmtrack1::getNewCmdSelect() {
 	Cmd* cmd = new Cmd(tixVController, VecVCommand::SELECT, Cmd::VecVRettype::VOID);
 
-	cmd->addParInv("tixVSource", Par::VecVType::TIX, CtrWtedZudkMfsmtrack1::VecVSource::getTix, CtrWtedZudkMfsmtrack1::VecVSource::getSref, CtrWtedZudkMfsmtrack1::VecVSource::fillFeed);
+	cmd->addParInv("tixVCapture", Par::VecVType::TIX, CtrWtedZudkMfsmtrack1::VecVCapture::getTix, CtrWtedZudkMfsmtrack1::VecVCapture::getSref, CtrWtedZudkMfsmtrack1::VecVCapture::fillFeed);
 	cmd->addParInv("staTixVTrigger", Par::VecVType::TIX, CtrWtedZudkMfsmtrack1::VecVTrigger::getTix, CtrWtedZudkMfsmtrack1::VecVTrigger::getSref, CtrWtedZudkMfsmtrack1::VecVTrigger::fillFeed);
+	cmd->addParInv("staFallingNotRising", Par::VecVType::_BOOL);
 	cmd->addParInv("stoTixVTrigger", Par::VecVType::TIX, CtrWtedZudkMfsmtrack1::VecVTrigger::getTix, CtrWtedZudkMfsmtrack1::VecVTrigger::getSref, CtrWtedZudkMfsmtrack1::VecVTrigger::fillFeed);
+	cmd->addParInv("stoFallingNotRising", Par::VecVType::_BOOL);
 
 	return cmd;
 };
 
 void CtrWtedZudkMfsmtrack1::select(
-			const uint8_t tixVSource
+			const uint8_t tixVCapture
 			, const uint8_t staTixVTrigger
+			, const bool staFallingNotRising
 			, const uint8_t stoTixVTrigger
+			, const bool stoFallingNotRising
 		) {
 	unt->lockAccess("CtrWtedZudkMfsmtrack1::select");
 
 	Cmd* cmd = cmdSelect;
 
-	cmd->parsInv["tixVSource"].setTix(tixVSource);
+	cmd->parsInv["tixVCapture"].setTix(tixVCapture);
 	cmd->parsInv["staTixVTrigger"].setTix(staTixVTrigger);
+	cmd->parsInv["staFallingNotRising"].setBool(staFallingNotRising);
 	cmd->parsInv["stoTixVTrigger"].setTix(stoTixVTrigger);
+	cmd->parsInv["stoFallingNotRising"].setBool(stoFallingNotRising);
 
 	if (unt->runCmd(cmd)) {
 	} else throw DbeException("error running select");

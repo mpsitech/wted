@@ -55,11 +55,13 @@ void CtrWtedTidkClient::VecVCommand::fillFeed(
 CtrWtedTidkClient::CtrWtedTidkClient(
 			UntWted* unt
 		) : CtrWted(unt) {
-	// IP constructor.easy.cmdvars --- INSERT
+	cmdLoadGetbuf = getNewCmdLoadGetbuf();
+	cmdStoreSetbuf = getNewCmdStoreSetbuf();
 };
 
 CtrWtedTidkClient::~CtrWtedTidkClient() {
-	// IP destructor.easy.cmdvars --- INSERT
+	delete cmdLoadGetbuf;
+	delete cmdStoreSetbuf;
 };
 
 uint8_t CtrWtedTidkClient::getTixVCommandBySref(

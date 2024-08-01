@@ -2,8 +2,8 @@
 	* \file CtrWtedZudkIdent.h
 	* ident controller (declarations)
 	* \copyright (C) 2016-2020 MPSI Technologies GmbH
-	* \author Alexander Wirthmueller (auto-generation)
-	* \date created: 30 Jun 2024
+	* \author Catherine Johnson (auto-generation)
+	* \date created: 10 Jul 2024
 	*/
 // IP header --- ABOVE
 
@@ -46,8 +46,8 @@ public:
 	static const uint8_t tixVController = 0x01;
 
 public:
-	Dbecore::Cmd* cmdGet ;
-	Dbecore::Cmd* cmdGetCfg ;
+	Dbecore::Cmd* cmdGet;
+	Dbecore::Cmd* cmdGetCfg;
 
 public:
 	static uint8_t getTixVCommandBySref(const std::string& sref);

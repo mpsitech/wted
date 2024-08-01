@@ -46,11 +46,9 @@ void CtrWtedClebRgbled0::VecVCommand::fillFeed(
 CtrWtedClebRgbled0::CtrWtedClebRgbled0(
 			UntWted* unt
 		) : CtrWted(unt) {
-	// IP constructor.easy.cmdvars --- INSERT
 };
 
 CtrWtedClebRgbled0::~CtrWtedClebRgbled0() {
-	// IP destructor.easy.cmdvars --- INSERT
 };
 
 uint8_t CtrWtedClebRgbled0::getTixVCommandBySref(

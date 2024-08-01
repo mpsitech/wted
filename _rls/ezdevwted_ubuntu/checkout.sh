@@ -2,7 +2,7 @@
 # checkout script for Wted device access library sources, release ezdevwted_ubuntu
 # copyright: (C) 2017-2020 MPSI Technologies GmbH
 # author: Alexander Wirthmueller (auto-generation)
-# date created: 30 Jun 2024
+# date created: 24 Jul 2024
 # IP header --- ABOVE
 
 if [ -z ${WHIZROOT+x} ]; then

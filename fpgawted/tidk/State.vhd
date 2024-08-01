@@ -68,6 +68,12 @@ architecture Rtl of State is
 	-- IP sigs.led.cust --- INSERT
 
 	---- main operation (op)
+	type stateOp_t is (
+		stateOpRunA, stateOpRunB
+	);
+	signal stateOp: stateOp_t := stateOpRunA;
+
+	signal trafgenRng_capt: std_logic;
 
 	-- IP sigs.op.cust --- INSERT
 
@@ -127,17 +133,35 @@ begin
 	-- IP impl.op.wiring --- END
 
 	-- IP impl.op.rising --- BEGIN
-	process (reset, mclk)
+	process (reset, mclk, stateOp)
 		-- IP impl.op.vars --- BEGIN
 		-- IP impl.op.vars --- END
 
 	begin
 		if reset='1' then
 			-- IP impl.op.asyncrst --- BEGIN
+			stateOp <= stateOpRunA;
+			trafgenRng_capt <= '0';
+
 			-- IP impl.op.asyncrst --- END
 
 		elsif rising_edge(mclk) then
-			-- IP impl.op --- INSERT
+		-- IP impl.op.ext --- INSERT
+
+			if stateOp=stateOpRunA then
+				if tkclk='1' then
+					-- IP impl.op.runA --- INSERT
+
+					stateOp <= stateOpRunB;
+				end if;
+
+			elsif stateOp=stateOpRunB then
+				if tkclk='0' then
+					-- IP impl.op.runB --- INSERT
+
+					stateOp <= stateOpRunA;
+				end if;
+			end if;
 		end if;
 	end process;
 	-- IP impl.op.rising --- END

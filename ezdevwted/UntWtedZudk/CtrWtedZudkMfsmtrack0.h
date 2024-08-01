@@ -2,8 +2,8 @@
 	* \file CtrWtedZudkMfsmtrack0.h
 	* mfsmtrack0 controller (declarations)
 	* \copyright (C) 2016-2020 MPSI Technologies GmbH
-	* \author Alexander Wirthmueller (auto-generation)
-	* \date created: 30 Jun 2024
+	* \author Catherine Johnson (auto-generation)
+	* \date created: 10 Jul 2024
 	*/
 // IP header --- ABOVE
 
@@ -14,8 +14,8 @@
 
 #define CmdWtedZudkMfsmtrack0GetInfo CtrWtedZudkMfsmtrack0::CmdGetInfo
 
+#define VecVWtedZudkMfsmtrack0Capture CtrWtedZudkMfsmtrack0::VecVCapture
 #define VecVWtedZudkMfsmtrack0Command CtrWtedZudkMfsmtrack0::VecVCommand
-#define VecVWtedZudkMfsmtrack0Source CtrWtedZudkMfsmtrack0::VecVSource
 #define VecVWtedZudkMfsmtrack0State CtrWtedZudkMfsmtrack0::VecVState
 #define VecVWtedZudkMfsmtrack0Trigger CtrWtedZudkMfsmtrack0::VecVTrigger
 
@@ -25,6 +25,22 @@
 class CtrWtedZudkMfsmtrack0 : public CtrWted {
 
 public:
+	/**
+		* VecVCapture (full: VecVWtedZudkMfsmtrack0Capture)
+		*/
+	class VecVCapture {
+
+	public:
+		static constexpr uint8_t HOSTIFOP = 0x01;
+
+		static uint8_t getTix(const std::string& sref);
+		static std::string getSref(const uint8_t tix);
+
+		static std::string getTitle(const uint8_t tix);
+
+		static void fillFeed(Sbecore::Feed& feed);
+	};
+
 	/**
 		* VecVCommand (full: VecVWtedZudkMfsmtrack0Command)
 		*/
@@ -37,22 +53,6 @@ public:
 
 		static uint8_t getTix(const std::string& sref);
 		static std::string getSref(const uint8_t tix);
-
-		static void fillFeed(Sbecore::Feed& feed);
-	};
-
-	/**
-		* VecVSource (full: VecVWtedZudkMfsmtrack0Source)
-		*/
-	class VecVSource {
-
-	public:
-		static constexpr uint8_t HOSTIFOP = 0x01;
-
-		static uint8_t getTix(const std::string& sref);
-		static std::string getSref(const uint8_t tix);
-
-		static std::string getTitle(const uint8_t tix);
 
 		static void fillFeed(Sbecore::Feed& feed);
 	};
@@ -102,9 +102,9 @@ public:
 	static const uint8_t tixVController = 0x04;
 
 public:
-	Dbecore::Cmd* cmdGetInfo ;
-	Dbecore::Cmd* cmdSelect ;
-	Dbecore::Cmd* cmdSet ;
+	Dbecore::Cmd* cmdGetInfo;
+	Dbecore::Cmd* cmdSelect;
+	Dbecore::Cmd* cmdSet;
 
 public:
 	static uint8_t getTixVCommandBySref(const std::string& sref);
@@ -117,7 +117,7 @@ public:
 	void getInfo(uint8_t& tixVState, unsigned char*& coverage, size_t& coveragelen);
 
 	static Dbecore::Cmd* getNewCmdSelect();
-	void select(const uint8_t tixVSource, const uint8_t staTixVTrigger, const uint8_t stoTixVTrigger);
+	void select(const uint8_t tixVCapture, const uint8_t staTixVTrigger, const bool staFallingNotRising, const uint8_t stoTixVTrigger, const bool stoFallingNotRising);
 
 	static Dbecore::Cmd* getNewCmdSet();
 	void set(const bool rng, const uint32_t TCapt);

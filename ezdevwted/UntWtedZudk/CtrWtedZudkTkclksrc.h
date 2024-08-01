@@ -2,8 +2,8 @@
 	* \file CtrWtedZudkTkclksrc.h
 	* tkclksrc controller (declarations)
 	* \copyright (C) 2016-2020 MPSI Technologies GmbH
-	* \author Alexander Wirthmueller (auto-generation)
-	* \date created: 30 Jun 2024
+	* \author Catherine Johnson (auto-generation)
+	* \date created: 10 Jul 2024
 	*/
 // IP header --- ABOVE
 
@@ -42,11 +42,11 @@ public:
 	~CtrWtedZudkTkclksrc();
 
 public:
-	static const uint8_t tixVController = 0x0A;
+	static const uint8_t tixVController = 0x0B;
 
 public:
-	Dbecore::Cmd* cmdGetTkst ;
-	Dbecore::Cmd* cmdSetTkst ;
+	Dbecore::Cmd* cmdGetTkst;
+	Dbecore::Cmd* cmdSetTkst;
 
 public:
 	static uint8_t getTixVCommandBySref(const std::string& sref);

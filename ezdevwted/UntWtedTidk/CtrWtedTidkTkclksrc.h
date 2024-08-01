@@ -42,11 +42,11 @@ public:
 	~CtrWtedTidkTkclksrc();
 
 public:
-	static const uint8_t tixVController = 0x0A;
+	static const uint8_t tixVController = 0x0B;
 
 public:
-	Dbecore::Cmd* cmdGetTkst ;
-	Dbecore::Cmd* cmdSetTkst ;
+	Dbecore::Cmd* cmdGetTkst;
+	Dbecore::Cmd* cmdSetTkst;
 
 public:
 	static uint8_t getTixVCommandBySref(const std::string& sref);

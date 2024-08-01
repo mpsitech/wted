@@ -23,19 +23,6 @@ entity Hostif is
 		commok: out std_logic;
 		reqReset: out std_logic;
 
-		identGetVer: in std_logic_vector(63 downto 0);
-		identGetHash: in std_logic_vector(63 downto 0);
-		identGetWho: in std_logic_vector(63 downto 0);
-
-		identGetCfgFMclk: in std_logic_vector(31 downto 0);
-		identGetCfgFMemclk: in std_logic_vector(31 downto 0);
-
-		reqInvClientLoadGetbuf: out std_logic;
-		ackInvClientLoadGetbuf: in std_logic;
-
-		reqInvClientStoreSetbuf: out std_logic;
-		ackInvClientStoreSetbuf: in std_logic;
-
 		reqInvTrafgenSet: out std_logic;
 		ackInvTrafgenSet: in std_logic;
 
@@ -50,19 +37,37 @@ entity Hostif is
 
 		stateGetTixVZudkState: in std_logic_vector(7 downto 0);
 
-		memgptrackGetInfoTixVState: in std_logic_vector(7 downto 0);
+		memwrtrackGetInfoTixVState: in std_logic_vector(7 downto 0);
 
-		reqInvMemgptrackSelect: out std_logic;
-		ackInvMemgptrackSelect: in std_logic;
+		reqInvMemwrtrackSelect: out std_logic;
+		ackInvMemwrtrackSelect: in std_logic;
 
-		memgptrackSelectStaTixVTrigger: out std_logic_vector(7 downto 0);
-		memgptrackSelectStoTixVTrigger: out std_logic_vector(7 downto 0);
+		memwrtrackSelectStaTixVTrigger: out std_logic_vector(7 downto 0);
+		memwrtrackSelectStaFallingNotRising: out std_logic_vector(7 downto 0);
+		memwrtrackSelectStoTixVTrigger: out std_logic_vector(7 downto 0);
+		memwrtrackSelectStoFallingNotRising: out std_logic_vector(7 downto 0);
 
-		reqInvMemgptrackSet: out std_logic;
-		ackInvMemgptrackSet: in std_logic;
+		reqInvMemwrtrackSet: out std_logic;
+		ackInvMemwrtrackSet: in std_logic;
 
-		memgptrackSetRng: out std_logic_vector(7 downto 0);
-		memgptrackSetTCapt: out std_logic_vector(31 downto 0);
+		memwrtrackSetRng: out std_logic_vector(7 downto 0);
+		memwrtrackSetTCapt: out std_logic_vector(31 downto 0);
+
+		memrdtrackGetInfoTixVState: in std_logic_vector(7 downto 0);
+
+		reqInvMemrdtrackSelect: out std_logic;
+		ackInvMemrdtrackSelect: in std_logic;
+
+		memrdtrackSelectStaTixVTrigger: out std_logic_vector(7 downto 0);
+		memrdtrackSelectStaFallingNotRising: out std_logic_vector(7 downto 0);
+		memrdtrackSelectStoTixVTrigger: out std_logic_vector(7 downto 0);
+		memrdtrackSelectStoFallingNotRising: out std_logic_vector(7 downto 0);
+
+		reqInvMemrdtrackSet: out std_logic;
+		ackInvMemrdtrackSet: in std_logic;
+
+		memrdtrackSetRng: out std_logic_vector(7 downto 0);
+		memrdtrackSetTCapt: out std_logic_vector(31 downto 0);
 
 		mgptrackGetInfoTixVState: in std_logic_vector(7 downto 0);
 
@@ -70,7 +75,9 @@ entity Hostif is
 		ackInvMgptrackSelect: in std_logic;
 
 		mgptrackSelectStaTixVTrigger: out std_logic_vector(7 downto 0);
+		mgptrackSelectStaFallingNotRising: out std_logic_vector(7 downto 0);
 		mgptrackSelectStoTixVTrigger: out std_logic_vector(7 downto 0);
+		mgptrackSelectStoFallingNotRising: out std_logic_vector(7 downto 0);
 
 		reqInvMgptrackSet: out std_logic;
 		ackInvMgptrackSet: in std_logic;
@@ -84,9 +91,11 @@ entity Hostif is
 		reqInvMfsmtrack1Select: out std_logic;
 		ackInvMfsmtrack1Select: in std_logic;
 
-		mfsmtrack1SelectTixVSource: out std_logic_vector(7 downto 0);
+		mfsmtrack1SelectTixVCapture: out std_logic_vector(7 downto 0);
 		mfsmtrack1SelectStaTixVTrigger: out std_logic_vector(7 downto 0);
+		mfsmtrack1SelectStaFallingNotRising: out std_logic_vector(7 downto 0);
 		mfsmtrack1SelectStoTixVTrigger: out std_logic_vector(7 downto 0);
+		mfsmtrack1SelectStoFallingNotRising: out std_logic_vector(7 downto 0);
 
 		reqInvMfsmtrack1Set: out std_logic;
 		ackInvMfsmtrack1Set: in std_logic;
@@ -100,9 +109,11 @@ entity Hostif is
 		reqInvMfsmtrack0Select: out std_logic;
 		ackInvMfsmtrack0Select: in std_logic;
 
-		mfsmtrack0SelectTixVSource: out std_logic_vector(7 downto 0);
+		mfsmtrack0SelectTixVCapture: out std_logic_vector(7 downto 0);
 		mfsmtrack0SelectStaTixVTrigger: out std_logic_vector(7 downto 0);
+		mfsmtrack0SelectStaFallingNotRising: out std_logic_vector(7 downto 0);
 		mfsmtrack0SelectStoTixVTrigger: out std_logic_vector(7 downto 0);
+		mfsmtrack0SelectStoFallingNotRising: out std_logic_vector(7 downto 0);
 
 		reqInvMfsmtrack0Set: out std_logic;
 		ackInvMfsmtrack0Set: in std_logic;
@@ -113,6 +124,19 @@ entity Hostif is
 		ddrifGetStatsNRdA: in std_logic_vector(31 downto 0);
 		ddrifGetStatsNWrA: in std_logic_vector(31 downto 0);
 		ddrifGetStatsNWrB: in std_logic_vector(31 downto 0);
+
+		reqInvClientLoadGetbuf: out std_logic;
+		ackInvClientLoadGetbuf: in std_logic;
+
+		reqInvClientStoreSetbuf: out std_logic;
+		ackInvClientStoreSetbuf: in std_logic;
+
+		identGetVer: in std_logic_vector(63 downto 0);
+		identGetHash: in std_logic_vector(63 downto 0);
+		identGetWho: in std_logic_vector(63 downto 0);
+
+		identGetCfgFMclk: in std_logic_vector(31 downto 0);
+		identGetCfgFMemclk: in std_logic_vector(31 downto 0);
 
 		reqGetbufFromClient: out std_logic;
 		ackGetbufFromClient: in std_logic;
@@ -134,10 +158,20 @@ entity Hostif is
 		setbufToClientAXIS_tdata: out std_logic_vector(63 downto 0);
 		setbufToClientAXIS_tlast: out std_logic;
 
+		reqCntbufFromMfsmtrack0: out std_logic;
+		ackCntbufFromMfsmtrack0: in std_logic;
+		dneCntbufFromMfsmtrack0: out std_logic;
+		avllenCntbufFromMfsmtrack0: in std_logic_vector(31 downto 0);
+
 		reqCntbufFromMfsmtrack1: out std_logic;
 		ackCntbufFromMfsmtrack1: in std_logic;
 		dneCntbufFromMfsmtrack1: out std_logic;
 		avllenCntbufFromMfsmtrack1: in std_logic_vector(31 downto 0);
+
+		cntbufFromMfsmtrack0AXIS_tready: out std_logic;
+		cntbufFromMfsmtrack0AXIS_tvalid: in std_logic;
+		cntbufFromMfsmtrack0AXIS_tdata: in std_logic_vector(63 downto 0);
+		cntbufFromMfsmtrack0AXIS_tlast: in std_logic;
 
 		cntbufFromMfsmtrack1AXIS_tready: out std_logic;
 		cntbufFromMfsmtrack1AXIS_tvalid: in std_logic;
@@ -154,46 +188,66 @@ entity Hostif is
 		fstoccbufFromMfsmtrack0AXIS_tdata: in std_logic_vector(63 downto 0);
 		fstoccbufFromMfsmtrack0AXIS_tlast: in std_logic;
 
-		reqFstoccbufFromMfsmtrack1: out std_logic;
-		ackFstoccbufFromMfsmtrack1: in std_logic;
-		dneFstoccbufFromMfsmtrack1: out std_logic;
-		avllenFstoccbufFromMfsmtrack1: in std_logic_vector(31 downto 0);
-
-		fstoccbufFromMfsmtrack1AXIS_tready: out std_logic;
-		fstoccbufFromMfsmtrack1AXIS_tvalid: in std_logic;
-		fstoccbufFromMfsmtrack1AXIS_tdata: in std_logic_vector(63 downto 0);
-		fstoccbufFromMfsmtrack1AXIS_tlast: in std_logic;
-
 		reqSeqbufFromMfsmtrack0: out std_logic;
 		ackSeqbufFromMfsmtrack0: in std_logic;
 		dneSeqbufFromMfsmtrack0: out std_logic;
 		avllenSeqbufFromMfsmtrack0: in std_logic_vector(31 downto 0);
 
 		seqbufFromMfsmtrack0AXIS_tready: out std_logic;
+		seqbufFromMfsmtrack0AXIS_tvalid: in std_logic;
+		seqbufFromMfsmtrack0AXIS_tdata: in std_logic_vector(63 downto 0);
+
+		reqFstoccbufFromMfsmtrack1: out std_logic;
+		ackFstoccbufFromMfsmtrack1: in std_logic;
+		dneFstoccbufFromMfsmtrack1: out std_logic;
+		avllenFstoccbufFromMfsmtrack1: in std_logic_vector(31 downto 0);
+
+		seqbufFromMfsmtrack0AXIS_tlast: in std_logic;
+
+		fstoccbufFromMfsmtrack1AXIS_tready: out std_logic;
+		fstoccbufFromMfsmtrack1AXIS_tvalid: in std_logic;
+		fstoccbufFromMfsmtrack1AXIS_tdata: in std_logic_vector(63 downto 0);
+		fstoccbufFromMfsmtrack1AXIS_tlast: in std_logic;
 
 		reqSeqbufFromMfsmtrack1: out std_logic;
 		ackSeqbufFromMfsmtrack1: in std_logic;
 		dneSeqbufFromMfsmtrack1: out std_logic;
 		avllenSeqbufFromMfsmtrack1: in std_logic_vector(31 downto 0);
 
-		seqbufFromMfsmtrack0AXIS_tvalid: in std_logic;
-		seqbufFromMfsmtrack0AXIS_tdata: in std_logic_vector(63 downto 0);
-		seqbufFromMfsmtrack0AXIS_tlast: in std_logic;
-
 		seqbufFromMfsmtrack1AXIS_tready: out std_logic;
 		seqbufFromMfsmtrack1AXIS_tvalid: in std_logic;
 		seqbufFromMfsmtrack1AXIS_tdata: in std_logic_vector(63 downto 0);
 		seqbufFromMfsmtrack1AXIS_tlast: in std_logic;
 
-		reqCntbufFromMfsmtrack0: out std_logic;
-		ackCntbufFromMfsmtrack0: in std_logic;
-		dneCntbufFromMfsmtrack0: out std_logic;
-		avllenCntbufFromMfsmtrack0: in std_logic_vector(31 downto 0);
+		reqSeqbufFromMemrdtrack: out std_logic;
+		ackSeqbufFromMemrdtrack: in std_logic;
+		dneSeqbufFromMemrdtrack: out std_logic;
+		avllenSeqbufFromMemrdtrack: in std_logic_vector(31 downto 0);
 
-		cntbufFromMfsmtrack0AXIS_tready: out std_logic;
-		cntbufFromMfsmtrack0AXIS_tvalid: in std_logic;
-		cntbufFromMfsmtrack0AXIS_tdata: in std_logic_vector(63 downto 0);
-		cntbufFromMfsmtrack0AXIS_tlast: in std_logic;
+		seqbufFromMemrdtrackAXIS_tready: out std_logic;
+		seqbufFromMemrdtrackAXIS_tvalid: in std_logic;
+		seqbufFromMemrdtrackAXIS_tdata: in std_logic_vector(63 downto 0);
+		seqbufFromMemrdtrackAXIS_tlast: in std_logic;
+
+		reqSeqbufFromMgptrack: out std_logic;
+		ackSeqbufFromMgptrack: in std_logic;
+		dneSeqbufFromMgptrack: out std_logic;
+		avllenSeqbufFromMgptrack: in std_logic_vector(31 downto 0);
+
+		seqbufFromMgptrackAXIS_tready: out std_logic;
+		seqbufFromMgptrackAXIS_tvalid: in std_logic;
+		seqbufFromMgptrackAXIS_tdata: in std_logic_vector(63 downto 0);
+		seqbufFromMgptrackAXIS_tlast: in std_logic;
+
+		reqSeqbufFromMemwrtrack: out std_logic;
+		ackSeqbufFromMemwrtrack: in std_logic;
+		dneSeqbufFromMemwrtrack: out std_logic;
+		avllenSeqbufFromMemwrtrack: in std_logic_vector(31 downto 0);
+
+		seqbufFromMemwrtrackAXIS_tready: out std_logic;
+		seqbufFromMemwrtrackAXIS_tvalid: in std_logic;
+		seqbufFromMemwrtrackAXIS_tdata: in std_logic_vector(63 downto 0);
+		seqbufFromMemwrtrackAXIS_tlast: in std_logic;
 
 		rxAXIS_tvalid_sig: out std_logic;
 
@@ -284,6 +338,9 @@ architecture Rtl of Hostif is
 	end component;
 
 	component Crc8005_64 is
+		generic (
+			initOneNotZero: boolean := false
+		);
 		port (
 			reset: in std_logic;
 			mclk: in std_logic;
@@ -592,7 +649,8 @@ begin
 				or (tixVController=tixVZudkControllerMfsmtrack0 and (tixVCommand=tixVMfsmtrack0CommandGetInfo or tixVCommand=tixVMfsmtrack0CommandSelect or tixVCommand=tixVMfsmtrack0CommandSet))
 				or (tixVController=tixVZudkControllerMfsmtrack1 and (tixVCommand=tixVMfsmtrack1CommandGetInfo or tixVCommand=tixVMfsmtrack1CommandSelect or tixVCommand=tixVMfsmtrack1CommandSet))
 				or (tixVController=tixVZudkControllerMgptrack and (tixVCommand=tixVMgptrackCommandGetInfo or tixVCommand=tixVMgptrackCommandSelect or tixVCommand=tixVMgptrackCommandSet))
-				or (tixVController=tixVZudkControllerMemgptrack and (tixVCommand=tixVMemgptrackCommandGetInfo or tixVCommand=tixVMemgptrackCommandSelect or tixVCommand=tixVMemgptrackCommandSet))
+				or (tixVController=tixVZudkControllerMemrdtrack and (tixVCommand=tixVMemrdtrackCommandGetInfo or tixVCommand=tixVMemrdtrackCommandSelect or tixVCommand=tixVMemrdtrackCommandSet))
+				or (tixVController=tixVZudkControllerMemwrtrack and (tixVCommand=tixVMemwrtrackCommandGetInfo or tixVCommand=tixVMemwrtrackCommandSelect or tixVCommand=tixVMemwrtrackCommandSet))
 				or (tixVController=tixVZudkControllerState and tixVCommand=tixVStateCommandGet)
 				or (tixVController=tixVZudkControllerTkclksrc and (tixVCommand=tixVTkclksrcCommandGetTkst or tixVCommand=tixVTkclksrcCommandSetTkst))
 				or (tixVController=tixVZudkControllerTrafgen and tixVCommand=tixVTrafgenCommandSet)
@@ -605,20 +663,23 @@ begin
 				else x"0021" when (tixVController=tixVZudkControllerMfsmtrack0 and tixVCommand=tixVMfsmtrack0CommandGetInfo)
 				else x"0021" when (tixVController=tixVZudkControllerMfsmtrack1 and tixVCommand=tixVMfsmtrack1CommandGetInfo)
 				else x"0001" when (tixVController=tixVZudkControllerMgptrack and tixVCommand=tixVMgptrackCommandGetInfo)
-				else x"0001" when (tixVController=tixVZudkControllerMemgptrack and tixVCommand=tixVMemgptrackCommandGetInfo)
+				else x"0001" when (tixVController=tixVZudkControllerMemrdtrack and tixVCommand=tixVMemrdtrackCommandGetInfo)
+				else x"0001" when (tixVController=tixVZudkControllerMemwrtrack and tixVCommand=tixVMemwrtrackCommandGetInfo)
 				else x"0001" when (tixVController=tixVZudkControllerState and tixVCommand=tixVStateCommandGet)
 				else x"0004" when (tixVController=tixVZudkControllerTkclksrc and tixVCommand=tixVTkclksrcCommandGetTkst)
 				else (others => '0');
 
 	-- rx/inv command
-	lenInv <= x"0003" when (tixVController=tixVZudkControllerMfsmtrack0 and tixVCommand=tixVMfsmtrack0CommandSelect)
+	lenInv <= x"0005" when (tixVController=tixVZudkControllerMfsmtrack0 and tixVCommand=tixVMfsmtrack0CommandSelect)
 				else x"0005" when (tixVController=tixVZudkControllerMfsmtrack0 and tixVCommand=tixVMfsmtrack0CommandSet)
-				else x"0003" when (tixVController=tixVZudkControllerMfsmtrack1 and tixVCommand=tixVMfsmtrack1CommandSelect)
+				else x"0005" when (tixVController=tixVZudkControllerMfsmtrack1 and tixVCommand=tixVMfsmtrack1CommandSelect)
 				else x"0005" when (tixVController=tixVZudkControllerMfsmtrack1 and tixVCommand=tixVMfsmtrack1CommandSet)
-				else x"0002" when (tixVController=tixVZudkControllerMgptrack and tixVCommand=tixVMgptrackCommandSelect)
+				else x"0004" when (tixVController=tixVZudkControllerMgptrack and tixVCommand=tixVMgptrackCommandSelect)
 				else x"0005" when (tixVController=tixVZudkControllerMgptrack and tixVCommand=tixVMgptrackCommandSet)
-				else x"0002" when (tixVController=tixVZudkControllerMemgptrack and tixVCommand=tixVMemgptrackCommandSelect)
-				else x"0005" when (tixVController=tixVZudkControllerMemgptrack and tixVCommand=tixVMemgptrackCommandSet)
+				else x"0004" when (tixVController=tixVZudkControllerMemrdtrack and tixVCommand=tixVMemrdtrackCommandSelect)
+				else x"0005" when (tixVController=tixVZudkControllerMemrdtrack and tixVCommand=tixVMemrdtrackCommandSet)
+				else x"0004" when (tixVController=tixVZudkControllerMemwrtrack and tixVCommand=tixVMemwrtrackCommandSelect)
+				else x"0005" when (tixVController=tixVZudkControllerMemwrtrack and tixVCommand=tixVMemwrtrackCommandSet)
 				else x"0004" when (tixVController=tixVZudkControllerTkclksrc and tixVCommand=tixVTkclksrcCommandSetTkst)
 				else x"0001" when (tixVController=tixVZudkControllerTrafgen and tixVCommand=tixVTrafgenCommandSet)
 				else (others => '0');
@@ -630,18 +691,22 @@ begin
 	reqInvClientStoreSetbuf <= reqInv when (tixVController=tixVZudkControllerClient and tixVCommand=tixVClientCommandStoreSetbuf) else '0';
 
 	reqInvMfsmtrack0Select <= reqInv when (tixVController=tixVZudkControllerMfsmtrack0 and tixVCommand=tixVMfsmtrack0CommandSelect) else '0';
-	mfsmtrack0SelectTixVSource <= invbuf(0);
+	mfsmtrack0SelectTixVCapture <= invbuf(0);
 	mfsmtrack0SelectStaTixVTrigger <= invbuf(1);
-	mfsmtrack0SelectStoTixVTrigger <= invbuf(2);
+	mfsmtrack0SelectStaFallingNotRising <= invbuf(2);
+	mfsmtrack0SelectStoTixVTrigger <= invbuf(3);
+	mfsmtrack0SelectStoFallingNotRising <= invbuf(4);
 
 	reqInvMfsmtrack0Set <= reqInv when (tixVController=tixVZudkControllerMfsmtrack0 and tixVCommand=tixVMfsmtrack0CommandSet) else '0';
 	mfsmtrack0SetRng <= invbuf(0);
 	mfsmtrack0SetTCapt <= invbuf(1) & invbuf(2) & invbuf(3) & invbuf(4);
 
 	reqInvMfsmtrack1Select <= reqInv when (tixVController=tixVZudkControllerMfsmtrack1 and tixVCommand=tixVMfsmtrack1CommandSelect) else '0';
-	mfsmtrack1SelectTixVSource <= invbuf(0);
+	mfsmtrack1SelectTixVCapture <= invbuf(0);
 	mfsmtrack1SelectStaTixVTrigger <= invbuf(1);
-	mfsmtrack1SelectStoTixVTrigger <= invbuf(2);
+	mfsmtrack1SelectStaFallingNotRising <= invbuf(2);
+	mfsmtrack1SelectStoTixVTrigger <= invbuf(3);
+	mfsmtrack1SelectStoFallingNotRising <= invbuf(4);
 
 	reqInvMfsmtrack1Set <= reqInv when (tixVController=tixVZudkControllerMfsmtrack1 and tixVCommand=tixVMfsmtrack1CommandSet) else '0';
 	mfsmtrack1SetRng <= invbuf(0);
@@ -649,19 +714,33 @@ begin
 
 	reqInvMgptrackSelect <= reqInv when (tixVController=tixVZudkControllerMgptrack and tixVCommand=tixVMgptrackCommandSelect) else '0';
 	mgptrackSelectStaTixVTrigger <= invbuf(0);
-	mgptrackSelectStoTixVTrigger <= invbuf(1);
+	mgptrackSelectStaFallingNotRising <= invbuf(1);
+	mgptrackSelectStoTixVTrigger <= invbuf(2);
+	mgptrackSelectStoFallingNotRising <= invbuf(3);
 
 	reqInvMgptrackSet <= reqInv when (tixVController=tixVZudkControllerMgptrack and tixVCommand=tixVMgptrackCommandSet) else '0';
 	mgptrackSetRng <= invbuf(0);
 	mgptrackSetTCapt <= invbuf(1) & invbuf(2) & invbuf(3) & invbuf(4);
 
-	reqInvMemgptrackSelect <= reqInv when (tixVController=tixVZudkControllerMemgptrack and tixVCommand=tixVMemgptrackCommandSelect) else '0';
-	memgptrackSelectStaTixVTrigger <= invbuf(0);
-	memgptrackSelectStoTixVTrigger <= invbuf(1);
+	reqInvMemrdtrackSelect <= reqInv when (tixVController=tixVZudkControllerMemrdtrack and tixVCommand=tixVMemrdtrackCommandSelect) else '0';
+	memrdtrackSelectStaTixVTrigger <= invbuf(0);
+	memrdtrackSelectStaFallingNotRising <= invbuf(1);
+	memrdtrackSelectStoTixVTrigger <= invbuf(2);
+	memrdtrackSelectStoFallingNotRising <= invbuf(3);
 
-	reqInvMemgptrackSet <= reqInv when (tixVController=tixVZudkControllerMemgptrack and tixVCommand=tixVMemgptrackCommandSet) else '0';
-	memgptrackSetRng <= invbuf(0);
-	memgptrackSetTCapt <= invbuf(1) & invbuf(2) & invbuf(3) & invbuf(4);
+	reqInvMemrdtrackSet <= reqInv when (tixVController=tixVZudkControllerMemrdtrack and tixVCommand=tixVMemrdtrackCommandSet) else '0';
+	memrdtrackSetRng <= invbuf(0);
+	memrdtrackSetTCapt <= invbuf(1) & invbuf(2) & invbuf(3) & invbuf(4);
+
+	reqInvMemwrtrackSelect <= reqInv when (tixVController=tixVZudkControllerMemwrtrack and tixVCommand=tixVMemwrtrackCommandSelect) else '0';
+	memwrtrackSelectStaTixVTrigger <= invbuf(0);
+	memwrtrackSelectStaFallingNotRising <= invbuf(1);
+	memwrtrackSelectStoTixVTrigger <= invbuf(2);
+	memwrtrackSelectStoFallingNotRising <= invbuf(3);
+
+	reqInvMemwrtrackSet <= reqInv when (tixVController=tixVZudkControllerMemwrtrack and tixVCommand=tixVMemwrtrackCommandSet) else '0';
+	memwrtrackSetRng <= invbuf(0);
+	memwrtrackSetTCapt <= invbuf(1) & invbuf(2) & invbuf(3) & invbuf(4);
 
 	reqInvTkclksrcSetTkst <= reqInv when (tixVController=tixVZudkControllerTkclksrc and tixVCommand=tixVTkclksrcCommandSetTkst) else '0';
 	tkclksrcSetTkstTkst <= invbuf(0) & invbuf(1) & invbuf(2) & invbuf(3);
@@ -677,14 +756,16 @@ begin
 				else ackInvMfsmtrack1Set when (tixVController=tixVZudkControllerMfsmtrack1 and tixVCommand=tixVMfsmtrack1CommandSet)
 				else ackInvMgptrackSelect when (tixVController=tixVZudkControllerMgptrack and tixVCommand=tixVMgptrackCommandSelect)
 				else ackInvMgptrackSet when (tixVController=tixVZudkControllerMgptrack and tixVCommand=tixVMgptrackCommandSet)
-				else ackInvMemgptrackSelect when (tixVController=tixVZudkControllerMemgptrack and tixVCommand=tixVMemgptrackCommandSelect)
-				else ackInvMemgptrackSet when (tixVController=tixVZudkControllerMemgptrack and tixVCommand=tixVMemgptrackCommandSet)
+				else ackInvMemrdtrackSelect when (tixVController=tixVZudkControllerMemrdtrack and tixVCommand=tixVMemrdtrackCommandSelect)
+				else ackInvMemrdtrackSet when (tixVController=tixVZudkControllerMemrdtrack and tixVCommand=tixVMemrdtrackCommandSet)
+				else ackInvMemwrtrackSelect when (tixVController=tixVZudkControllerMemwrtrack and tixVCommand=tixVMemwrtrackCommandSelect)
+				else ackInvMemwrtrackSet when (tixVController=tixVZudkControllerMemwrtrack and tixVCommand=tixVMemwrtrackCommandSet)
 				else ackInvTkclksrcSetTkst when (tixVController=tixVZudkControllerTkclksrc and tixVCommand=tixVTkclksrcCommandSetTkst)
 				else ackInvTrafgenSet when (tixVController=tixVZudkControllerTrafgen and tixVCommand=tixVTrafgenCommandSet)
 				else '1';
 
 	-- tx buffer
-	txbufvalid <= '1' when tixVBuffer=tixVZudkBufferCntbufMfsmtrack0ToHostif or tixVBuffer=tixVZudkBufferCntbufMfsmtrack1ToHostif or tixVBuffer=tixVZudkBufferFstoccbufMfsmtrack0ToHostif or tixVBuffer=tixVZudkBufferFstoccbufMfsmtrack1ToHostif or tixVBuffer=tixVZudkBufferGetbufClientToHostif or tixVBuffer=tixVZudkBufferSeqbufMfsmtrack0ToHostif or tixVBuffer=tixVZudkBufferSeqbufMfsmtrack1ToHostif else '0';
+	txbufvalid <= '1' when tixVBuffer=tixVZudkBufferCntbufMfsmtrack0ToHostif or tixVBuffer=tixVZudkBufferCntbufMfsmtrack1ToHostif or tixVBuffer=tixVZudkBufferFstoccbufMfsmtrack0ToHostif or tixVBuffer=tixVZudkBufferFstoccbufMfsmtrack1ToHostif or tixVBuffer=tixVZudkBufferGetbufClientToHostif or tixVBuffer=tixVZudkBufferSeqbufMfsmtrack0ToHostif or tixVBuffer=tixVZudkBufferSeqbufMfsmtrack1ToHostif or tixVBuffer=tixVZudkBufferSeqbufMemwrtrackToHostif or tixVBuffer=tixVZudkBufferSeqbufMgptrackToHostif or tixVBuffer=tixVZudkBufferSeqbufMemrdtrackToHostif else '0';
 
 	reqTxbuf <= '1' when stateOp=stateOpTxbufA or stateOp=stateOpTxbufB or stateOp=stateOpTxbufC or stateOp=stateOpTxbufD or stateOp=stateOpTxbufE or stateOp=stateOpTxbufF or stateOp=stateOpTxbufG or stateOp=stateOpTxbufH else '0';
 
@@ -695,6 +776,9 @@ begin
 	reqGetbufFromClient <= reqTxbuf when tixVBuffer=tixVZudkBufferGetbufClientToHostif else '0';
 	reqSeqbufFromMfsmtrack0 <= reqTxbuf when tixVBuffer=tixVZudkBufferSeqbufMfsmtrack0ToHostif else '0';
 	reqSeqbufFromMfsmtrack1 <= reqTxbuf when tixVBuffer=tixVZudkBufferSeqbufMfsmtrack1ToHostif else '0';
+	reqSeqbufFromMemwrtrack <= reqTxbuf when tixVBuffer=tixVZudkBufferSeqbufMemwrtrackToHostif else '0';
+	reqSeqbufFromMgptrack <= reqTxbuf when tixVBuffer=tixVZudkBufferSeqbufMgptrackToHostif else '0';
+	reqSeqbufFromMemrdtrack <= reqTxbuf when tixVBuffer=tixVZudkBufferSeqbufMemrdtrackToHostif else '0';
 
 	ackTxbuf <= ackCntbufFromMfsmtrack0 when tixVBuffer=tixVZudkBufferCntbufMfsmtrack0ToHostif
 				else ackCntbufFromMfsmtrack1 when tixVBuffer=tixVZudkBufferCntbufMfsmtrack1ToHostif
@@ -703,6 +787,9 @@ begin
 				else ackGetbufFromClient when tixVBuffer=tixVZudkBufferGetbufClientToHostif
 				else ackSeqbufFromMfsmtrack0 when tixVBuffer=tixVZudkBufferSeqbufMfsmtrack0ToHostif
 				else ackSeqbufFromMfsmtrack1 when tixVBuffer=tixVZudkBufferSeqbufMfsmtrack1ToHostif
+				else ackSeqbufFromMemwrtrack when tixVBuffer=tixVZudkBufferSeqbufMemwrtrackToHostif
+				else ackSeqbufFromMgptrack when tixVBuffer=tixVZudkBufferSeqbufMgptrackToHostif
+				else ackSeqbufFromMemrdtrack when tixVBuffer=tixVZudkBufferSeqbufMemrdtrackToHostif
 				else '0';
 
 	dneTxbuf <= '1' when stateOp=stateOpTxbufE else '0';
@@ -714,6 +801,9 @@ begin
 	dneGetbufFromClient <= dneTxbuf when tixVBuffer=tixVZudkBufferGetbufClientToHostif else '0';
 	dneSeqbufFromMfsmtrack0 <= dneTxbuf when tixVBuffer=tixVZudkBufferSeqbufMfsmtrack0ToHostif else '0';
 	dneSeqbufFromMfsmtrack1 <= dneTxbuf when tixVBuffer=tixVZudkBufferSeqbufMfsmtrack1ToHostif else '0';
+	dneSeqbufFromMemwrtrack <= dneTxbuf when tixVBuffer=tixVZudkBufferSeqbufMemwrtrackToHostif else '0';
+	dneSeqbufFromMgptrack <= dneTxbuf when tixVBuffer=tixVZudkBufferSeqbufMgptrackToHostif else '0';
+	dneSeqbufFromMemrdtrack <= dneTxbuf when tixVBuffer=tixVZudkBufferSeqbufMemrdtrackToHostif else '0';
 
 	avllenTxbuf <= avllenCntbufFromMfsmtrack0 when tixVBuffer=tixVZudkBufferCntbufMfsmtrack0ToHostif
 				else avllenCntbufFromMfsmtrack1 when tixVBuffer=tixVZudkBufferCntbufMfsmtrack1ToHostif
@@ -722,6 +812,9 @@ begin
 				else avllenGetbufFromClient when tixVBuffer=tixVZudkBufferGetbufClientToHostif
 				else avllenSeqbufFromMfsmtrack0 when tixVBuffer=tixVZudkBufferSeqbufMfsmtrack0ToHostif
 				else avllenSeqbufFromMfsmtrack1 when tixVBuffer=tixVZudkBufferSeqbufMfsmtrack1ToHostif
+				else avllenSeqbufFromMemwrtrack when tixVBuffer=tixVZudkBufferSeqbufMemwrtrackToHostif
+				else avllenSeqbufFromMgptrack when tixVBuffer=tixVZudkBufferSeqbufMgptrackToHostif
+				else avllenSeqbufFromMemrdtrack when tixVBuffer=tixVZudkBufferSeqbufMemrdtrackToHostif
 				else (others => '0');
 
 	txbufAXIS_tready <= '1' when stateOp=stateOpTxbufB else '0';
@@ -733,6 +826,9 @@ begin
 	getbufFromClientAXIS_tready <= txbufAXIS_tready when tixVBuffer=tixVZudkBufferGetbufClientToHostif else '0';
 	seqbufFromMfsmtrack0AXIS_tready <= txbufAXIS_tready when tixVBuffer=tixVZudkBufferSeqbufMfsmtrack0ToHostif else '0';
 	seqbufFromMfsmtrack1AXIS_tready <= txbufAXIS_tready when tixVBuffer=tixVZudkBufferSeqbufMfsmtrack1ToHostif else '0';
+	seqbufFromMemwrtrackAXIS_tready <= txbufAXIS_tready when tixVBuffer=tixVZudkBufferSeqbufMemwrtrackToHostif else '0';
+	seqbufFromMgptrackAXIS_tready <= txbufAXIS_tready when tixVBuffer=tixVZudkBufferSeqbufMgptrackToHostif else '0';
+	seqbufFromMemrdtrackAXIS_tready <= txbufAXIS_tready when tixVBuffer=tixVZudkBufferSeqbufMemrdtrackToHostif else '0';
 
 	txbufAXIS_tvalid <= cntbufFromMfsmtrack0AXIS_tvalid when tixVBuffer=tixVZudkBufferCntbufMfsmtrack0ToHostif
 				else cntbufFromMfsmtrack1AXIS_tvalid when tixVBuffer=tixVZudkBufferCntbufMfsmtrack1ToHostif
@@ -741,6 +837,9 @@ begin
 				else getbufFromClientAXIS_tvalid when tixVBuffer=tixVZudkBufferGetbufClientToHostif
 				else seqbufFromMfsmtrack0AXIS_tvalid when tixVBuffer=tixVZudkBufferSeqbufMfsmtrack0ToHostif
 				else seqbufFromMfsmtrack1AXIS_tvalid when tixVBuffer=tixVZudkBufferSeqbufMfsmtrack1ToHostif
+				else seqbufFromMemwrtrackAXIS_tvalid when tixVBuffer=tixVZudkBufferSeqbufMemwrtrackToHostif
+				else seqbufFromMgptrackAXIS_tvalid when tixVBuffer=tixVZudkBufferSeqbufMgptrackToHostif
+				else seqbufFromMemrdtrackAXIS_tvalid when tixVBuffer=tixVZudkBufferSeqbufMemrdtrackToHostif
 				else '0';
 
 	txbufAXIS_tdata <= cntbufFromMfsmtrack0AXIS_tdata when tixVBuffer=tixVZudkBufferCntbufMfsmtrack0ToHostif
@@ -750,6 +849,9 @@ begin
 				else getbufFromClientAXIS_tdata when tixVBuffer=tixVZudkBufferGetbufClientToHostif
 				else seqbufFromMfsmtrack0AXIS_tdata when tixVBuffer=tixVZudkBufferSeqbufMfsmtrack0ToHostif
 				else seqbufFromMfsmtrack1AXIS_tdata when tixVBuffer=tixVZudkBufferSeqbufMfsmtrack1ToHostif
+				else seqbufFromMemwrtrackAXIS_tdata when tixVBuffer=tixVZudkBufferSeqbufMemwrtrackToHostif
+				else seqbufFromMgptrackAXIS_tdata when tixVBuffer=tixVZudkBufferSeqbufMgptrackToHostif
+				else seqbufFromMemrdtrackAXIS_tdata when tixVBuffer=tixVZudkBufferSeqbufMemrdtrackToHostif
 				else (others => '0');
 
 	txbufAXIS_tlast <= cntbufFromMfsmtrack0AXIS_tlast when tixVBuffer=tixVZudkBufferCntbufMfsmtrack0ToHostif
@@ -759,6 +861,9 @@ begin
 				else getbufFromClientAXIS_tlast when tixVBuffer=tixVZudkBufferGetbufClientToHostif
 				else seqbufFromMfsmtrack0AXIS_tlast when tixVBuffer=tixVZudkBufferSeqbufMfsmtrack0ToHostif
 				else seqbufFromMfsmtrack1AXIS_tlast when tixVBuffer=tixVZudkBufferSeqbufMfsmtrack1ToHostif
+				else seqbufFromMemwrtrackAXIS_tlast when tixVBuffer=tixVZudkBufferSeqbufMemwrtrackToHostif
+				else seqbufFromMgptrackAXIS_tlast when tixVBuffer=tixVZudkBufferSeqbufMgptrackToHostif
+				else seqbufFromMemrdtrackAXIS_tlast when tixVBuffer=tixVZudkBufferSeqbufMemrdtrackToHostif
 				else '0';
 
 	-- rx buffer
@@ -851,47 +956,51 @@ begin
 				or stateOp=stateOpRxbufE
 				else '0';
 
-	-- stateOp_dbg <= x"00" when stateOp=stateOpInit
-	-- 			else x"10" when stateOp=stateOpIdle
-	-- 			else x"20" when stateOp=stateOpRxopA
-	-- 			else x"21" when stateOp=stateOpRxopB
-	-- 			else x"22" when stateOp=stateOpRxopC
-	-- 			else x"23" when stateOp=stateOpRxopD
-	-- 			else x"24" when stateOp=stateOpRxopE
-	-- 			else x"30" when stateOp=stateOpTxpollA
-	-- 			else x"31" when stateOp=stateOpTxpollB
-	-- 			else x"32" when stateOp=stateOpTxpollC
-	-- 			else x"33" when stateOp=stateOpTxpollD
-	-- 			else x"34" when stateOp=stateOpTxpollE
-	-- 			else x"35" when stateOp=stateOpTxpollF
-	-- 			else x"36" when stateOp=stateOpTxpollG
-	-- 			else x"40" when stateOp=stateOpTxA
-	-- 			else x"41" when stateOp=stateOpTxB
-	-- 			else x"42" when stateOp=stateOpTxC
-	-- 			else x"43" when stateOp=stateOpTxD
-	-- 			else x"44" when stateOp=stateOpTxE
-	-- 			else x"45" when stateOp=stateOpTxF
-	-- 			else x"46" when stateOp=stateOpTxG
-	-- 			else x"50" when stateOp=stateOpTxbufA
-	-- 			else x"51" when stateOp=stateOpTxbufB
-	-- 			else x"52" when stateOp=stateOpTxbufC
-	-- 			else x"53" when stateOp=stateOpTxbufD
-	-- 			else x"54" when stateOp=stateOpTxbufE
-	-- 			else x"55" when stateOp=stateOpTxbufF
-	-- 			else x"56" when stateOp=stateOpTxbufG
-	-- 			else x"57" when stateOp=stateOpTxbufH
-	-- 			else x"60" when stateOp=stateOpRxA
-	-- 			else x"61" when stateOp=stateOpRxB
-	-- 			else x"62" when stateOp=stateOpRxC
-	-- 			else x"63" when stateOp=stateOpRxD
-	-- 			else x"70" when stateOp=stateOpRxbufA
-	-- 			else x"71" when stateOp=stateOpRxbufB
-	-- 			else x"72" when stateOp=stateOpRxbufC
-	-- 			else x"73" when stateOp=stateOpRxbufD
-	-- 			else x"74" when stateOp=stateOpRxbufE
-	-- 			else x"75" when stateOp=stateOpRxbufF
-	-- 			else x"80" when stateOp=stateOpInv
-	-- 			else (others => '1');
+	-- IP cust --- RBEGIN
+	 stateOp_dbg <= x"00" when stateOp=stateOpInit
+	 			else x"10" when stateOp=stateOpIdle
+	 			else x"20" when stateOp=stateOpRxopA
+	 			else x"21" when stateOp=stateOpRxopB
+	 			else x"22" when stateOp=stateOpRxopC
+	 			else x"23" when stateOp=stateOpRxopD
+	 			else x"24" when stateOp=stateOpRxopE
+	 			else x"30" when stateOp=stateOpTxpollA
+	 			else x"31" when stateOp=stateOpTxpollB
+	 			else x"32" when stateOp=stateOpTxpollC
+	 			else x"33" when stateOp=stateOpTxpollD
+	 			else x"34" when stateOp=stateOpTxpollE
+	 			else x"35" when stateOp=stateOpTxpollF
+	 			else x"36" when stateOp=stateOpTxpollG
+	 			else x"40" when stateOp=stateOpTxA
+	 			else x"41" when stateOp=stateOpTxB
+	 			else x"42" when stateOp=stateOpTxC
+	 			else x"43" when stateOp=stateOpTxD
+	 			else x"44" when stateOp=stateOpTxE
+	 			else x"45" when stateOp=stateOpTxF
+	 			else x"46" when stateOp=stateOpTxG
+	 			else x"50" when stateOp=stateOpTxbufA
+	 			else x"51" when stateOp=stateOpTxbufB
+	 			else x"52" when stateOp=stateOpTxbufC
+	 			else x"53" when stateOp=stateOpTxbufD
+	 			else x"54" when stateOp=stateOpTxbufE
+	 			else x"55" when stateOp=stateOpTxbufF
+	 			else x"56" when stateOp=stateOpTxbufG
+	 			else x"57" when stateOp=stateOpTxbufH
+	 			else x"60" when stateOp=stateOpRxA
+	 			else x"61" when stateOp=stateOpRxB
+	 			else x"62" when stateOp=stateOpRxC
+	 			else x"63" when stateOp=stateOpRxD
+	 			else x"70" when stateOp=stateOpRxbufA
+	 			else x"71" when stateOp=stateOpRxbufB
+	 			else x"72" when stateOp=stateOpRxbufC
+	 			else x"73" when stateOp=stateOpRxbufD
+	 			else x"74" when stateOp=stateOpRxbufE
+	 			else x"75" when stateOp=stateOpRxbufF
+	 			else x"80" when stateOp=stateOpInv
+	 			else (others => '1');
+
+	rxAXIS_tvalid_sig <= rxAXIS_tvalid;
+	-- IP cust --- REND
 
 	process (reset, mclk, stateOp)
 		variable len: std_logic_vector(31 downto 0);
@@ -1736,9 +1845,14 @@ begin
 							retbuf(0) <= mgptrackGetInfoTixVState;
 						end if;
 
-					elsif tixVController=tixVZudkControllerMemgptrack then
-						if tixVCommand=tixVMemgptrackCommandGetInfo then
-							retbuf(0) <= memgptrackGetInfoTixVState;
+					elsif tixVController=tixVZudkControllerMemrdtrack then
+						if tixVCommand=tixVMemrdtrackCommandGetInfo then
+							retbuf(0) <= memrdtrackGetInfoTixVState;
+						end if;
+
+					elsif tixVController=tixVZudkControllerMemwrtrack then
+						if tixVCommand=tixVMemwrtrackCommandGetInfo then
+							retbuf(0) <= memwrtrackGetInfoTixVState;
 						end if;
 
 					elsif tixVController=tixVZudkControllerState then

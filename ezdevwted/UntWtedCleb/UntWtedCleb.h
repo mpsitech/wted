@@ -96,23 +96,26 @@ public:
 	Dbecore::Bufxf* getNewBufxf(const uint8_t tixVBuffer, const size_t reqlen, unsigned char* buf);
 	Dbecore::Cmd* getNewCmd(const uint8_t tixVController, const uint8_t tixVCommand);
 
-	Dbecore::Bufxf* getNewBufxfCntbufFromMfsmtrack0(const size_t reqlen, unsigned char* buf);
-	void readCntbufFromMfsmtrack0(const size_t reqlen, unsigned char*& data, size_t& datalen);
-
 	Dbecore::Bufxf* getNewBufxfCntbufFromMfsmtrack1(const size_t reqlen, unsigned char* buf);
 	void readCntbufFromMfsmtrack1(const size_t reqlen, unsigned char*& data, size_t& datalen);
 
-	Dbecore::Bufxf* getNewBufxfFstoccbufFromMfsmtrack0(const size_t reqlen, unsigned char* buf);
-	void readFstoccbufFromMfsmtrack0(const size_t reqlen, unsigned char*& data, size_t& datalen);
+	Dbecore::Bufxf* getNewBufxfCntbufFromMfsmtrack0(const size_t reqlen, unsigned char* buf);
+	void readCntbufFromMfsmtrack0(const size_t reqlen, unsigned char*& data, size_t& datalen);
 
 	Dbecore::Bufxf* getNewBufxfFstoccbufFromMfsmtrack1(const size_t reqlen, unsigned char* buf);
 	void readFstoccbufFromMfsmtrack1(const size_t reqlen, unsigned char*& data, size_t& datalen);
 
-	Dbecore::Bufxf* getNewBufxfSeqbufFromMfsmtrack0(const size_t reqlen, unsigned char* buf);
-	void readSeqbufFromMfsmtrack0(const size_t reqlen, unsigned char*& data, size_t& datalen);
+	Dbecore::Bufxf* getNewBufxfFstoccbufFromMfsmtrack0(const size_t reqlen, unsigned char* buf);
+	void readFstoccbufFromMfsmtrack0(const size_t reqlen, unsigned char*& data, size_t& datalen);
 
 	Dbecore::Bufxf* getNewBufxfSeqbufFromMfsmtrack1(const size_t reqlen, unsigned char* buf);
 	void readSeqbufFromMfsmtrack1(const size_t reqlen, unsigned char*& data, size_t& datalen);
+
+	Dbecore::Bufxf* getNewBufxfSeqbufFromMfsmtrack0(const size_t reqlen, unsigned char* buf);
+	void readSeqbufFromMfsmtrack0(const size_t reqlen, unsigned char*& data, size_t& datalen);
+
+	Dbecore::Bufxf* getNewBufxfSeqbufFromMgptrack(const size_t reqlen, unsigned char* buf);
+	void readSeqbufFromMgptrack(const size_t reqlen, unsigned char*& data, size_t& datalen);
 
 };
 

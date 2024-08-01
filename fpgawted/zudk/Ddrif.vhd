@@ -46,9 +46,6 @@ entity Ddrif is
 		wrAAXI_wlast: in std_logic;
 		wrAAXI_wready: out std_logic;
 		wrAAXI_wvalid: in std_logic;
-		wrAAXI_bready: in std_logic;
-		wrAAXI_bresp: out std_logic_vector(1 downto 0);
-		wrAAXI_bvalid: out std_logic;
 
 		reqWrB: in std_logic;
 		ackWrB: out std_logic;
@@ -60,10 +57,8 @@ entity Ddrif is
 		wrBAXI_wlast: in std_logic;
 		wrBAXI_wready: out std_logic;
 		wrBAXI_wvalid: in std_logic;
-		wrBAXI_bready: in std_logic;
-		wrBAXI_bresp: out std_logic_vector(1 downto 0);
-		wrBAXI_bvalid: out std_logic;
 
+		ddrAXI_arid: out std_logic_vector(5 downto 0);
 		ddrAXI_araddr: out std_logic_vector(39 downto 0);
 		ddrAXI_arburst: out std_logic_vector(1 downto 0);
 		ddrAXI_arcache: out std_logic_vector(3 downto 0);
@@ -76,12 +71,14 @@ entity Ddrif is
 		ddrAXI_arsize: out std_logic_vector(2 downto 0);
 		ddrAXI_arvalid: out std_logic;
 
+		ddrAXI_rid: in std_logic_vector(5 downto 0);
 		ddrAXI_rdata: in std_logic_vector(127 downto 0);
 		ddrAXI_rlast: in std_logic;
 		ddrAXI_rready: out std_logic;
 		ddrAXI_rresp: in std_logic_vector(1 downto 0);
 		ddrAXI_rvalid: in std_logic;
 
+		ddrAXI_awid: out std_logic_vector(5 downto 0);
 		ddrAXI_awaddr: out std_logic_vector(39 downto 0);
 		ddrAXI_awburst: out std_logic_vector(1 downto 0);
 		ddrAXI_awcache: out std_logic_vector(3 downto 0);
@@ -100,6 +97,7 @@ entity Ddrif is
 		ddrAXI_wstrb: out std_logic_vector(15 downto 0);
 		ddrAXI_wvalid: out std_logic;
 
+		ddrAXI_bid: in std_logic_vector(5 downto 0);
 		ddrAXI_bready: out std_logic;
 		ddrAXI_bresp: in std_logic_vector(1 downto 0);
 		ddrAXI_bvalid: in std_logic
@@ -153,7 +151,7 @@ architecture Rtl of Ddrif is
 	type stateWrite_t is (
 		stateWriteInit,
 		stateWriteIdle,
-		stateWriteLockedA, stateWriteLockedB
+		stateWriteLocked
 	);
 	signal stateWrite: stateWrite_t := stateWriteInit;
 
@@ -169,8 +167,12 @@ architecture Rtl of Ddrif is
 	signal ddrAXI_wvalid_sig: std_logic;
 	signal ddrAXI_wlast_sig: std_logic;
 
+	signal ddrAXI_bready_sig: std_logic;
 	signal wrmutex: mutex_t;
 	signal strbWrlock: std_logic;
+
+	signal wrid: std_logic_vector(31 downto 0);
+	signal ixWrid: natural range 0 to 31;
 
 	-- IP sigs.write.cust --- INSERT
 
@@ -200,6 +202,8 @@ begin
 	------------------------------------------------------------------------
 	-- implementation: read access negotiation (read)
 	------------------------------------------------------------------------
+
+	ddrAXI_arid <= (others => '0');
 
 	ddrAXI_araddr <= "000000000111" & rdAAXI_araddr & "00000000" when rdmutex=mutexA
 				else (others => '0');
@@ -373,6 +377,8 @@ begin
 	-- implementation: write access negotiation (write)
 	------------------------------------------------------------------------
 
+	ddrAXI_awid <= std_logic_vector(to_unsigned(ixWrid, 6));
+
 	ddrAXI_awaddr <= "000000000111" & wrAAXI_awaddr & "00000000" when wrmutex=mutexA
 				else "000000000111" & wrBAXI_awaddr & "00000000" when wrmutex=mutexB
 				else (others => '0');
@@ -416,17 +422,9 @@ begin
 				else wrBAXI_wvalid when wrmutex=mutexB
 				else '0';
 
-	ddrAXI_bready <= wrAAXI_bready when wrmutex=mutexA
-				else wrBAXI_bready when wrmutex=mutexB
-				else '1';
+	ddrAXI_bready <= ddrAXI_bready_sig;
 
-	wrAAXI_bresp <= ddrAXI_bresp;
-	wrBAXI_bresp <= ddrAXI_bresp;
-
-	wrAAXI_bvalid <= ddrAXI_bvalid;
-	wrBAXI_bvalid <= ddrAXI_bvalid;
-
-	ackWr <= '1' when stateWrite=stateWriteLockedA else '0';
+	ackWr <= '1' when stateWrite=stateWriteLocked else '0';
 
 	ackWrA <= ackWr when wrmutex=mutexA else '0';
 	ackWrB <= ackWr when wrmutex=mutexB else '0';
@@ -443,49 +441,68 @@ begin
 			abWr <= 0;
 			wrmutex <= mutexIdle;
 			strbWrlock <= '0';
+			wrid <= (others => '0');
+			ixWrid <= 0;
 
 			-- IP impl.write.asyncrst --- END
 
 		elsif rising_edge(memclk) then
+			if ddrAXI_bvalid='1' then
+				wrid(to_integer(unsigned(ddrAXI_bid))) <= '0';
+			end if;
+
+			if unsigned(wrid)=0 then -- one clock late
+				ddrAXI_bready_sig <= '0';
+			else
+				ddrAXI_bready_sig <= '1';
+			end if;
+
 			if stateWrite=stateWriteInit then
 				-- IP impl.write.syncrst --- BEGIN
 				abWr <= 0;
 				wrmutex <= mutexIdle;
 				strbWrlock <= '0';
+				wrid <= (others => '0');
+				ixWrid <= 0;
 
 				-- IP impl.write.syncrst --- END
 
 				stateWrite <= stateWriteIdle;
 
 			elsif stateWrite=stateWriteIdle then
-				if (reqWrA='1' and ((abWr=0 and reqWrB='0') or abWr=1)) then
+				if (reqWrA='1' and ((abWr=0 and reqWrB='0') or abWr=1) and wrid(ixWrid)='0') then
 					abWr <= 0;
 					wrmutex <= mutexA;
 
 					strbWrlock <= '1';
 
-					stateWrite <= stateWriteLockedA;
+					wrid(ixWrid) <= '1';
 
-				elsif (reqWrB='1' and ((abWr=1 and reqWrA='0') or abWr=0)) then
+					stateWrite <= stateWriteLocked;
+
+				elsif (reqWrB='1' and ((abWr=1 and reqWrA='0') or abWr=0) and wrid(ixWrid)='0') then
 					abWr <= 1;
 					wrmutex <= mutexB;
 
 					strbWrlock <= '1';
 
-					stateWrite <= stateWriteLockedA;
+					wrid(ixWrid) <= '1';
+
+					stateWrite <= stateWriteLocked;
 				end if;
 
-			elsif stateWrite=stateWriteLockedA then
+			elsif stateWrite=stateWriteLocked then
 				strbWrlock <= '0';
 
 				if (ddrAXI_wready='1' and ddrAXI_wvalid_sig='1' and ddrAXI_wlast_sig='1') then
 					wrmutex <= mutexIdle;
 
-					stateWrite <= stateWriteLockedB;
-				end if;
+					if ixWrid=31 then
+						ixWrid <= 0;
+					else
+						ixWrid <= ixWrid + 1;
+					end if;
 
-			elsif stateWrite=stateWriteLockedB then
-				if ddrAXI_bvalid='1' then
 					stateWrite <= stateWriteIdle;
 				end if;
 			end if;

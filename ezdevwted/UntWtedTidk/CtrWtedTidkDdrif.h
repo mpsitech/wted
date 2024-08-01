@@ -44,7 +44,7 @@ public:
 	static const uint8_t tixVController = 0x03;
 
 public:
-	Dbecore::Cmd* cmdGetStats ;
+	Dbecore::Cmd* cmdGetStats;
 
 public:
 	static uint8_t getTixVCommandBySref(const std::string& sref);

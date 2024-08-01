@@ -15,6 +15,45 @@ using namespace Xmlio;
 using namespace Dbecore;
 
 /******************************************************************************
+ class CtrWtedTidkMfsmtrack0::VecVCapture
+ ******************************************************************************/
+
+uint8_t CtrWtedTidkMfsmtrack0::VecVCapture::getTix(
+			const string& sref
+		) {
+	string s = StrMod::lc(sref);
+
+	if (s == "hostifop") return HOSTIFOP;
+
+	return(0xFF);
+};
+
+string CtrWtedTidkMfsmtrack0::VecVCapture::getSref(
+			const uint8_t tix
+		) {
+	if (tix == HOSTIFOP) return("hostifOp");
+
+	return("");
+};
+
+string CtrWtedTidkMfsmtrack0::VecVCapture::getTitle(
+			const uint8_t tix
+		) {
+
+	return(getSref(tix));
+};
+
+void CtrWtedTidkMfsmtrack0::VecVCapture::fillFeed(
+			Feed& feed
+		) {
+	feed.clear();
+
+	std::set<uint8_t> items = {HOSTIFOP};
+
+	for (auto it = items.begin(); it != items.end(); it++) feed.appendIxSrefTitles(*it, getSref(*it), getTitle(*it));
+};
+
+/******************************************************************************
  class CtrWtedTidkMfsmtrack0::VecVCommand
  ******************************************************************************/
 
@@ -48,45 +87,6 @@ void CtrWtedTidkMfsmtrack0::VecVCommand::fillFeed(
 	std::set<uint8_t> items = {GETINFO,SELECT,SET};
 
 	for (auto it = items.begin(); it != items.end(); it++) feed.appendIxSrefTitles(*it, getSref(*it), getSref(*it));
-};
-
-/******************************************************************************
- class CtrWtedTidkMfsmtrack0::VecVSource
- ******************************************************************************/
-
-uint8_t CtrWtedTidkMfsmtrack0::VecVSource::getTix(
-			const string& sref
-		) {
-	string s = StrMod::lc(sref);
-
-	if (s == "hostifop") return HOSTIFOP;
-
-	return(0xFF);
-};
-
-string CtrWtedTidkMfsmtrack0::VecVSource::getSref(
-			const uint8_t tix
-		) {
-	if (tix == HOSTIFOP) return("hostifOp");
-
-	return("");
-};
-
-string CtrWtedTidkMfsmtrack0::VecVSource::getTitle(
-			const uint8_t tix
-		) {
-
-	return(getSref(tix));
-};
-
-void CtrWtedTidkMfsmtrack0::VecVSource::fillFeed(
-			Feed& feed
-		) {
-	feed.clear();
-
-	std::set<uint8_t> items = {HOSTIFOP};
-
-	for (auto it = items.begin(); it != items.end(); it++) feed.appendIxSrefTitles(*it, getSref(*it), getTitle(*it));
 };
 
 /******************************************************************************
@@ -186,11 +186,15 @@ void CtrWtedTidkMfsmtrack0::VecVTrigger::fillFeed(
 CtrWtedTidkMfsmtrack0::CtrWtedTidkMfsmtrack0(
 			UntWted* unt
 		) : CtrWted(unt) {
-	// IP constructor.easy.cmdvars --- INSERT
+	cmdGetInfo = getNewCmdGetInfo();
+	cmdSelect = getNewCmdSelect();
+	cmdSet = getNewCmdSet();
 };
 
 CtrWtedTidkMfsmtrack0::~CtrWtedTidkMfsmtrack0() {
-	// IP destructor.easy.cmdvars --- INSERT
+	delete cmdGetInfo;
+	delete cmdSelect;
+	delete cmdSet;
 };
 
 uint8_t CtrWtedTidkMfsmtrack0::getTixVCommandBySref(
@@ -253,25 +257,31 @@ void CtrWtedTidkMfsmtrack0::getInfo(
 Cmd* CtrWtedTidkMfsmtrack0::getNewCmdSelect() {
 	Cmd* cmd = new Cmd(tixVController, VecVCommand::SELECT, Cmd::VecVRettype::VOID);
 
-	cmd->addParInv("tixVSource", Par::VecVType::TIX, CtrWtedTidkMfsmtrack0::VecVSource::getTix, CtrWtedTidkMfsmtrack0::VecVSource::getSref, CtrWtedTidkMfsmtrack0::VecVSource::fillFeed);
+	cmd->addParInv("tixVCapture", Par::VecVType::TIX, CtrWtedTidkMfsmtrack0::VecVCapture::getTix, CtrWtedTidkMfsmtrack0::VecVCapture::getSref, CtrWtedTidkMfsmtrack0::VecVCapture::fillFeed);
 	cmd->addParInv("staTixVTrigger", Par::VecVType::TIX, CtrWtedTidkMfsmtrack0::VecVTrigger::getTix, CtrWtedTidkMfsmtrack0::VecVTrigger::getSref, CtrWtedTidkMfsmtrack0::VecVTrigger::fillFeed);
+	cmd->addParInv("staFallingNotRising", Par::VecVType::_BOOL);
 	cmd->addParInv("stoTixVTrigger", Par::VecVType::TIX, CtrWtedTidkMfsmtrack0::VecVTrigger::getTix, CtrWtedTidkMfsmtrack0::VecVTrigger::getSref, CtrWtedTidkMfsmtrack0::VecVTrigger::fillFeed);
+	cmd->addParInv("stoFallingNotRising", Par::VecVType::_BOOL);
 
 	return cmd;
 };
 
 void CtrWtedTidkMfsmtrack0::select(
-			const uint8_t tixVSource
+			const uint8_t tixVCapture
 			, const uint8_t staTixVTrigger
+			, const bool staFallingNotRising
 			, const uint8_t stoTixVTrigger
+			, const bool stoFallingNotRising
 		) {
 	unt->lockAccess("CtrWtedTidkMfsmtrack0::select");
 
 	Cmd* cmd = cmdSelect;
 
-	cmd->parsInv["tixVSource"].setTix(tixVSource);
+	cmd->parsInv["tixVCapture"].setTix(tixVCapture);
 	cmd->parsInv["staTixVTrigger"].setTix(staTixVTrigger);
+	cmd->parsInv["staFallingNotRising"].setBool(staFallingNotRising);
 	cmd->parsInv["stoTixVTrigger"].setTix(stoTixVTrigger);
+	cmd->parsInv["stoFallingNotRising"].setBool(stoFallingNotRising);
 
 	if (unt->runCmd(cmd)) {
 	} else throw DbeException("error running select");

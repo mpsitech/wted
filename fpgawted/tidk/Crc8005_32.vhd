@@ -10,6 +10,9 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity Crc8005_32 is
+	generic (
+		initOneNotZero: boolean := false
+	);
 	port (
 		reset: in std_logic;
 		mclk: in std_logic;
@@ -34,8 +37,7 @@ architecture Rtl of Crc8005_32 is
 	---- main operation (op)
 	type stateOp_t is (
 		stateOpInit,
-		stateOpCapt,
-		stateOpDone
+		stateOpCapt
 	);
 	signal stateOp: stateOp_t := stateOpInit;
 
@@ -48,7 +50,7 @@ begin
 	-- implementation: main operation (op)
 	------------------------------------------------------------------------
 
-	AXIS_tready <= '1' when stateOp=stateOpCapt or stateOp=stateOpDone else '0';
+	AXIS_tready <= '1' when stateOp=stateOpCapt else '0';
 
 	crc <= crc_sig;
 	validCrc <= validCrc_sig;
@@ -60,19 +62,29 @@ begin
 		if reset='1' then
 			stateOp <= stateOpInit;
 
-			crc_sig <= (others => '0');
+			if not initOneNotZero then
+				crc_sig <= (others => '0');
+			else
+				crc_sig <= (others => '1');
+			end if;
 			validCrc_sig <= '0';
 
 			first := true;
 
 		elsif rising_edge(mclk) then
 			if stateOp=stateOpInit then
-				crc_sig <= (others => '0');
-				validCrc_sig <= '0';
+				if AXIS_tlast='0' then
+					if not initOneNotZero then
+						crc_sig <= (others => '0');
+					else
+						crc_sig <= (others => '1');
+					end if;
+					validCrc_sig <= '0';
 
-				first := true;
+					first := true;
 
-				stateOp <= stateOpCapt;
+					stateOp <= stateOpCapt;
+				end if;
 
 			elsif stateOp=stateOpCapt then
 				if AXIS_tvalid='1' and (first or validCrc_sig='1') then
@@ -149,20 +161,15 @@ begin
 							crc_sig(1) <= AXIS_tdata(7) xor AXIS_tdata(6) xor AXIS_tdata(5) xor AXIS_tdata(4) xor AXIS_tdata(3) xor AXIS_tdata(2) xor AXIS_tdata(1) xor crc_sig(9) xor crc_sig(10) xor crc_sig(11) xor crc_sig(12) xor crc_sig(13) xor crc_sig(14) xor crc_sig(15);
 							crc_sig(0) <= AXIS_tdata(7) xor AXIS_tdata(6) xor AXIS_tdata(5) xor AXIS_tdata(4) xor AXIS_tdata(3) xor AXIS_tdata(2) xor AXIS_tdata(1) xor AXIS_tdata(0) xor crc_sig(8) xor crc_sig(9) xor crc_sig(10) xor crc_sig(11) xor crc_sig(12) xor crc_sig(13) xor crc_sig(14) xor crc_sig(15);
 							validCrc_sig <= '1';
-					when others =>
+						when others =>
 							validCrc_sig <= '0';
 					end case;
 
 					first := false;
 
 					if AXIS_tlast='1' then
-						stateOp <= stateOpDone;
+						stateOp <= stateOpInit;
 					end if;
-				end if;
-
-			elsif stateOp=stateOpDone then
-				if AXIS_tlast='0' then
-					stateOp <= stateOpInit;
 				end if;
 			end if;
 		end if;

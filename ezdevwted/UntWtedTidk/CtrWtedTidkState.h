@@ -43,10 +43,10 @@ public:
 	~CtrWtedTidkState();
 
 public:
-	static const uint8_t tixVController = 0x09;
+	static const uint8_t tixVController = 0x0A;
 
 public:
-	Dbecore::Cmd* cmdGet ;
+	Dbecore::Cmd* cmdGet;
 
 public:
 	static uint8_t getTixVCommandBySref(const std::string& sref);

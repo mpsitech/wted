@@ -49,12 +49,13 @@ use ieee.numeric_std.all;
 package Cleb is
 	constant tixVClebBufferCmdretToHostif: std_logic_vector(7 downto 0) := x"00";
 	constant tixVClebBufferHostifToCmdinv: std_logic_vector(7 downto 0) := x"01";
-	constant tixVClebBufferCntbufMfsmtrack0ToHostif: std_logic_vector(7 downto 0) := x"02";
-	constant tixVClebBufferCntbufMfsmtrack1ToHostif: std_logic_vector(7 downto 0) := x"03";
-	constant tixVClebBufferFstoccbufMfsmtrack0ToHostif: std_logic_vector(7 downto 0) := x"04";
-	constant tixVClebBufferFstoccbufMfsmtrack1ToHostif: std_logic_vector(7 downto 0) := x"05";
-	constant tixVClebBufferSeqbufMfsmtrack0ToHostif: std_logic_vector(7 downto 0) := x"06";
-	constant tixVClebBufferSeqbufMfsmtrack1ToHostif: std_logic_vector(7 downto 0) := x"07";
+	constant tixVClebBufferCntbufMfsmtrack1ToHostif: std_logic_vector(7 downto 0) := x"02";
+	constant tixVClebBufferCntbufMfsmtrack0ToHostif: std_logic_vector(7 downto 0) := x"03";
+	constant tixVClebBufferFstoccbufMfsmtrack1ToHostif: std_logic_vector(7 downto 0) := x"04";
+	constant tixVClebBufferFstoccbufMfsmtrack0ToHostif: std_logic_vector(7 downto 0) := x"05";
+	constant tixVClebBufferSeqbufMfsmtrack1ToHostif: std_logic_vector(7 downto 0) := x"06";
+	constant tixVClebBufferSeqbufMfsmtrack0ToHostif: std_logic_vector(7 downto 0) := x"07";
+	constant tixVClebBufferSeqbufMgptrackToHostif: std_logic_vector(7 downto 0) := x"08";
 
 	constant tixVClebControllerHostif: std_logic_vector(7 downto 0) := x"00";
 	constant tixVClebControllerIdent: std_logic_vector(7 downto 0) := x"01";

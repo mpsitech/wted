@@ -12,7 +12,7 @@ use ieee.numeric_std.all;
 
 entity Tkclksrc_Easy_v1_0 is
 	generic (
-		fMclk: natural := 50000 -- in kHz
+		fMclk: natural := 50000
 	);
 	port (
 		reset: in std_logic;
@@ -24,7 +24,9 @@ entity Tkclksrc_Easy_v1_0 is
 		reqInvSetTkst: in std_logic;
 		ackInvSetTkst: out std_logic;
 
-		setTkstTkst: in std_logic_vector(31 downto 0)
+		setTkstTkst: in std_logic_vector(31 downto 0);
+
+		stateOp_dbg: out std_logic_vector(7 downto 0)
 	);
 end Tkclksrc_Easy_v1_0;
 
@@ -56,6 +58,13 @@ begin
 	getTkstTkst <= tkst;
 
 	ackInvSetTkst <= '1' when stateOp=stateOpInv else '0';
+
+	-- IP cust --- BEGIN
+	-- stateOp_dbg <= x"00" when stateOp=stateOpInit
+	-- 			else x"10" when stateOp=stateOpInv
+	-- 			else x"20" when stateOp=stateOpRun
+	-- 			else (others => '1');
+	-- IP cust --- END
 
 	process (reset, mclk, stateOp)
 		variable i: natural range 0 to (fMclk/10)/2;

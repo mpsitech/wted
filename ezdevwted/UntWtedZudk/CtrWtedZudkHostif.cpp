@@ -2,8 +2,8 @@
 	* \file CtrWtedZudkHostif.cpp
 	* hostif controller (implementation)
 	* \copyright (C) 2016-2020 MPSI Technologies GmbH
-	* \author Alexander Wirthmueller (auto-generation)
-	* \date created: 30 Jun 2024
+	* \author Catherine Johnson (auto-generation)
+	* \date created: 10 Jul 2024
 	*/
 // IP header --- ABOVE
 
@@ -53,11 +53,11 @@ void CtrWtedZudkHostif::VecVCommand::fillFeed(
 CtrWtedZudkHostif::CtrWtedZudkHostif(
 			UntWted* unt
 		) : CtrWted(unt) {
-	// IP constructor.easy.cmdvars --- INSERT
+	cmdReset = getNewCmdReset();
 };
 
 CtrWtedZudkHostif::~CtrWtedZudkHostif() {
-	// IP destructor.easy.cmdvars --- INSERT
+	delete cmdReset;
 };
 
 uint8_t CtrWtedZudkHostif::getTixVCommandBySref(

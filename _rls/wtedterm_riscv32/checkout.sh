@@ -2,7 +2,7 @@
 # checkout script for Wted interactive terminal sources, release wtedterm_riscv32 (ubuntu cross-compilation)
 # copyright: (C) 2023 MPSI Technologies GmbH
 # author: Alexander Wirthmueller (auto-generation)
-# date created: 30 Jun 2024
+# date created: 24 Jul 2024
 # IP header --- ABOVE
 
 if [ -z ${WHIZROOT+x} ]; then

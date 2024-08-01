@@ -18,7 +18,8 @@
 #include "CtrWtedZudkDdrif.h"
 #include "CtrWtedZudkHostif.h"
 #include "CtrWtedZudkIdent.h"
-#include "CtrWtedZudkMemgptrack.h"
+#include "CtrWtedZudkMemrdtrack.h"
+#include "CtrWtedZudkMemwrtrack.h"
 #include "CtrWtedZudkMfsmtrack0.h"
 #include "CtrWtedZudkMfsmtrack1.h"
 #include "CtrWtedZudkMgptrack.h"
@@ -54,7 +55,8 @@ public:
 	CtrWtedZudkDdrif* ddrif;
 	CtrWtedZudkHostif* hostif;
 	CtrWtedZudkIdent* ident;
-	CtrWtedZudkMemgptrack* memgptrack;
+	CtrWtedZudkMemrdtrack* memrdtrack;
+	CtrWtedZudkMemwrtrack* memwrtrack;
 	CtrWtedZudkMfsmtrack0* mfsmtrack0;
 	CtrWtedZudkMfsmtrack1* mfsmtrack1;
 	CtrWtedZudkMgptrack* mgptrack;
@@ -95,11 +97,11 @@ public:
 	Dbecore::Bufxf* getNewBufxfCntbufFromMfsmtrack1(const size_t reqlen, unsigned char* buf);
 	void readCntbufFromMfsmtrack1(const size_t reqlen, unsigned char*& data, size_t& datalen);
 
-	Dbecore::Bufxf* getNewBufxfFstoccbufFromMfsmtrack0(const size_t reqlen, unsigned char* buf);
-	void readFstoccbufFromMfsmtrack0(const size_t reqlen, unsigned char*& data, size_t& datalen);
-
 	Dbecore::Bufxf* getNewBufxfFstoccbufFromMfsmtrack1(const size_t reqlen, unsigned char* buf);
 	void readFstoccbufFromMfsmtrack1(const size_t reqlen, unsigned char*& data, size_t& datalen);
+
+	Dbecore::Bufxf* getNewBufxfFstoccbufFromMfsmtrack0(const size_t reqlen, unsigned char* buf);
+	void readFstoccbufFromMfsmtrack0(const size_t reqlen, unsigned char*& data, size_t& datalen);
 
 	Dbecore::Bufxf* getNewBufxfGetbufFromClient(const size_t reqlen, unsigned char* buf);
 	void readGetbufFromClient(const size_t reqlen, unsigned char*& data, size_t& datalen);
@@ -109,6 +111,15 @@ public:
 
 	Dbecore::Bufxf* getNewBufxfSeqbufFromMfsmtrack1(const size_t reqlen, unsigned char* buf);
 	void readSeqbufFromMfsmtrack1(const size_t reqlen, unsigned char*& data, size_t& datalen);
+
+	Dbecore::Bufxf* getNewBufxfSeqbufFromMemwrtrack(const size_t reqlen, unsigned char* buf);
+	void readSeqbufFromMemwrtrack(const size_t reqlen, unsigned char*& data, size_t& datalen);
+
+	Dbecore::Bufxf* getNewBufxfSeqbufFromMemrdtrack(const size_t reqlen, unsigned char* buf);
+	void readSeqbufFromMemrdtrack(const size_t reqlen, unsigned char*& data, size_t& datalen);
+
+	Dbecore::Bufxf* getNewBufxfSeqbufFromMgptrack(const size_t reqlen, unsigned char* buf);
+	void readSeqbufFromMgptrack(const size_t reqlen, unsigned char*& data, size_t& datalen);
 
 	Dbecore::Bufxf* getNewBufxfSetbufToClient(const size_t reqlen, unsigned char* buf);
 	void writeSetbufToClient(const unsigned char* data, const size_t datalen, const bool copy);

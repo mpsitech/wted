@@ -10,10 +10,10 @@
 #ifndef DEVWTED_H
 #define DEVWTED_H
 
-#define WTED_VERSION "0.1.0"
+#define WTED_VERSION "0.1.2"
 #define WTED_VERSION_MAJOR 0
 #define WTED_VERSION_MINOR 1
-#define WTED_VERSION_SUB 0
+#define WTED_VERSION_SUB 2
 
 #include "UntWtedCleb.h"
 #include "UntWtedTidk.h"

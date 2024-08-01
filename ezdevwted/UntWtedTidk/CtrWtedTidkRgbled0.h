@@ -38,7 +38,7 @@ public:
 	~CtrWtedTidkRgbled0();
 
 public:
-	static const uint8_t tixVController = 0x08;
+	static const uint8_t tixVController = 0x09;
 
 public:
 

@@ -82,33 +82,63 @@ begin
 	-- implementation: RGB LED control (led)
 	------------------------------------------------------------------------
 
-	-- IP impl.led.wiring --- BEGIN
-	-- IP impl.led.wiring --- END
+	-- IP impl.led.wiring --- RBEGIN
+	rgb <= seq(ixSeq);
+	-- IP impl.led.wiring --- REND
 
 	-- IP impl.led.rising --- BEGIN
 	process (reset, mclk, stateLed)
-		-- IP impl.led.vars --- BEGIN
-		-- IP impl.led.vars --- END
+		-- IP impl.led.vars --- RBEGIN
+		variable rgb_lcl: std_logic_vector(23 downto 0);
+
+		constant imax: natural := 2000; -- 200ms slice time
+		variable i: natural range 0 to imax;
+		-- IP impl.led.vars --- REND
 
 	begin
 		if reset='1' then
-			-- IP impl.led.asyncrst --- BEGIN
+			-- IP impl.led.asyncrst --- RBEGIN
 			stateLed <= stateLedRunA;
+			seq <= (others => (others => '0'));
 			ixSeq <= 0;
 
-			-- IP impl.led.asyncrst --- END
+			rgb_lcl := (others => '0');
+			i := 0;
+			-- IP impl.led.asyncrst --- REND
 
 		elsif rising_edge(mclk) then
 			if stateLed=stateLedRunA then
 				if tkclk='1' then
-					-- IP impl.led.runA --- INSERT
+					-- IP impl.led.runA --- IBEGIN
+					if i=imax then
+						i := 0;
+
+						if ixSeq=sizeSeq-1 then
+							ixSeq <= 0;
+
+							if commok='0' then
+								seq <= (rgbRed, x"000000", x"000000", x"000000", x"000000");
+							
+							else
+								seq(0) <= rgbGreenD4;
+								seq(1) <= rgbGreenD3;
+								seq(2) <= rgbGreenD2;
+								seq(3) <= rgbGreenD1;
+								seq(4) <= rgbGreen;
+							end if;
+
+						else
+							ixSeq <= ixSeq + 1;
+						end if;
+					end if;
+					-- IP impl.led.runA --- IEND
 
 					stateLed <= stateLedRunB;
 				end if;
 
 			elsif stateLed=stateLedRunB then
 				if tkclk='0' then
-					-- IP impl.led.runB --- INSERT
+					i := i + 1; -- IP impl.led.runB --- ILINE
 
 					stateLed <= stateLedRunA;
 				end if;
@@ -121,8 +151,10 @@ begin
 	-- implementation: main operation (op)
 	------------------------------------------------------------------------
 
-	-- IP impl.op.wiring --- BEGIN
-	-- IP impl.op.wiring --- END
+	-- IP impl.op.wiring --- RBEGIN
+	getTixVClebState <= tixVClebStateNc when commok='0'
+				else tixVClebStateReady;
+	-- IP impl.op.wiring --- REND
 
 	-- IP impl.op.rising --- BEGIN
 	process (reset, mclk)

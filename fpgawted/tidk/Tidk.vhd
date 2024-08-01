@@ -55,8 +55,11 @@ package Tidk is
 	constant tixVTidkBufferFstoccbufMfsmtrack0ToHostif: std_logic_vector(7 downto 0) := x"05";
 	constant tixVTidkBufferGetbufClientToHostif: std_logic_vector(7 downto 0) := x"06";
 	constant tixVTidkBufferSeqbufMfsmtrack1ToHostif: std_logic_vector(7 downto 0) := x"07";
-	constant tixVTidkBufferSeqbufMfsmtrack0ToHostif: std_logic_vector(7 downto 0) := x"08";
-	constant tixVTidkBufferSetbufHostifToClient: std_logic_vector(7 downto 0) := x"09";
+	constant tixVTidkBufferSeqbufMemwrtrackToHostif: std_logic_vector(7 downto 0) := x"08";
+	constant tixVTidkBufferSeqbufMemrdtrackToHostif: std_logic_vector(7 downto 0) := x"09";
+	constant tixVTidkBufferSeqbufMfsmtrack0ToHostif: std_logic_vector(7 downto 0) := x"0A";
+	constant tixVTidkBufferSeqbufMgptrackToHostif: std_logic_vector(7 downto 0) := x"0B";
+	constant tixVTidkBufferSetbufHostifToClient: std_logic_vector(7 downto 0) := x"0C";
 
 	constant tixVTidkControllerHostif: std_logic_vector(7 downto 0) := x"00";
 	constant tixVTidkControllerIdent: std_logic_vector(7 downto 0) := x"01";
@@ -65,11 +68,12 @@ package Tidk is
 	constant tixVTidkControllerMfsmtrack0: std_logic_vector(7 downto 0) := x"04";
 	constant tixVTidkControllerMfsmtrack1: std_logic_vector(7 downto 0) := x"05";
 	constant tixVTidkControllerMgptrack: std_logic_vector(7 downto 0) := x"06";
-	constant tixVTidkControllerMemgptrack: std_logic_vector(7 downto 0) := x"07";
-	constant tixVTidkControllerRgbled0: std_logic_vector(7 downto 0) := x"08";
-	constant tixVTidkControllerState: std_logic_vector(7 downto 0) := x"09";
-	constant tixVTidkControllerTkclksrc: std_logic_vector(7 downto 0) := x"0A";
-	constant tixVTidkControllerTrafgen: std_logic_vector(7 downto 0) := x"0B";
+	constant tixVTidkControllerMemrdtrack: std_logic_vector(7 downto 0) := x"07";
+	constant tixVTidkControllerMemwrtrack: std_logic_vector(7 downto 0) := x"08";
+	constant tixVTidkControllerRgbled0: std_logic_vector(7 downto 0) := x"09";
+	constant tixVTidkControllerState: std_logic_vector(7 downto 0) := x"0A";
+	constant tixVTidkControllerTkclksrc: std_logic_vector(7 downto 0) := x"0B";
+	constant tixVTidkControllerTrafgen: std_logic_vector(7 downto 0) := x"0C";
 
 	constant tixVTidkStateNc: std_logic_vector(7 downto 0) := x"00";
 	constant tixVTidkStateReady: std_logic_vector(7 downto 0) := x"01";
@@ -83,9 +87,13 @@ package Tidk is
 	constant tixVIdentCommandGet: std_logic_vector(7 downto 0) := x"00";
 	constant tixVIdentCommandGetCfg: std_logic_vector(7 downto 0) := x"02";
 
-	constant tixVMemgptrackCommandGetInfo: std_logic_vector(7 downto 0) := x"00";
-	constant tixVMemgptrackCommandSelect: std_logic_vector(7 downto 0) := x"01";
-	constant tixVMemgptrackCommandSet: std_logic_vector(7 downto 0) := x"02";
+	constant tixVMemrdtrackCommandGetInfo: std_logic_vector(7 downto 0) := x"00";
+	constant tixVMemrdtrackCommandSelect: std_logic_vector(7 downto 0) := x"01";
+	constant tixVMemrdtrackCommandSet: std_logic_vector(7 downto 0) := x"02";
+
+	constant tixVMemwrtrackCommandGetInfo: std_logic_vector(7 downto 0) := x"00";
+	constant tixVMemwrtrackCommandSelect: std_logic_vector(7 downto 0) := x"01";
+	constant tixVMemwrtrackCommandSet: std_logic_vector(7 downto 0) := x"02";
 
 	constant tixVMfsmtrack0CommandGetInfo: std_logic_vector(7 downto 0) := x"00";
 	constant tixVMfsmtrack0CommandSelect: std_logic_vector(7 downto 0) := x"01";

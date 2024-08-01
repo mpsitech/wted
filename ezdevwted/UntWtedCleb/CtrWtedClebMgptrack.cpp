@@ -15,6 +15,71 @@ using namespace Xmlio;
 using namespace Dbecore;
 
 /******************************************************************************
+ class CtrWtedClebMgptrack::VecVCapture
+ ******************************************************************************/
+
+uint8_t CtrWtedClebMgptrack::VecVCapture::getTix(
+			const string& sref
+		) {
+	string s = StrMod::lc(sref);
+
+	if (s == "tkclk") return TKCLK;
+	else if (s == "rgb0_r") return RGB0R;
+	else if (s == "rgb0_g") return RGB0G;
+	else if (s == "rgb0_b") return RGB0B;
+	else if (s == "btn0") return BTN0;
+	else if (s == "btn0_sig") return BTN0SIG;
+	else if (s == "tkclksrcgettksttkst0") return TKCLKSRCGETTKSTTKST0;
+	else if (s == "tkclksrcgettksttkst1") return TKCLKSRCGETTKSTTKST1;
+	else if (s == "tkclksrcgettksttkst2") return TKCLKSRCGETTKSTTKST2;
+	else if (s == "tkclksrcgettksttkst3") return TKCLKSRCGETTKSTTKST3;
+	else if (s == "tkclksrcgettksttkst4") return TKCLKSRCGETTKSTTKST4;
+	else if (s == "tkclksrcgettksttkst5") return TKCLKSRCGETTKSTTKST5;
+	else if (s == "tkclksrcgettksttkst6") return TKCLKSRCGETTKSTTKST6;
+	else if (s == "tkclksrcgettksttkst7") return TKCLKSRCGETTKSTTKST7;
+
+	return(0xFF);
+};
+
+string CtrWtedClebMgptrack::VecVCapture::getSref(
+			const uint8_t tix
+		) {
+	if (tix == TKCLK) return("tkclk");
+	else if (tix == RGB0R) return("rgb0_r");
+	else if (tix == RGB0G) return("rgb0_g");
+	else if (tix == RGB0B) return("rgb0_b");
+	else if (tix == BTN0) return("btn0");
+	else if (tix == BTN0SIG) return("btn0_sig");
+	else if (tix == TKCLKSRCGETTKSTTKST0) return("tkclksrcGetTkstTkst0");
+	else if (tix == TKCLKSRCGETTKSTTKST1) return("tkclksrcGetTkstTkst1");
+	else if (tix == TKCLKSRCGETTKSTTKST2) return("tkclksrcGetTkstTkst2");
+	else if (tix == TKCLKSRCGETTKSTTKST3) return("tkclksrcGetTkstTkst3");
+	else if (tix == TKCLKSRCGETTKSTTKST4) return("tkclksrcGetTkstTkst4");
+	else if (tix == TKCLKSRCGETTKSTTKST5) return("tkclksrcGetTkstTkst5");
+	else if (tix == TKCLKSRCGETTKSTTKST6) return("tkclksrcGetTkstTkst6");
+	else if (tix == TKCLKSRCGETTKSTTKST7) return("tkclksrcGetTkstTkst7");
+
+	return("");
+};
+
+string CtrWtedClebMgptrack::VecVCapture::getTitle(
+			const uint8_t tix
+		) {
+
+	return(getSref(tix));
+};
+
+void CtrWtedClebMgptrack::VecVCapture::fillFeed(
+			Feed& feed
+		) {
+	feed.clear();
+
+	std::set<uint8_t> items = {TKCLK,RGB0R,RGB0G,RGB0B,BTN0,BTN0SIG,TKCLKSRCGETTKSTTKST0,TKCLKSRCGETTKSTTKST1,TKCLKSRCGETTKSTTKST2,TKCLKSRCGETTKSTTKST3,TKCLKSRCGETTKSTTKST4,TKCLKSRCGETTKSTTKST5,TKCLKSRCGETTKSTTKST6,TKCLKSRCGETTKSTTKST7};
+
+	for (auto it = items.begin(); it != items.end(); it++) feed.appendIxSrefTitles(*it, getSref(*it), getTitle(*it));
+};
+
+/******************************************************************************
  class CtrWtedClebMgptrack::VecVCommand
  ******************************************************************************/
 
@@ -107,6 +172,9 @@ uint8_t CtrWtedClebMgptrack::VecVTrigger::getTix(
 	string s = StrMod::lc(sref);
 
 	if (s == "void") return VOID;
+	else if (s == "btn0") return BTN0;
+	else if (s == "hostifrxaxis_tvalid") return HOSTIFRXAXISTVALID;
+	else if (s == "ackinvtkclksrcsettkst") return ACKINVTKCLKSRCSETTKST;
 
 	return(0xFF);
 };
@@ -115,6 +183,9 @@ string CtrWtedClebMgptrack::VecVTrigger::getSref(
 			const uint8_t tix
 		) {
 	if (tix == VOID) return("void");
+	else if (tix == BTN0) return("btn0");
+	else if (tix == HOSTIFRXAXISTVALID) return("hostifRxAXIS_tvalid");
+	else if (tix == ACKINVTKCLKSRCSETTKST) return("ackInvTkclksrcSetTkst");
 
 	return("");
 };
@@ -131,7 +202,7 @@ void CtrWtedClebMgptrack::VecVTrigger::fillFeed(
 		) {
 	feed.clear();
 
-	std::set<uint8_t> items = {VOID};
+	std::set<uint8_t> items = {VOID,BTN0,HOSTIFRXAXISTVALID,ACKINVTKCLKSRCSETTKST};
 
 	for (auto it = items.begin(); it != items.end(); it++) feed.appendIxSrefTitles(*it, getSref(*it), getTitle(*it));
 };
@@ -143,11 +214,15 @@ void CtrWtedClebMgptrack::VecVTrigger::fillFeed(
 CtrWtedClebMgptrack::CtrWtedClebMgptrack(
 			UntWted* unt
 		) : CtrWted(unt) {
-	// IP constructor.easy.cmdvars --- INSERT
+	cmdGetInfo = getNewCmdGetInfo();
+	cmdSelect = getNewCmdSelect();
+	cmdSet = getNewCmdSet();
 };
 
 CtrWtedClebMgptrack::~CtrWtedClebMgptrack() {
-	// IP destructor.easy.cmdvars --- INSERT
+	delete cmdGetInfo;
+	delete cmdSelect;
+	delete cmdSet;
 };
 
 uint8_t CtrWtedClebMgptrack::getTixVCommandBySref(
@@ -206,21 +281,27 @@ Cmd* CtrWtedClebMgptrack::getNewCmdSelect() {
 	Cmd* cmd = new Cmd(tixVController, VecVCommand::SELECT, Cmd::VecVRettype::VOID);
 
 	cmd->addParInv("staTixVTrigger", Par::VecVType::TIX, CtrWtedClebMgptrack::VecVTrigger::getTix, CtrWtedClebMgptrack::VecVTrigger::getSref, CtrWtedClebMgptrack::VecVTrigger::fillFeed);
+	cmd->addParInv("staFallingNotRising", Par::VecVType::_BOOL);
 	cmd->addParInv("stoTixVTrigger", Par::VecVType::TIX, CtrWtedClebMgptrack::VecVTrigger::getTix, CtrWtedClebMgptrack::VecVTrigger::getSref, CtrWtedClebMgptrack::VecVTrigger::fillFeed);
+	cmd->addParInv("stoFallingNotRising", Par::VecVType::_BOOL);
 
 	return cmd;
 };
 
 void CtrWtedClebMgptrack::select(
 			const uint8_t staTixVTrigger
+			, const bool staFallingNotRising
 			, const uint8_t stoTixVTrigger
+			, const bool stoFallingNotRising
 		) {
 	unt->lockAccess("CtrWtedClebMgptrack::select");
 
 	Cmd* cmd = cmdSelect;
 
 	cmd->parsInv["staTixVTrigger"].setTix(staTixVTrigger);
+	cmd->parsInv["staFallingNotRising"].setBool(staFallingNotRising);
 	cmd->parsInv["stoTixVTrigger"].setTix(stoTixVTrigger);
+	cmd->parsInv["stoFallingNotRising"].setBool(stoFallingNotRising);
 
 	if (unt->runCmd(cmd)) {
 	} else throw DbeException("error running select");

@@ -14,6 +14,7 @@
 
 #define CmdWtedTidkMemgptrackGetInfo CtrWtedTidkMemgptrack::CmdGetInfo
 
+#define VecVWtedTidkMemgptrackCapture CtrWtedTidkMemgptrack::VecVCapture
 #define VecVWtedTidkMemgptrackCommand CtrWtedTidkMemgptrack::VecVCommand
 #define VecVWtedTidkMemgptrackState CtrWtedTidkMemgptrack::VecVState
 #define VecVWtedTidkMemgptrackTrigger CtrWtedTidkMemgptrack::VecVTrigger
@@ -24,6 +25,30 @@
 class CtrWtedTidkMemgptrack : public CtrWted {
 
 public:
+	/**
+		* VecVCapture (full: VecVWtedTidkMemgptrackCapture)
+		*/
+	class VecVCapture {
+
+	public:
+		static constexpr uint8_t REQCLIENTTODDRIFRD = 0x00;
+		static constexpr uint8_t ACKCLIENTTODDRIFRD = 0x01;
+		static constexpr uint8_t MEMCRDAXIRVALID = 0x02;
+		static constexpr uint8_t REQCLIENTTODDRIFWR = 0x03;
+		static constexpr uint8_t ACKCLIENTTODDRIFWR = 0x04;
+		static constexpr uint8_t MEMCWRAXIWREADY = 0x05;
+		static constexpr uint8_t REQTRAFGENTODDRIFWR = 0x06;
+		static constexpr uint8_t ACKTRAFGENTODDRIFWR = 0x07;
+		static constexpr uint8_t MEMTWRAXIWREADY = 0x08;
+
+		static uint8_t getTix(const std::string& sref);
+		static std::string getSref(const uint8_t tix);
+
+		static std::string getTitle(const uint8_t tix);
+
+		static void fillFeed(Sbecore::Feed& feed);
+	};
+
 	/**
 		* VecVCommand (full: VecVWtedTidkMemgptrackCommand)
 		*/
@@ -66,6 +91,8 @@ public:
 
 	public:
 		static constexpr uint8_t VOID = 0x00;
+		static constexpr uint8_t ACKINVCLIENTLOADGETBUF = 0x02;
+		static constexpr uint8_t ACKINVCLIENTSTORESETBUF = 0x03;
 
 		static uint8_t getTix(const std::string& sref);
 		static std::string getSref(const uint8_t tix);

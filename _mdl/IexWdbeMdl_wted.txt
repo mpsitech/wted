@@ -32,7 +32,7 @@ fpga	lifcl-40-9bg400c	cleb	Lattice CrossLink-NX Evaluation Board	true	radiant
 		trkclk	mclk
 		ratioTrkclk	1
 		capts	hostif.op
-		trigs	hostifRxAXIS_tvalid.rising;ackInvTkclksrcSetTkst.rising
+		trigs	hostifRxAXIS_tvalid;ackInvTkclksrcSetTkst
 		sizeSeqbuf	4
 		ImeIAMModulePar.end
 	edbgctr	wted_core	fsmtrack_Easy_v1_0	mfsmtrack1	track other mclk-based FSM's
@@ -40,7 +40,7 @@ fpga	lifcl-40-9bg400c	cleb	Lattice CrossLink-NX Evaluation Board	true	radiant
 		trkclk	mclk
 		ratioTrkclk	1
 		capts	tkclksrc.op
-		trigs	hostifRxAXIS_tvalid.rising;ackInvTkclksrcSetTkst.rising
+		trigs	hostifRxAXIS_tvalid;ackInvTkclksrcSetTkst
 		sizeSeqbuf	4
 		ImeIAMModulePar.end
 	edbgctr	wted_core	gptrack_Easy_v1_0	mgptrack	track mclk-based signals
@@ -48,7 +48,7 @@ fpga	lifcl-40-9bg400c	cleb	Lattice CrossLink-NX Evaluation Board	true	radiant
 		trkclk	mclk
 		ratioTrkclk	1
 		capts	tkclk;rgb0_r;rgb0_g;rgb0_b;btn0;btn0_sig;tkclksrcGetTkstTkst[7..0]
-		trigs	btn0.rising;btn0.falling;ackInvTkclksrcSetTkst.rising
+		trigs	btn0;hostifRxAXIS_tvalid;ackInvTkclksrcSetTkst
 		sizeSeqbuf	4
 		ImeIAMModulePar.end
 	ectr	wted_core	rgbled_v1_0	rgbled0
@@ -116,7 +116,7 @@ fpga	ti180m484i3	tidk	Efinix Titanium Ti180 development kit	true	efinity
 		wAConst	6
 		aConst	000011	64 MB chunk from 192 MB to 256 MB
 		NBeat	16	default
-		wD	32
+		wD	512
 		NRd	1
 		flexNBeatRds	false
 		wDRds	32
@@ -133,7 +133,7 @@ fpga	ti180m484i3	tidk	Efinix Titanium Ti180 development kit	true	efinity
 		trkclk	mclk
 		ratioTrkclk	1
 		capts	hostif.op
-		trigs	hostifRxAXIS_tvalid.rising;ackInvTkclksrcSetTkst.rising
+		trigs	hostifRxAXIS_tvalid;ackInvTkclksrcSetTkst
 		sizeSeqbuf	4
 		ImeIAMModulePar.end
 	edbgctr	wted_core	fsmtrack_Easy_v1_0	mfsmtrack1	track other mclk-based FSM's
@@ -141,7 +141,7 @@ fpga	ti180m484i3	tidk	Efinix Titanium Ti180 development kit	true	efinity
 		trkclk	mclk
 		ratioTrkclk	1
 		capts	client.getbufB;client.setbufB;tkclksrc.op
-		trigs	hostifRxAXIS_tvalid.rising;ackInvTkclksrcSetTkst.rising
+		trigs	hostifRxAXIS_tvalid;ackInvTkclksrcSetTkst
 		sizeSeqbuf	4
 		ImeIAMModulePar.end
 	edbgctr	wted_core	gptrack_Easy_v1_0	mgptrack	track mclk-based signals
@@ -149,15 +149,23 @@ fpga	ti180m484i3	tidk	Efinix Titanium Ti180 development kit	true	efinity
 		trkclk	mclk
 		ratioTrkclk	1
 		capts	tkclk;rgb0_r;rgb0_g;rgb0_b;btn0;btn0_sig;tkclksrcGetTkstTkst[7..0]
-		trigs	btn0.rising;btn0.falling;ackInvTkclksrcSetTkst.rising
+		trigs	btn0;hostifRxAXIS_tvalid;ackInvTkclksrcSetTkst
 		sizeSeqbuf	4
 		ImeIAMModulePar.end
-	edbgctr	wted_core	gptrack_Easy_v1_0	memgptrack	track memclk-based signals
+	edbgctr	wted_core	gptrack_Easy_v1_0	memrdtrack	track memclk-based DDR memory read signals
 		ImeIAMModulePar.x1SrefKKey	Val
 		trkclk	memclk
 		ratioTrkclk	2.5
-		capts	reqClientToDdrifRd;ackClientToDdrifRd;memRdAAXI_rvalid;reqClientToDdrifWr;ackClientToDdrifWr;memWrAAXI_wready;reqTrafgenToDdrifRd;ackTrafgenToDdrifWr;memWrBAXI_wready
-		trigs	ackInvClientLoadGetbuf;ackInvClientStoreSetbuf
+		capts	reqClientToDdrifRd;ackClientToDdrifRd;memCRdAXI_rvalid;ddrAXI_araddr_sig[1..0];ddrAXI_arready;ddrAXI_arvalid_sig;ddrAXI_rready_sig;ddrAXI_rdata[3..0];ddrAXI_rlast
+		trigs	ackInvClientLoadGetbuf.mclk;ackInvClientStoreSetbuf.mclk
+		sizeSeqbuf	4
+		ImeIAMModulePar.end
+	edbgctr	wted_core	gptrack_Easy_v1_0	memwrtrack	track memclk-based DDR memory write signals
+		ImeIAMModulePar.x1SrefKKey	Val
+		trkclk	memclk
+		ratioTrkclk	2.5
+		capts	reqClientToDdrifWr;ackClientToDdrifWr;reqTrafgenToDdrifWr;ackTrafgenToDdrifWr;ddrAXI_awaddr_sig[1..0];ddrAXI_awready;ddrAXI_awvalid_sig;ddrAXI_wready;ddrAXI_wdata_sig[1..0];ddrAXI_wlast_sig;ddrAXI_bready_sig;ddrAXI_bvalid
+		trigs	ackInvClientLoadGetbuf.mclk;ackInvClientStoreSetbuf.mclk
 		sizeSeqbuf	4
 		ImeIAMModulePar.end
 	ectr	wted_core	rgbled_v1_0	rgbled0
@@ -166,12 +174,6 @@ fpga	ti180m484i3	tidk	Efinix Titanium Ti180 development kit	true	efinity
 	ectr	wted_core		trafgen	randomized data exchange with DDR memory
 	oth	wted_core;trafgen	neotrng_v1_0	lenrng	randum number generator for transaction length
 	oth	wted_core;trafgen	neotrng_v1_0	ofsrng	random number generator for data value offset
-	oth	wted_core;trafgen	dpram_efnx_v1_0	setbuf
-		ImeIAMModulePar.x1SrefKKey	Val
-		size	4
-		wA	8
-		wB	32
-		ImeIAMModulePar.end
 	ImeIMModule.end
 fpga	xczu1cg-1sbva484e	zudk	Avnet Zynq UltraScale+ MPSoC development kit	true	vivado
 	ImeIMModule.srefIxVBasetype	hsrefSupRefWdbeMModule	srefTplRefWdbeMModule	sref	Comment
@@ -251,7 +253,7 @@ fpga	xczu1cg-1sbva484e	zudk	Avnet Zynq UltraScale+ MPSoC development kit	true	vi
 		trkclk	mclk
 		ratioTrkclk	1
 		capts	hostif.op
-		trigs	hostifRxAXIS_tvalid.rising;ackInvTkclksrcSetTkst.rising
+		trigs	hostifRxAXIS_tvalid;ackInvTkclksrcSetTkst
 		sizeSeqbuf	4
 		ImeIAMModulePar.end
 	edbgctr	wted_core	fsmtrack_Easy_v1_0	mfsmtrack1	track other mclk-based FSM's
@@ -259,7 +261,7 @@ fpga	xczu1cg-1sbva484e	zudk	Avnet Zynq UltraScale+ MPSoC development kit	true	vi
 		trkclk	mclk
 		ratioTrkclk	1
 		capts	client.getbufB;client.setbufB;tkclksrc.op
-		trigs	hostifRxAXIS_tvalid.rising;ackInvTkclksrcSetTkst.rising
+		trigs	hostifRxAXIS_tvalid;ackInvTkclksrcSetTkst
 		sizeSeqbuf	4
 		ImeIAMModulePar.end
 	edbgctr	wted_core	gptrack_Easy_v1_0	mgptrack	track mclk-based signals
@@ -267,15 +269,23 @@ fpga	xczu1cg-1sbva484e	zudk	Avnet Zynq UltraScale+ MPSoC development kit	true	vi
 		trkclk	mclk
 		ratioTrkclk	1
 		capts	tkclk;rgb0_r;rgb0_g;rgb0_b;btn0;btn0_sig;tkclksrcGetTkstTkst[7..0]
-		trigs	btn0.rising;btn0.falling;ackInvTkclksrcSetTkst.rising
+		trigs	btn0;hostifRxAXIS_tvalid;ackInvTkclksrcSetTkst
 		sizeSeqbuf	4
 		ImeIAMModulePar.end
-	edbgctr	wted_core	gptrack_Easy_v1_0	memgptrack	track memclk-based signals
+	edbgctr	wted_core	gptrack_Easy_v1_0	memrdtrack	track memclk-based DDR memory read signals
 		ImeIAMModulePar.x1SrefKKey	Val
 		trkclk	memclk
 		ratioTrkclk	3
-		capts	reqClientToDdrifRd;ackClientToDdrifRd;memRdAAXI_rvalid;reqClientToDdrifWr;ackClientToDdrifWr;memWrAAXI_wready;reqTrafgenToDdrifRd;ackTrafgenToDdrifWr;memWrBAXI_wready
-		trigs	ackInvClientLoadGetbuf;ackInvClientStoreSetbuf
+		capts	reqClientToDdrifRd;ackClientToDdrifRd;memCRdAXI_rvalid;ddrAXI_araddr_sig[1..0];ddrAXI_arready;ddrAXI_arvalid_sig;ddrAXI_rready_sig;ddrAXI_rdata[3..0];ddrAXI_rlast
+		trigs	ackInvClientLoadGetbuf.mclk;ackInvClientStoreSetbuf.mclk
+		sizeSeqbuf	4
+		ImeIAMModulePar.end
+	edbgctr	wted_core	gptrack_Easy_v1_0	memwrtrack	track memclk-based DDR memory write signals
+		ImeIAMModulePar.x1SrefKKey	Val
+		trkclk	memclk
+		ratioTrkclk	3
+		capts	reqClientToDdrifWr;ackClientToDdrifWr;reqTrafgenToDdrifWr;ackTrafgenToDdrifWr;ddrAXI_awaddr_sig[1..0];ddrAXI_awready;ddrAXI_awvalid_sig;ddrAXI_wready;ddrAXI_wdata_sig[1..0];ddrAXI_wlast_sig;ddrAXI_bready_sig;ddrAXI_bvalid
+		trigs	ackInvClientLoadGetbuf.mclk;ackInvClientStoreSetbuf.mclk
 		sizeSeqbuf	4
 		ImeIAMModulePar.end
 	ectr	wted_core	rgbled_v1_0	rgbled0
@@ -284,11 +294,5 @@ fpga	xczu1cg-1sbva484e	zudk	Avnet Zynq UltraScale+ MPSoC development kit	true	vi
 	ectr	wted_core		trafgen	randomized data exchange with DDR memory
 	oth	wted_core;trafgen	neotrng_v1_0	lenrng	randum number generator for transaction length
 	oth	wted_core;trafgen	neotrng_v1_0	ofsrng	random number generator for data value offset
-	oth	wted_core;trafgen	dpbram_xlnx_v8_4	setbuf
-		ImeIAMModulePar.x1SrefKKey	Val
-		size	2
-		wA	8
-		wB	128
-		ImeIAMModulePar.end
 	ImeIMModule.end
 ImeIMUnit.end

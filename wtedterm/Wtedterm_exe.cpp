@@ -107,7 +107,7 @@ int main(
 	else if (untshort == "zudk") {hw = new UntWtedZudk(); untsref = "UntWtedZudk";};
 
 	// welcome message
-	cout << "Welcome to the interactive terminal for Wted version 0.1.0, unit " << untsref << "!" << endl;
+	cout << "Welcome to the interactive terminal for Wted version 0.1.2, unit " << untsref << "!" << endl;
 
 	hw->histNotDump = false;
 

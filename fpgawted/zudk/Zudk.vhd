@@ -56,7 +56,10 @@ package Zudk is
 	constant tixVZudkBufferGetbufClientToHostif: std_logic_vector(7 downto 0) := x"06";
 	constant tixVZudkBufferSeqbufMfsmtrack0ToHostif: std_logic_vector(7 downto 0) := x"07";
 	constant tixVZudkBufferSeqbufMfsmtrack1ToHostif: std_logic_vector(7 downto 0) := x"08";
-	constant tixVZudkBufferSetbufHostifToClient: std_logic_vector(7 downto 0) := x"09";
+	constant tixVZudkBufferSeqbufMemwrtrackToHostif: std_logic_vector(7 downto 0) := x"09";
+	constant tixVZudkBufferSeqbufMgptrackToHostif: std_logic_vector(7 downto 0) := x"0A";
+	constant tixVZudkBufferSeqbufMemrdtrackToHostif: std_logic_vector(7 downto 0) := x"0B";
+	constant tixVZudkBufferSetbufHostifToClient: std_logic_vector(7 downto 0) := x"0C";
 
 	constant tixVZudkControllerHostif: std_logic_vector(7 downto 0) := x"00";
 	constant tixVZudkControllerIdent: std_logic_vector(7 downto 0) := x"01";
@@ -65,11 +68,12 @@ package Zudk is
 	constant tixVZudkControllerMfsmtrack0: std_logic_vector(7 downto 0) := x"04";
 	constant tixVZudkControllerMfsmtrack1: std_logic_vector(7 downto 0) := x"05";
 	constant tixVZudkControllerMgptrack: std_logic_vector(7 downto 0) := x"06";
-	constant tixVZudkControllerMemgptrack: std_logic_vector(7 downto 0) := x"07";
-	constant tixVZudkControllerRgbled0: std_logic_vector(7 downto 0) := x"08";
-	constant tixVZudkControllerState: std_logic_vector(7 downto 0) := x"09";
-	constant tixVZudkControllerTkclksrc: std_logic_vector(7 downto 0) := x"0A";
-	constant tixVZudkControllerTrafgen: std_logic_vector(7 downto 0) := x"0B";
+	constant tixVZudkControllerMemrdtrack: std_logic_vector(7 downto 0) := x"07";
+	constant tixVZudkControllerMemwrtrack: std_logic_vector(7 downto 0) := x"08";
+	constant tixVZudkControllerRgbled0: std_logic_vector(7 downto 0) := x"09";
+	constant tixVZudkControllerState: std_logic_vector(7 downto 0) := x"0A";
+	constant tixVZudkControllerTkclksrc: std_logic_vector(7 downto 0) := x"0B";
+	constant tixVZudkControllerTrafgen: std_logic_vector(7 downto 0) := x"0C";
 
 	constant tixVZudkStateNc: std_logic_vector(7 downto 0) := x"00";
 	constant tixVZudkStateReady: std_logic_vector(7 downto 0) := x"01";
@@ -83,9 +87,13 @@ package Zudk is
 	constant tixVIdentCommandGet: std_logic_vector(7 downto 0) := x"00";
 	constant tixVIdentCommandGetCfg: std_logic_vector(7 downto 0) := x"02";
 
-	constant tixVMemgptrackCommandGetInfo: std_logic_vector(7 downto 0) := x"00";
-	constant tixVMemgptrackCommandSelect: std_logic_vector(7 downto 0) := x"01";
-	constant tixVMemgptrackCommandSet: std_logic_vector(7 downto 0) := x"02";
+	constant tixVMemrdtrackCommandGetInfo: std_logic_vector(7 downto 0) := x"00";
+	constant tixVMemrdtrackCommandSelect: std_logic_vector(7 downto 0) := x"01";
+	constant tixVMemrdtrackCommandSet: std_logic_vector(7 downto 0) := x"02";
+
+	constant tixVMemwrtrackCommandGetInfo: std_logic_vector(7 downto 0) := x"00";
+	constant tixVMemwrtrackCommandSelect: std_logic_vector(7 downto 0) := x"01";
+	constant tixVMemwrtrackCommandSet: std_logic_vector(7 downto 0) := x"02";
 
 	constant tixVMfsmtrack0CommandGetInfo: std_logic_vector(7 downto 0) := x"00";
 	constant tixVMfsmtrack0CommandSelect: std_logic_vector(7 downto 0) := x"01";

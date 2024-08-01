@@ -2,7 +2,7 @@
 # make file for Wted interactive terminal, release wtedterm_pl64 (ubuntu cross-compilation)
 # copyright: (C) 2023 MPSI Technologies GmbH
 # author: Alexander Wirthmueller (auto-generation)
-# date created: 30 Jun 2024
+# date created: 24 Jul 2024
 # IP header --- ABOVE
 
 BUILDROOT = ${WHIZSDKROOT}/build

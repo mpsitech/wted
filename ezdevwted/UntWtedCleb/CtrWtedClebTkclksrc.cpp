@@ -55,11 +55,13 @@ void CtrWtedClebTkclksrc::VecVCommand::fillFeed(
 CtrWtedClebTkclksrc::CtrWtedClebTkclksrc(
 			UntWted* unt
 		) : CtrWted(unt) {
-	// IP constructor.easy.cmdvars --- INSERT
+	cmdGetTkst = getNewCmdGetTkst();
+	cmdSetTkst = getNewCmdSetTkst();
 };
 
 CtrWtedClebTkclksrc::~CtrWtedClebTkclksrc() {
-	// IP destructor.easy.cmdvars --- INSERT
+	delete cmdGetTkst;
+	delete cmdSetTkst;
 };
 
 uint8_t CtrWtedClebTkclksrc::getTixVCommandBySref(

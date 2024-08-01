@@ -14,8 +14,8 @@
 
 #define CmdWtedClebMfsmtrack1GetInfo CtrWtedClebMfsmtrack1::CmdGetInfo
 
+#define VecVWtedClebMfsmtrack1Capture CtrWtedClebMfsmtrack1::VecVCapture
 #define VecVWtedClebMfsmtrack1Command CtrWtedClebMfsmtrack1::VecVCommand
-#define VecVWtedClebMfsmtrack1Source CtrWtedClebMfsmtrack1::VecVSource
 #define VecVWtedClebMfsmtrack1State CtrWtedClebMfsmtrack1::VecVState
 #define VecVWtedClebMfsmtrack1Trigger CtrWtedClebMfsmtrack1::VecVTrigger
 
@@ -25,6 +25,22 @@
 class CtrWtedClebMfsmtrack1 : public CtrWted {
 
 public:
+	/**
+		* VecVCapture (full: VecVWtedClebMfsmtrack1Capture)
+		*/
+	class VecVCapture {
+
+	public:
+		static constexpr uint8_t TKCLKSRCOP = 0x01;
+
+		static uint8_t getTix(const std::string& sref);
+		static std::string getSref(const uint8_t tix);
+
+		static std::string getTitle(const uint8_t tix);
+
+		static void fillFeed(Sbecore::Feed& feed);
+	};
+
 	/**
 		* VecVCommand (full: VecVWtedClebMfsmtrack1Command)
 		*/
@@ -37,22 +53,6 @@ public:
 
 		static uint8_t getTix(const std::string& sref);
 		static std::string getSref(const uint8_t tix);
-
-		static void fillFeed(Sbecore::Feed& feed);
-	};
-
-	/**
-		* VecVSource (full: VecVWtedClebMfsmtrack1Source)
-		*/
-	class VecVSource {
-
-	public:
-		static constexpr uint8_t TKCLKSRCOP = 0x01;
-
-		static uint8_t getTix(const std::string& sref);
-		static std::string getSref(const uint8_t tix);
-
-		static std::string getTitle(const uint8_t tix);
 
 		static void fillFeed(Sbecore::Feed& feed);
 	};
@@ -102,9 +102,9 @@ public:
 	static const uint8_t tixVController = 0x03;
 
 public:
-	Dbecore::Cmd* cmdGetInfo ;
-	Dbecore::Cmd* cmdSelect ;
-	Dbecore::Cmd* cmdSet ;
+	Dbecore::Cmd* cmdGetInfo;
+	Dbecore::Cmd* cmdSelect;
+	Dbecore::Cmd* cmdSet;
 
 public:
 	static uint8_t getTixVCommandBySref(const std::string& sref);
@@ -117,7 +117,7 @@ public:
 	void getInfo(uint8_t& tixVState, unsigned char*& coverage, size_t& coveragelen);
 
 	static Dbecore::Cmd* getNewCmdSelect();
-	void select(const uint8_t tixVSource, const uint8_t staTixVTrigger, const uint8_t stoTixVTrigger);
+	void select(const uint8_t tixVCapture, const uint8_t staTixVTrigger, const bool staFallingNotRising, const uint8_t stoTixVTrigger, const bool stoFallingNotRising);
 
 	static Dbecore::Cmd* getNewCmdSet();
 	void set(const bool rng, const uint32_t TCapt);

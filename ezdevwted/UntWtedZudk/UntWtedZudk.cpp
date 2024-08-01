@@ -35,7 +35,8 @@ void UntWtedZudk::init(
 	ddrif = new CtrWtedZudkDdrif(this);
 	hostif = new CtrWtedZudkHostif(this);
 	ident = new CtrWtedZudkIdent(this);
-	memgptrack = new CtrWtedZudkMemgptrack(this);
+	memrdtrack = new CtrWtedZudkMemrdtrack(this);
+	memwrtrack = new CtrWtedZudkMemwrtrack(this);
 	mfsmtrack0 = new CtrWtedZudkMfsmtrack0(this);
 	mfsmtrack1 = new CtrWtedZudkMfsmtrack1(this);
 	mgptrack = new CtrWtedZudkMgptrack(this);
@@ -76,7 +77,8 @@ void UntWtedZudk::term() {
 	delete ddrif;
 	delete hostif;
 	delete ident;
-	delete memgptrack;
+	delete memrdtrack;
+	delete memwrtrack;
 	delete mfsmtrack0;
 	delete mfsmtrack1;
 	delete mgptrack;
@@ -255,7 +257,8 @@ uint8_t UntWtedZudk::getTixVCommandBySref(
 	else if (tixVController == VecVWtedZudkController::DDRIF) tixVCommand = VecVWtedZudkDdrifCommand::getTix(sref);
 	else if (tixVController == VecVWtedZudkController::HOSTIF) tixVCommand = VecVWtedZudkHostifCommand::getTix(sref);
 	else if (tixVController == VecVWtedZudkController::IDENT) tixVCommand = VecVWtedZudkIdentCommand::getTix(sref);
-	else if (tixVController == VecVWtedZudkController::MEMGPTRACK) tixVCommand = VecVWtedZudkMemgptrackCommand::getTix(sref);
+	else if (tixVController == VecVWtedZudkController::MEMRDTRACK) tixVCommand = VecVWtedZudkMemrdtrackCommand::getTix(sref);
+	else if (tixVController == VecVWtedZudkController::MEMWRTRACK) tixVCommand = VecVWtedZudkMemwrtrackCommand::getTix(sref);
 	else if (tixVController == VecVWtedZudkController::MFSMTRACK0) tixVCommand = VecVWtedZudkMfsmtrack0Command::getTix(sref);
 	else if (tixVController == VecVWtedZudkController::MFSMTRACK1) tixVCommand = VecVWtedZudkMfsmtrack1Command::getTix(sref);
 	else if (tixVController == VecVWtedZudkController::MGPTRACK) tixVCommand = VecVWtedZudkMgptrackCommand::getTix(sref);
@@ -277,7 +280,8 @@ string UntWtedZudk::getSrefByTixVCommand(
 	else if (tixVController == VecVWtedZudkController::DDRIF) sref = VecVWtedZudkDdrifCommand::getSref(tixVCommand);
 	else if (tixVController == VecVWtedZudkController::HOSTIF) sref = VecVWtedZudkHostifCommand::getSref(tixVCommand);
 	else if (tixVController == VecVWtedZudkController::IDENT) sref = VecVWtedZudkIdentCommand::getSref(tixVCommand);
-	else if (tixVController == VecVWtedZudkController::MEMGPTRACK) sref = VecVWtedZudkMemgptrackCommand::getSref(tixVCommand);
+	else if (tixVController == VecVWtedZudkController::MEMRDTRACK) sref = VecVWtedZudkMemrdtrackCommand::getSref(tixVCommand);
+	else if (tixVController == VecVWtedZudkController::MEMWRTRACK) sref = VecVWtedZudkMemwrtrackCommand::getSref(tixVCommand);
 	else if (tixVController == VecVWtedZudkController::MFSMTRACK0) sref = VecVWtedZudkMfsmtrack0Command::getSref(tixVCommand);
 	else if (tixVController == VecVWtedZudkController::MFSMTRACK1) sref = VecVWtedZudkMfsmtrack1Command::getSref(tixVCommand);
 	else if (tixVController == VecVWtedZudkController::MGPTRACK) sref = VecVWtedZudkMgptrackCommand::getSref(tixVCommand);
@@ -299,7 +303,8 @@ void UntWtedZudk::fillFeedFCommand(
 	else if (tixVController == VecVWtedZudkController::DDRIF) VecVWtedZudkDdrifCommand::fillFeed(feed);
 	else if (tixVController == VecVWtedZudkController::HOSTIF) VecVWtedZudkHostifCommand::fillFeed(feed);
 	else if (tixVController == VecVWtedZudkController::IDENT) VecVWtedZudkIdentCommand::fillFeed(feed);
-	else if (tixVController == VecVWtedZudkController::MEMGPTRACK) VecVWtedZudkMemgptrackCommand::fillFeed(feed);
+	else if (tixVController == VecVWtedZudkController::MEMRDTRACK) VecVWtedZudkMemrdtrackCommand::fillFeed(feed);
+	else if (tixVController == VecVWtedZudkController::MEMWRTRACK) VecVWtedZudkMemwrtrackCommand::fillFeed(feed);
 	else if (tixVController == VecVWtedZudkController::MFSMTRACK0) VecVWtedZudkMfsmtrack0Command::fillFeed(feed);
 	else if (tixVController == VecVWtedZudkController::MFSMTRACK1) VecVWtedZudkMfsmtrack1Command::fillFeed(feed);
 	else if (tixVController == VecVWtedZudkController::MGPTRACK) VecVWtedZudkMgptrackCommand::fillFeed(feed);
@@ -318,11 +323,14 @@ Bufxf* UntWtedZudk::getNewBufxf(
 
 	if (tixVBuffer == VecVWtedZudkBuffer::CNTBUFMFSMTRACK0TOHOSTIF) bufxf = getNewBufxfCntbufFromMfsmtrack0(reqlen, buf);
 	else if (tixVBuffer == VecVWtedZudkBuffer::CNTBUFMFSMTRACK1TOHOSTIF) bufxf = getNewBufxfCntbufFromMfsmtrack1(reqlen, buf);
-	else if (tixVBuffer == VecVWtedZudkBuffer::FSTOCCBUFMFSMTRACK0TOHOSTIF) bufxf = getNewBufxfFstoccbufFromMfsmtrack0(reqlen, buf);
 	else if (tixVBuffer == VecVWtedZudkBuffer::FSTOCCBUFMFSMTRACK1TOHOSTIF) bufxf = getNewBufxfFstoccbufFromMfsmtrack1(reqlen, buf);
+	else if (tixVBuffer == VecVWtedZudkBuffer::FSTOCCBUFMFSMTRACK0TOHOSTIF) bufxf = getNewBufxfFstoccbufFromMfsmtrack0(reqlen, buf);
 	else if (tixVBuffer == VecVWtedZudkBuffer::GETBUFCLIENTTOHOSTIF) bufxf = getNewBufxfGetbufFromClient(reqlen, buf);
 	else if (tixVBuffer == VecVWtedZudkBuffer::SEQBUFMFSMTRACK0TOHOSTIF) bufxf = getNewBufxfSeqbufFromMfsmtrack0(reqlen, buf);
 	else if (tixVBuffer == VecVWtedZudkBuffer::SEQBUFMFSMTRACK1TOHOSTIF) bufxf = getNewBufxfSeqbufFromMfsmtrack1(reqlen, buf);
+	else if (tixVBuffer == VecVWtedZudkBuffer::SEQBUFMEMWRTRACKTOHOSTIF) bufxf = getNewBufxfSeqbufFromMemwrtrack(reqlen, buf);
+	else if (tixVBuffer == VecVWtedZudkBuffer::SEQBUFMEMRDTRACKTOHOSTIF) bufxf = getNewBufxfSeqbufFromMemrdtrack(reqlen, buf);
+	else if (tixVBuffer == VecVWtedZudkBuffer::SEQBUFMGPTRACKTOHOSTIF) bufxf = getNewBufxfSeqbufFromMgptrack(reqlen, buf);
 	else if (tixVBuffer == VecVWtedZudkBuffer::SETBUFHOSTIFTOCLIENT) bufxf = getNewBufxfSetbufToClient(reqlen, buf);
 
 	return bufxf;
@@ -338,7 +346,8 @@ Cmd* UntWtedZudk::getNewCmd(
 	else if (tixVController == VecVWtedZudkController::DDRIF) cmd = CtrWtedZudkDdrif::getNewCmd(tixVCommand);
 	else if (tixVController == VecVWtedZudkController::HOSTIF) cmd = CtrWtedZudkHostif::getNewCmd(tixVCommand);
 	else if (tixVController == VecVWtedZudkController::IDENT) cmd = CtrWtedZudkIdent::getNewCmd(tixVCommand);
-	else if (tixVController == VecVWtedZudkController::MEMGPTRACK) cmd = CtrWtedZudkMemgptrack::getNewCmd(tixVCommand);
+	else if (tixVController == VecVWtedZudkController::MEMRDTRACK) cmd = CtrWtedZudkMemrdtrack::getNewCmd(tixVCommand);
+	else if (tixVController == VecVWtedZudkController::MEMWRTRACK) cmd = CtrWtedZudkMemwrtrack::getNewCmd(tixVCommand);
 	else if (tixVController == VecVWtedZudkController::MFSMTRACK0) cmd = CtrWtedZudkMfsmtrack0::getNewCmd(tixVCommand);
 	else if (tixVController == VecVWtedZudkController::MFSMTRACK1) cmd = CtrWtedZudkMfsmtrack1::getNewCmd(tixVCommand);
 	else if (tixVController == VecVWtedZudkController::MGPTRACK) cmd = CtrWtedZudkMgptrack::getNewCmd(tixVCommand);
@@ -406,34 +415,6 @@ void UntWtedZudk::readCntbufFromMfsmtrack1(
 	delete bufxf;
 };
 
-Bufxf* UntWtedZudk::getNewBufxfFstoccbufFromMfsmtrack0(
-			const size_t reqlen
-			, unsigned char* buf
-		) {
-	return(new Bufxf(VecVWtedZudkBuffer::FSTOCCBUFMFSMTRACK0TOHOSTIF, false, reqlen, 0, 2, buf));
-};
-
-void UntWtedZudk::readFstoccbufFromMfsmtrack0(
-			const size_t reqlen
-			, unsigned char*& data
-			, size_t& datalen
-		) {
-	Bufxf* bufxf = getNewBufxfFstoccbufFromMfsmtrack0(reqlen, data);
-
-	if (runBufxf(bufxf)) {
-		if (!data) data = bufxf->getReadData();
-		datalen = bufxf->getReadDatalen();
-
-	} else {
-		datalen = 0;
-
-		delete bufxf;
-		throw DbeException("error running readFstoccbufFromMfsmtrack0");
-	};
-
-	delete bufxf;
-};
-
 Bufxf* UntWtedZudk::getNewBufxfFstoccbufFromMfsmtrack1(
 			const size_t reqlen
 			, unsigned char* buf
@@ -457,6 +438,34 @@ void UntWtedZudk::readFstoccbufFromMfsmtrack1(
 
 		delete bufxf;
 		throw DbeException("error running readFstoccbufFromMfsmtrack1");
+	};
+
+	delete bufxf;
+};
+
+Bufxf* UntWtedZudk::getNewBufxfFstoccbufFromMfsmtrack0(
+			const size_t reqlen
+			, unsigned char* buf
+		) {
+	return(new Bufxf(VecVWtedZudkBuffer::FSTOCCBUFMFSMTRACK0TOHOSTIF, false, reqlen, 0, 2, buf));
+};
+
+void UntWtedZudk::readFstoccbufFromMfsmtrack0(
+			const size_t reqlen
+			, unsigned char*& data
+			, size_t& datalen
+		) {
+	Bufxf* bufxf = getNewBufxfFstoccbufFromMfsmtrack0(reqlen, data);
+
+	if (runBufxf(bufxf)) {
+		if (!data) data = bufxf->getReadData();
+		datalen = bufxf->getReadDatalen();
+
+	} else {
+		datalen = 0;
+
+		delete bufxf;
+		throw DbeException("error running readFstoccbufFromMfsmtrack0");
 	};
 
 	delete bufxf;
@@ -541,6 +550,90 @@ void UntWtedZudk::readSeqbufFromMfsmtrack1(
 
 		delete bufxf;
 		throw DbeException("error running readSeqbufFromMfsmtrack1");
+	};
+
+	delete bufxf;
+};
+
+Bufxf* UntWtedZudk::getNewBufxfSeqbufFromMemwrtrack(
+			const size_t reqlen
+			, unsigned char* buf
+		) {
+	return(new Bufxf(VecVWtedZudkBuffer::SEQBUFMEMWRTRACKTOHOSTIF, false, reqlen, 0, 2, buf));
+};
+
+void UntWtedZudk::readSeqbufFromMemwrtrack(
+			const size_t reqlen
+			, unsigned char*& data
+			, size_t& datalen
+		) {
+	Bufxf* bufxf = getNewBufxfSeqbufFromMemwrtrack(reqlen, data);
+
+	if (runBufxf(bufxf)) {
+		if (!data) data = bufxf->getReadData();
+		datalen = bufxf->getReadDatalen();
+
+	} else {
+		datalen = 0;
+
+		delete bufxf;
+		throw DbeException("error running readSeqbufFromMemwrtrack");
+	};
+
+	delete bufxf;
+};
+
+Bufxf* UntWtedZudk::getNewBufxfSeqbufFromMemrdtrack(
+			const size_t reqlen
+			, unsigned char* buf
+		) {
+	return(new Bufxf(VecVWtedZudkBuffer::SEQBUFMEMRDTRACKTOHOSTIF, false, reqlen, 0, 2, buf));
+};
+
+void UntWtedZudk::readSeqbufFromMemrdtrack(
+			const size_t reqlen
+			, unsigned char*& data
+			, size_t& datalen
+		) {
+	Bufxf* bufxf = getNewBufxfSeqbufFromMemrdtrack(reqlen, data);
+
+	if (runBufxf(bufxf)) {
+		if (!data) data = bufxf->getReadData();
+		datalen = bufxf->getReadDatalen();
+
+	} else {
+		datalen = 0;
+
+		delete bufxf;
+		throw DbeException("error running readSeqbufFromMemrdtrack");
+	};
+
+	delete bufxf;
+};
+
+Bufxf* UntWtedZudk::getNewBufxfSeqbufFromMgptrack(
+			const size_t reqlen
+			, unsigned char* buf
+		) {
+	return(new Bufxf(VecVWtedZudkBuffer::SEQBUFMGPTRACKTOHOSTIF, false, reqlen, 0, 2, buf));
+};
+
+void UntWtedZudk::readSeqbufFromMgptrack(
+			const size_t reqlen
+			, unsigned char*& data
+			, size_t& datalen
+		) {
+	Bufxf* bufxf = getNewBufxfSeqbufFromMgptrack(reqlen, data);
+
+	if (runBufxf(bufxf)) {
+		if (!data) data = bufxf->getReadData();
+		datalen = bufxf->getReadDatalen();
+
+	} else {
+		datalen = 0;
+
+		delete bufxf;
+		throw DbeException("error running readSeqbufFromMgptrack");
 	};
 
 	delete bufxf;

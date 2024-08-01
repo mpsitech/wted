@@ -2,8 +2,8 @@
 	* \file CtrWtedZudkRgbled0.cpp
 	* rgbled0 controller (implementation)
 	* \copyright (C) 2016-2020 MPSI Technologies GmbH
-	* \author Alexander Wirthmueller (auto-generation)
-	* \date created: 30 Jun 2024
+	* \author Catherine Johnson (auto-generation)
+	* \date created: 10 Jul 2024
 	*/
 // IP header --- ABOVE
 
@@ -46,11 +46,9 @@ void CtrWtedZudkRgbled0::VecVCommand::fillFeed(
 CtrWtedZudkRgbled0::CtrWtedZudkRgbled0(
 			UntWted* unt
 		) : CtrWted(unt) {
-	// IP constructor.easy.cmdvars --- INSERT
 };
 
 CtrWtedZudkRgbled0::~CtrWtedZudkRgbled0() {
-	// IP destructor.easy.cmdvars --- INSERT
 };
 
 uint8_t CtrWtedZudkRgbled0::getTixVCommandBySref(

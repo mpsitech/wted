@@ -39,9 +39,6 @@ entity Client is
 		memCWrAXI_wlast: out std_logic;
 		memCWrAXI_wready: in std_logic;
 		memCWrAXI_wvalid: out std_logic;
-		memCWrAXI_bready: out std_logic;
-		memCWrAXI_bresp: in std_logic_vector(1 downto 0);
-		memCWrAXI_bvalid: in std_logic;
 
 		reqToDdrifWr: out std_logic;
 		ackToDdrifWr: in std_logic;
@@ -128,7 +125,6 @@ architecture Rtl of Client is
 	signal memCWrAXI_awvalid_sig: std_logic;
 	signal memCWrAXI_wlast_sig: std_logic;
 	signal memCWrAXI_wvalid_sig: std_logic;
-	signal memCWrAXI_bready_sig: std_logic;
 
 	signal reqToDdrifWr_sig: std_logic;
 	signal enSetbuf: std_logic;
@@ -343,8 +339,6 @@ begin
 	memCWrAXI_wlast <= memCWrAXI_wlast_sig;
 	memCWrAXI_wvalid_sig <= '1' when stateEgr=stateEgrCopyC else '0';
 	memCWrAXI_wvalid <= memCWrAXI_wvalid_sig;
-	memCWrAXI_bready_sig <= '1';
-	memCWrAXI_bready <= memCWrAXI_bready_sig;
 
 	reqToDdrifWr_sig <= '1' when stateEgr=stateEgrCopyB else '0';
 	reqToDdrifWr <= reqToDdrifWr_sig;

@@ -3,7 +3,7 @@
 # checkout script for Wted embedded system code, release fpgawted_any
 # copyright: (C) 2017-2020 MPSI Technologies GmbH
 # author: Alexander Wirthmueller (auto-generation)
-# date created: 30 Jun 2024
+# date created: 24 Jul 2024
 # IP header --- ABOVE
 
 if [ -z ${FPGAROOT+x} ]; then

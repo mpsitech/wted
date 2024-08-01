@@ -15,7 +15,7 @@ entity Uarttx_v2_0 is
 		fMclk: natural := 50000; -- in kHz
 
 		fSclk: natural range 100 to 50000000 := 115200;
-		Nstop: natural range 1 to 8 := 1
+		NStop: natural range 1 to 8 := 1
 	);
 	port(
 		reset: in std_logic;
@@ -29,7 +29,7 @@ entity Uarttx_v2_0 is
 		len: in std_logic_vector(31 downto 0);
 
 		AXIS_tready: out std_logic;
-		AXIS_tvalid: in std_logic; -- expect this to be 1
+		AXIS_tvalid: in std_logic;
 		AXIS_tdata: in std_logic_vector(7 downto 0);
 		AXIS_tlast: in std_logic; -- currently ignored
 
@@ -79,7 +79,7 @@ begin
 		variable bytecnt: natural;
 
 		variable i: natural range 0 to tbit;
-		variable j: natural range 0 to Nstop;
+		variable j: natural range 0 to NStop;
 
 	begin
 		if reset='1' then
@@ -99,13 +99,15 @@ begin
 				end if;
 
 			elsif stateSend=stateSendLoad then -- AXIS_tready='1'
-				txd_sig <= '0';
+				if AXIS_tvalid='1' then
+					txd_sig <= '0';
 
-				d_var := AXIS_tdata;
+					d_var := AXIS_tdata;
 
-				i := 0;
+					i := 0;
 
-				stateSend <= stateSendStart;
+					stateSend <= stateSendStart;
+				end if;
 
 			elsif stateSend=stateSendStart then
 				i := i + 1;

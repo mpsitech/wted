@@ -2,8 +2,8 @@
 	* \file CtrWtedZudkTkclksrc.cpp
 	* tkclksrc controller (implementation)
 	* \copyright (C) 2016-2020 MPSI Technologies GmbH
-	* \author Alexander Wirthmueller (auto-generation)
-	* \date created: 30 Jun 2024
+	* \author Catherine Johnson (auto-generation)
+	* \date created: 10 Jul 2024
 	*/
 // IP header --- ABOVE
 
@@ -55,11 +55,13 @@ void CtrWtedZudkTkclksrc::VecVCommand::fillFeed(
 CtrWtedZudkTkclksrc::CtrWtedZudkTkclksrc(
 			UntWted* unt
 		) : CtrWted(unt) {
-	// IP constructor.easy.cmdvars --- INSERT
+	cmdGetTkst = getNewCmdGetTkst();
+	cmdSetTkst = getNewCmdSetTkst();
 };
 
 CtrWtedZudkTkclksrc::~CtrWtedZudkTkclksrc() {
-	// IP destructor.easy.cmdvars --- INSERT
+	delete cmdGetTkst;
+	delete cmdSetTkst;
 };
 
 uint8_t CtrWtedZudkTkclksrc::getTixVCommandBySref(

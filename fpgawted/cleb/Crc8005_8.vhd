@@ -10,6 +10,9 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity Crc8005_8 is
+	generic (
+		initOneNotZero: boolean := false
+	);
 	port (
 		reset: in std_logic;
 		mclk: in std_logic;
@@ -33,8 +36,7 @@ architecture Rtl of Crc8005_8 is
 	---- main operation (op)
 	type stateOp_t is (
 		stateOpInit,
-		stateOpCapt,
-		stateOpDone
+		stateOpCapt
 	);
 	signal stateOp: stateOp_t := stateOpInit;
 
@@ -47,7 +49,7 @@ begin
 	-- implementation: main operation (op)
 	------------------------------------------------------------------------
 
-	AXIS_tready <= '1' when stateOp=stateOpCapt or stateOp=stateOpDone else '0';
+	AXIS_tready <= '1' when stateOp=stateOpCapt else '0';
 
 	crc <= crc_sig;
 	validCrc <= validCrc_sig;
@@ -59,19 +61,29 @@ begin
 		if reset='1' then
 			stateOp <= stateOpInit;
 
-			crc_sig <= (others => '0');
+			if not initOneNotZero then
+				crc_sig <= (others => '0');
+			else
+				crc_sig <= (others => '1');
+			end if;
 			validCrc_sig <= '0';
 
 			first := true;
 
 		elsif rising_edge(mclk) then
 			if stateOp=stateOpInit then
-				crc_sig <= (others => '0');
-				validCrc_sig <= '0';
+				if AXIS_tlast='0' then
+					if not initOneNotZero then
+						crc_sig <= (others => '0');
+					else
+						crc_sig <= (others => '1');
+					end if;
+					validCrc_sig <= '0';
 
-				first := true;
+					first := true;
 
-				stateOp <= stateOpCapt;
+					stateOp <= stateOpCapt;
+				end if;
 
 			elsif stateOp=stateOpCapt then
 				if AXIS_tvalid='1' and (first or validCrc_sig='1') then
@@ -96,13 +108,8 @@ begin
 					first := false;
 
 					if AXIS_tlast='1' then
-						stateOp <= stateOpDone;
+						stateOp <= stateOpInit;
 					end if;
-				end if;
-
-			elsif stateOp=stateOpDone then
-				if AXIS_tlast='0' then
-					stateOp <= stateOpInit;
 				end if;
 			end if;
 		end if;
